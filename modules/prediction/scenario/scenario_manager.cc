@@ -29,7 +29,7 @@ void ScenarioManager::Run(ContainerManager* container_manager) {
 
   current_scenario_ = ptr_scenario_features->scenario();
 
-  // TODO(all) other functionalities including lane, junction filters
+  // (all) other functionalities including lane, junction filters
 }
 
 const Scenario ScenarioManager::scenario() const { return current_scenario_; }

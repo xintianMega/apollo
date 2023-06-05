@@ -47,7 +47,7 @@ message Signal {
   optional Id id = 1;
   optional Polygon boundary = 2;
   repeated Subsignal subsignal = 3;
-  // TODO: add orientation. now no data support.
+  // : add orientation. now no data support.
   repeated Id overlap_id = 4;
   optional Type type = 5;
   // stop line

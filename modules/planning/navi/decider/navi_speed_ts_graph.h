@@ -52,9 +52,9 @@ struct NaviSpeedTsConstraints {
   double b_max = std::numeric_limits<double>::max();
   // The preferred deceleration of the point.
   double b_preffered = std::numeric_limits<double>::max();
-  // TODO(all): ignore
+  // (all): ignore
   double da_max = std::numeric_limits<double>::max();
-  // TODO(all): ignore
+  // (all): ignore
   double da_preffered = std::numeric_limits<double>::max();
 };
 

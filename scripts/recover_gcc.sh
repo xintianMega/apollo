@@ -17,7 +17,7 @@
 ###############################################################################
 
 # This script is used to recover default GCC/G++ settings on Ubuntu 18.04 only.
-# TODO(all): Ubuntu 20.04 Support
+# (all): Ubuntu 20.04 Support
 
 sudo update-alternatives --remove-all gcc
 sudo update-alternatives --remove-all g++

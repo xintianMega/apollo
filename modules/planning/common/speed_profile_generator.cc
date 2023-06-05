@@ -53,7 +53,7 @@ SpeedData SpeedProfileGenerator::GenerateFallbackSpeed(
 
   std::array<double, 3> init_s = {0.0, init_v, init_a};
 
-  // TODO(all): dt is too small;
+  // (all): dt is too small;
   double delta_t = FLAGS_fallback_time_unit;
   double total_time = FLAGS_fallback_total_time;
   const size_t num_of_knots = static_cast<size_t>(total_time / delta_t) + 1;

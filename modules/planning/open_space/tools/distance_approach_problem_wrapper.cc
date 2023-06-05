@@ -272,10 +272,10 @@ bool DistanceSmoothing(
   Eigen::VectorXd steer;
   Eigen::VectorXd a;
 
-  // TODO(Runxin): extend logics in future
+  // (Runxin): extend logics in future
   if (horizon_ <= 10 && horizon_ > 2 &&
       planner_open_space_config.enable_linear_interpolation()) {
-    // TODO(Runxin): extend this number
+    // (Runxin): extend this number
     int extend_size = 5;
     // modify state and control vectors sizes
     horizon_ = extend_size * horizon_;
@@ -466,7 +466,7 @@ bool DistancePlan(HybridAStar* hybridA_ptr, ObstacleContainer* obstacles_ptr,
     std::vector<std::future<bool>> results;
 
     // In parallel
-    // TODO(Jinyun): fix memory issue
+    // (Jinyun): fix memory issue
     // for (size_t i = 0; i < size; ++i) {
     //   double piece_wise_sx = partition_trajectories[i].x.front();
     //   double piece_wise_sy = partition_trajectories[i].y.front();

@@ -25,7 +25,7 @@ namespace apollo {
 namespace perception {
 namespace inference {
 
-// TODO(chenjiahao): complete member functions
+// (chenjiahao): complete member functions
 // Custom layer for RPNProposalSSD operation, i.e.
 // anchor generation and nms filtering
 class RPNProposalSSDPlugin : public IPlugin {
@@ -78,8 +78,8 @@ class RPNProposalSSDPlugin : public IPlugin {
 
   Dims getOutputDimensions(int index, const Dims *inputs,
                                      int nbInputDims) override {
-    // TODO(chenjiahao): complete inputs dims assertion
-    // TODO(chenjiahao): batch size is hard coded to 1 here
+    // (chenjiahao): complete inputs dims assertion
+    // (chenjiahao): batch size is hard coded to 1 here
     return Dims4(top_n_ * 1, 5, 1, 1);
   }
 

@@ -40,7 +40,7 @@ constexpr double kPathBoundsDeciderHorizon = 100.0;
 constexpr double kPathBoundsDeciderResolution = 0.5;
 constexpr double kDefaultLaneWidth = 5.0;
 constexpr double kDefaultRoadWidth = 20.0;
-// TODO(all): Update extra tail point base on vehicle speed.
+// (all): Update extra tail point base on vehicle speed.
 constexpr int kNumExtraTailBoundPoint = 20;
 constexpr double kPulloverLonSearchCoeff = 1.5;
 constexpr double kPulloverLatSearchCoeff = 1.25;

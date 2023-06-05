@@ -117,7 +117,7 @@ double DpStCost::GetObstacleCost(const StGraphPoint& st_graph_point) {
   double cost = 0.0;
 
   if (FLAGS_use_st_drivable_boundary) {
-    // TODO(Jiancheng): move to configs
+    // (Jiancheng): move to configs
     static constexpr double boundary_resolution = 0.1;
     int index = static_cast<int>(t / boundary_resolution);
     const double lower_bound =
@@ -307,7 +307,7 @@ double DpStCost::JerkCost(const double jerk) {
     cost = jerk_cost_.at(jerk_key);
   }
 
-  // TODO(All): normalize to unit_t_
+  // (All): normalize to unit_t_
   return cost;
 }
 

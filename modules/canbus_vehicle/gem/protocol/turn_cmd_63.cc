@@ -30,7 +30,7 @@ const int32_t Turncmd63::ID = 0x63;
 Turncmd63::Turncmd63() { Reset(); }
 
 uint32_t Turncmd63::GetPeriod() const {
-  // TODO(QiL) :modify every protocol's period manually
+  // (QiL) :modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -40,7 +40,7 @@ void Turncmd63::UpdateData(uint8_t* data) {
 }
 
 void Turncmd63::Reset() {
-  // TODO(QiL) :you should check this manually
+  // (QiL) :you should check this manually
   turn_signal_cmd_ = Turn_cmd_63::TURN_SIGNAL_CMD_NONE;
 }
 

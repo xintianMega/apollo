@@ -36,7 +36,7 @@ TEST_F(ScenarioManagerTest, init) {
 }
 
 TEST_F(ScenarioManagerTest, run) {
-  // TODO(kechxu) add unit tests with concrete contents
+  // (kechxu) add unit tests with concrete contents
   container_manager_->RegisterContainers();
   std::unique_ptr<Container> adc_traj_container =
       container_manager_->CreateContainer(AdapterConfig::PLANNING_TRAJECTORY);

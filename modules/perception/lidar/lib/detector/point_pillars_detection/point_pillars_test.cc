@@ -517,7 +517,7 @@ TEST(TestSuite, CheckPreprocessGPU) {
 }
 */
 /*
-// TODO(chenjiahao): should be changed to multi-anchor for multi-class
+// (chenjiahao): should be changed to multi-anchor for multi-class
 TEST(TestSuite, CheckGenerateAnchors) {
   const int kNumClass = 1;
   const int kMaxNumPillars = 12000;

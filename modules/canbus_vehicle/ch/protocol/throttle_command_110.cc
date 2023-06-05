@@ -29,7 +29,7 @@ const int32_t Throttlecommand110::ID = 0x110;
 Throttlecommand110::Throttlecommand110() { Reset(); }
 
 uint32_t Throttlecommand110::GetPeriod() const {
-  // TODO(All) :  modify every protocol's period manually
+  // (All) :  modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -40,7 +40,7 @@ void Throttlecommand110::UpdateData(uint8_t* data) {
 }
 
 void Throttlecommand110::Reset() {
-  // TODO(All) :  you should check this manually
+  // (All) :  you should check this manually
   throttle_pedal_en_ctrl_ =
       Throttle_command_110::THROTTLE_PEDAL_EN_CTRL_DISABLE;
   throttle_pedal_cmd_ = 0;

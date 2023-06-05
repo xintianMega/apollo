@@ -38,7 +38,7 @@ PedestrianInteractionEvaluator::PedestrianInteractionEvaluator()
   LoadModel();
 }
 
-/* TODO(kechxu) figure out if this function is necessary. It is not being used
+/* (kechxu) figure out if this function is necessary. It is not being used
 void PedestrianInteractionEvaluator::Clear() {
   auto ptr_obstacles_container =
       ContainerManager::Instance()->GetContainer<ObstaclesContainer>(
@@ -75,7 +75,7 @@ void PedestrianInteractionEvaluator::LoadModel() {
 }
 
 torch::Tensor PedestrianInteractionEvaluator::GetSocialPooling() {
-  // TODO(kechxu) implement more sophisticated logics
+  // (kechxu) implement more sophisticated logics
   return torch::zeros({1, kGridSize * kGridSize * kHiddenSize});
 }
 

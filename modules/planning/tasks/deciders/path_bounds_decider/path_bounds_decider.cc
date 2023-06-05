@@ -342,7 +342,7 @@ Status PathBoundsDecider::GenerateRegularPathBound(
   }
   // PathBoundsDebugString(*path_bound);
 
-  // TODO(jiacheng): once ready, limit the path boundary based on the
+  // (jiacheng): once ready, limit the path boundary based on the
   //                 actual road boundary to avoid getting off-road.
 
   // 3. Fine-tune the boundary based on static obstacles
@@ -366,7 +366,7 @@ Status PathBoundsDecider::GenerateRegularPathBound(
   // PathBoundsDebugString(*path_bound);
 
   // 4. Adjust the boundary considering dynamic obstacles
-  // TODO(all): may need to implement this in the future.
+  // (all): may need to implement this in the future.
 
   ADEBUG << "Completed generating path boundaries.";
   return Status::OK();
@@ -1108,7 +1108,7 @@ bool PathBoundsDecider::GetBoundaryFromADC(
   return true;
 }
 
-// TODO(jiacheng): this function is to be retired soon.
+// (jiacheng): this function is to be retired soon.
 bool PathBoundsDecider::GetBoundaryFromLanesAndADC(
     const ReferenceLineInfo& reference_line_info,
     const LaneBorrowInfo& lane_borrow_info, double ADC_buffer,
@@ -1302,7 +1302,7 @@ void PathBoundsDecider::UpdatePullOverBoundaryByLaneBoundary(
     if (pull_over_type == PullOverStatus::PULL_OVER) {
       std::get<2>((*path_bound)[i]) = left_bound;
     } else if (pull_over_type == PullOverStatus::EMERGENCY_PULL_OVER) {
-      // TODO(all): use left/right lane boundary accordingly
+      // (all): use left/right lane boundary accordingly
       std::get<2>((*path_bound)[i]) = left_bound;
     }
   }
@@ -1344,7 +1344,7 @@ void PathBoundsDecider::GetBoundaryFromLaneChangeForbiddenZone(
                           &point_sl);
     lane_change_start_s = point_sl.s();
   } else {
-    // TODO(jiacheng): train ML model to learn this.
+    // (jiacheng): train ML model to learn this.
     lane_change_start_s = FLAGS_lane_change_prepare_length + adc_frenet_s_;
 
     // Update the decided lane_change_start_s into planning-context.
@@ -1403,7 +1403,7 @@ void PathBoundsDecider::GetBoundaryFromLaneChangeForbiddenZone(
 // Currently, it processes each obstacle based on its frenet-frame
 // projection. Therefore, it might be overly conservative when processing
 // obstacles whose headings differ from road-headings a lot.
-// TODO(all): (future work) this can be improved in the future.
+// (all): (future work) this can be improved in the future.
 bool PathBoundsDecider::GetBoundaryFromStaticObstacles(
     const PathDecision& path_decision, PathBound* const path_boundaries,
     std::string* const blocking_obstacle_id) {
@@ -1774,7 +1774,7 @@ std::vector<std::vector<bool>> PathBoundsDecider::DecidePassDirections(
     }
     decisions.push_back(pass_direction);
   }
-  // TODO(jiacheng): sort the decisions based on the feasibility.
+  // (jiacheng): sort the decisions based on the feasibility.
 
   return decisions;
 }
@@ -1782,7 +1782,7 @@ std::vector<std::vector<bool>> PathBoundsDecider::DecidePassDirections(
 double PathBoundsDecider::GetBufferBetweenADCCenterAndEdge() {
   double adc_half_width =
       VehicleConfigHelper::GetConfig().vehicle_param().width() / 2.0;
-  // TODO(all): currently it's a fixed number. But it can take into account many
+  // (all): currently it's a fixed number. But it can take into account many
   // factors such as: ADC length, possible turning angle, speed, etc.
   static constexpr double kAdcEdgeBuffer = 0.0;
 

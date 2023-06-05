@@ -316,7 +316,7 @@ Box2d TrajectoryCost::GetBoxFromSLPoint(const common::SLPoint &sl,
                vehicle_param_.width());
 }
 
-// TODO(All): optimize obstacle cost calculation time
+// (All): optimize obstacle cost calculation time
 ComparableCost TrajectoryCost::Calculate(const QuinticPolynomialCurve1d &curve,
                                          const double start_s,
                                          const double end_s,

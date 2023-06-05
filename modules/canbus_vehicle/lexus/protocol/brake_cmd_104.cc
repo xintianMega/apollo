@@ -32,7 +32,7 @@ const int32_t Brakecmd104::ID = 0x104;
 Brakecmd104::Brakecmd104() { Reset(); }
 
 uint32_t Brakecmd104::GetPeriod() const {
-  // TODO(QiL) modify every protocol's period manually
+  // (QiL) modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -46,7 +46,7 @@ void Brakecmd104::UpdateData(uint8_t* data) {
 }
 
 void Brakecmd104::Reset() {
-  // TODO(QiL) you should check this manually
+  // (QiL) you should check this manually
   ignore_overrides_ = false;
   enable_ = false;
   clear_override_ = false;
@@ -127,7 +127,7 @@ void Brakecmd104::set_p_brake_cmd(uint8_t* data, double brake_cmd) {
   const double scaling_gain = 0.80;  // estimated from the garage test data
   brake_cmd = std::max(0.0, (brake_cmd - scaling_bias) / (scaling_gain * 100));
   brake_cmd = ProtocolData::BoundedValue(0.0, 1.0, brake_cmd);
-  // TODO(AS): fix this scaling.
+  // (AS): fix this scaling.
   int x = static_cast<int>(brake_cmd / 0.001000);
   uint8_t t = 0;
 

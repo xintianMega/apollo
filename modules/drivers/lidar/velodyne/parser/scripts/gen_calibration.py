@@ -215,7 +215,7 @@ if calibration['num_lasers'] <= 0:
 elif calibration['num_lasers'] != num_enabled:
     xmlError('inconsistent number of lasers defined')
 
-# TODO: make sure all required fields are present.
+# : make sure all required fields are present.
 # (Which ones are required?)
 
 if calibrationGood:

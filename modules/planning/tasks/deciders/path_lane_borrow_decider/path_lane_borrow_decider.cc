@@ -132,7 +132,7 @@ bool PathLaneBorrowDecider::IsNecessaryToBorrowLane(
 }
 
 // This function is to prevent lane-borrowing during lane-changing.
-// TODO(jiacheng): depending on our needs, may allow lane-borrowing during
+// (jiacheng): depending on our needs, may allow lane-borrowing during
 //                 lane-change.
 bool PathLaneBorrowDecider::HasSingleReferenceLine(const Frame& frame) {
   return frame.reference_line_info().size() == 1;

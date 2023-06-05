@@ -53,7 +53,7 @@ DistanceApproachIPOPTRelaxEndSlackInterface::
   ACHECK(obstacles_num < std::numeric_limits<int>::max())
       << "Invalid cast on obstacles_num in open space planner";
 
-  // TODO(RHe): use relax slacks from dual warm up
+  // (RHe): use relax slacks from dual warm up
   // slack_warm_up_ = Eigen::MatrixXd::Zero(obstacles_num, horizon_ + 1);
 
   obstacles_num_ = static_cast<int>(obstacles_num);
@@ -630,7 +630,7 @@ void DistanceApproachIPOPTRelaxEndSlackInterface::get_optimization_results(
     Eigen::MatrixXd* state_result, Eigen::MatrixXd* control_result,
     Eigen::MatrixXd* time_result, Eigen::MatrixXd* dual_l_result,
     Eigen::MatrixXd* dual_n_result) const {
-  // TODO(RHe): extract slack variables for further study
+  // (RHe): extract slack variables for further study
   ADEBUG << "get_optimization_results";
   *state_result = state_result_;
   *control_result = control_result_;
@@ -706,7 +706,7 @@ void DistanceApproachIPOPTRelaxEndSlackInterface::eval_obj(int n, const T* x,
   int time_index = time_start_index_;
   int state_index = state_start_index_;
 
-  // TODO(QiL): Initial implementation towards earlier understanding and debug
+  // (QiL): Initial implementation towards earlier understanding and debug
   // purpose, later code refine towards improving efficiency
 
   *obj_value = 0.0;
@@ -892,7 +892,7 @@ void DistanceApproachIPOPTRelaxEndSlackInterface::eval_constraints(int n,
       T tmp1 = 0.0;
       T tmp2 = 0.0;
       for (int k = 0; k < current_edges_num; ++k) {
-        // TODO(QiL) : replace this one directly with x
+        // (QiL) : replace this one directly with x
         tmp1 += Aj(k, 0) * x[l_index + k];
         tmp2 += Aj(k, 1) * x[l_index + k];
       }

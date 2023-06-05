@@ -30,7 +30,7 @@ const int32_t Headlightcmd76::ID = 0x76;
 Headlightcmd76::Headlightcmd76() { Reset(); }
 
 uint32_t Headlightcmd76::GetPeriod() const {
-  // TODO(QiL) :modify every protocol's period manually
+  // (QiL) :modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -40,7 +40,7 @@ void Headlightcmd76::UpdateData(uint8_t* data) {
 }
 
 void Headlightcmd76::Reset() {
-  // TODO(QiL) :you should check this manually
+  // (QiL) :you should check this manually
   headlight_cmd_ = Headlight_cmd_76::HEADLIGHT_CMD_HEADLIGHTS_OFF;
 }
 

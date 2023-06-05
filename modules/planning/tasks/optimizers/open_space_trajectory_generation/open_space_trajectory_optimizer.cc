@@ -176,7 +176,7 @@ Status OpenSpaceTrajectoryOptimizer::Plan(
         last_time_u << 0.0, 0.0;
         init_v = 0.0;
       }
-      // TODO(Jinyun): Further testing
+      // (Jinyun): Further testing
       const auto smoother_start_timestamp = std::chrono::system_clock::now();
       switch (config_.trajectory_smoother()) {
         case OpenSpaceTrajectoryOptimizerConfig::ITERATIVE_ANCHORING_SMOOTHER: {
@@ -509,7 +509,7 @@ void OpenSpaceTrajectoryOptimizer::LoadTrajectory(
     Vec2d cur_path_point(state_result(0, i), state_result(1, i));
     relative_s += cur_path_point.DistanceTo(last_path_point);
     point.mutable_path_point()->set_s(relative_s);
-    // TODO(Jinyun): Evaluate how to set end states control input
+    // (Jinyun): Evaluate how to set end states control input
     if (i == controls_size) {
       point.set_steer(0.0);
       point.set_a(0.0);
@@ -624,7 +624,7 @@ bool OpenSpaceTrajectoryOptimizer::GenerateDistanceApproachTraj(
   return true;
 }
 
-// TODO(Jinyun): deprecate the use of Eigen in trajectory smoothing
+// (Jinyun): deprecate the use of Eigen in trajectory smoothing
 void OpenSpaceTrajectoryOptimizer::LoadHybridAstarResultInEigen(
     HybridAStartResult* result, Eigen::MatrixXd* xWS, Eigen::MatrixXd* uWS) {
   // load Warm Start result(horizon is timestep number minus one)
@@ -867,7 +867,7 @@ bool OpenSpaceTrajectoryOptimizer::GenerateDecoupledTraj(
   return true;
 }
 
-// TODO(Jinyun): tmp interface, will refactor
+// (Jinyun): tmp interface, will refactor
 void OpenSpaceTrajectoryOptimizer::LoadResult(
     const DiscretizedTrajectory& discretized_trajectory,
     Eigen::MatrixXd* state_result_dc, Eigen::MatrixXd* control_result_dc,

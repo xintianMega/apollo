@@ -73,7 +73,7 @@ bool IsNonmovableObstacle(const ReferenceLineInfo& reference_line_info,
       continue;
     }
 
-    // TODO(All): Fix the segmentation bug for large vehicles, otherwise
+    // (All): Fix the segmentation bug for large vehicles, otherwise
     // the follow line will be problematic.
     ADEBUG << " - It is blocked by others, and will move later.";
     return false;
@@ -84,7 +84,7 @@ bool IsNonmovableObstacle(const ReferenceLineInfo& reference_line_info,
 }
 
 // This is the side-pass condition for every obstacle.
-// TODO(all): if possible, transform as many function parameters into GFLAGS.
+// (all): if possible, transform as many function parameters into GFLAGS.
 bool IsBlockingObstacleToSidePass(const Frame& frame, const Obstacle* obstacle,
                                   double block_obstacle_min_speed,
                                   double min_front_sidepass_distance,
@@ -158,7 +158,7 @@ bool IsBlockingObstacleToSidePass(const Frame& frame, const Obstacle* obstacle,
         continue;
       }
 
-      // TODO(All): Fix the segmentation bug for large vehicles, otherwise
+      // (All): Fix the segmentation bug for large vehicles, otherwise
       // the follow line will be problematic.
       ADEBUG << " - It is blocked by others, too.";
       return false;
@@ -188,7 +188,7 @@ bool IsBlockingDrivingPathObstacle(const ReferenceLine& reference_line,
          << ", adc_width = " << adc_width << ")";
   if (driving_width > adc_width + FLAGS_static_obstacle_nudge_l_buffer +
                           FLAGS_side_pass_driving_width_l_buffer) {
-    // TODO(jiacheng): make this a GFLAG:
+    // (jiacheng): make this a GFLAG:
     // side_pass_context_.scenario_config_.min_l_nudge_buffer()
     ADEBUG << "It is NOT blocking our path.";
     return false;

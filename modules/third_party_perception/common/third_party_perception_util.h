@@ -38,7 +38,7 @@ void FillPerceptionPolygon(
     const double length, const double width, const double height,
     const double heading);
 
-// TODO(lizh): change it to PerceptionObstacle::VEHICLE or so
+// (lizh): change it to PerceptionObstacle::VEHICLE or so
 //             when perception obstacle type is extended.
 // object type | int
 // car         | 0

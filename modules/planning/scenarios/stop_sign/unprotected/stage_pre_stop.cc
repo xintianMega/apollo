@@ -251,7 +251,7 @@ bool StopSignUnprotectedStagePreStop::CheckADCStop(
     return false;
   }
 
-  // TODO(all): check no BICYCLE in between.
+  // (all): check no BICYCLE in between.
 
   return true;
 }

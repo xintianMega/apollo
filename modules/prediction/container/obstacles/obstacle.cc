@@ -221,7 +221,7 @@ void Obstacle::TrimHistory(const size_t remain_size) {
 }
 
 bool Obstacle::IsInJunction(const std::string& junction_id) const {
-  // TODO(all) Consider if need to use vehicle front rather than position
+  // (all) Consider if need to use vehicle front rather than position
   if (feature_history_.empty()) {
     AERROR << "Obstacle [" << id_ << "] has no history";
     return false;
@@ -264,7 +264,7 @@ void Obstacle::BuildJunctionFeature() {
     ACHECK(prev_feature.junction_feature().enter_lane().has_lane_id());
     std::string enter_lane_id =
         prev_feature.junction_feature().enter_lane().lane_id();
-    // TODO(all) use enter lane when tracking is better
+    // (all) use enter lane when tracking is better
     SetJunctionFeatureWithoutEnterLane(latest_feature_ptr);
   } else {
     SetJunctionFeatureWithoutEnterLane(latest_feature_ptr);
@@ -326,7 +326,7 @@ void Obstacle::SetJunctionFeatureWithoutEnterLane(Feature* const feature_ptr) {
     ADEBUG << "Obstacle [" << id_ << "] has no lane in junction";
     return;
   }
-  // TODO(kechxu) Maybe output all exits if no start lane found
+  // (kechxu) Maybe output all exits if no start lane found
   feature_ptr->mutable_junction_feature()->CopyFrom(
       junction_analyzer_->GetJunctionFeature(start_lane_ids));
 }
@@ -1029,7 +1029,7 @@ void Obstacle::BuildLaneGraphFromLeftToRight() {
 
   const std::vector<std::string> lane_ids_ordered(lane_ids_ordered_list.begin(),
                                                   lane_ids_ordered_list.end());
-  // TODO(all): sort the lane_segments from left to right (again)
+  // (all): sort the lane_segments from left to right (again)
   //            to double-check and make sure it's well sorted.
   // Build lane_graph for every lane_segment and update it into proto.
   int seq_id = 0;
@@ -1099,7 +1099,7 @@ void Obstacle::SetLanePoints(const Feature* feature,
     if (lane_sequence->lane_segment().empty()) {
       continue;
     }
-    // TODO(jiacheng): can refactor the following two parts into one to
+    // (jiacheng): can refactor the following two parts into one to
     //                 make it more elegant.
 
     // If building bidirectionally, then build backward lane-points as well.
@@ -1492,7 +1492,7 @@ void Obstacle::SetPredictorType(
 
 PredictionObstacle Obstacle::GeneratePredictionObstacle() {
   PredictionObstacle prediction_obstacle;
-  // TODO(kechxu) implement
+  // (kechxu) implement
   return prediction_obstacle;
 }
 

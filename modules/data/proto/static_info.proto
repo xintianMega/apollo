@@ -32,7 +32,7 @@ message VehicleInfo {
 message EnvironmentInfo {
   optional string map_name = 1 [deprecated = true];
   optional float temperature = 2;  // Temperature in degrees Celsius.
-  // TODO(xiaoxq): weather, rare condition, etc.
+  // (xiaoxq): weather, rare condition, etc.
 }
 
 message HardwareInfo {

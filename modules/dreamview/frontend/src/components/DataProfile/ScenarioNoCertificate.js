@@ -15,7 +15,7 @@ export function ScenarioNoCertificate() {
       <button
         className='command-button'
         onClick={() => {
-          // todo: 跳转安装证书页面
+          // : 跳转安装证书页面
         }}
       >
         View the certificate installation tutorial
@@ -32,7 +32,7 @@ export function ScenarioCertificateInvalid() {
         <h6>certificate status is abnormal, please reinstall.</h6>
         <p
           onClick={() => {
-            // todo: 跳转安装证书页面
+            // : 跳转安装证书页面
           }
           }
         >View the certificate installation tutorial

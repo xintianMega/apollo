@@ -109,7 +109,7 @@ function _usage() {
   exit 1
 }
 
-# TODO(all): cyber/doxy-docs
+# (all): cyber/doxy-docs
 
 function main() {
   local cmd="$1"

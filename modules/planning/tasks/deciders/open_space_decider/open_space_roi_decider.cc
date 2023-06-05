@@ -234,7 +234,7 @@ void OpenSpaceRoiDecider::SetParkingSpotEndPose(
   right_down -= origin_point;
   right_down.SelfRotate(-origin_heading);
 
-  // TODO(Jinyun): adjust end pose setting for more parking spot configurations
+  // (Jinyun): adjust end pose setting for more parking spot configurations
   double parking_spot_heading = (left_down - left_top).Angle();
   double end_x = (left_top.x() + right_top.x()) / 2.0;
   double end_y = 0.0;
@@ -621,7 +621,7 @@ void OpenSpaceRoiDecider::AddBoundaryKeyPoint(
   //                                 *-------------*
 
   // road width changes slightly at the turning point of a path
-  // TODO(SHU): 1. consider distortion introduced by curvy road; 2. use both
+  // (SHU): 1. consider distortion introduced by curvy road; 2. use both
   // round boundaries for single-track road; 3. longitudinal range may not be
   // symmetric
   const double previous_distance_s = std::min(
@@ -766,7 +766,7 @@ bool OpenSpaceRoiDecider::GetParkingBoundary(
   const double average_l = (left_top_l + right_top_l) / 2.0;
   std::vector<Vec2d> boundary_points;
 
-  // TODO(jiaxuan): Write a half-boundary formation function and call it twice
+  // (jiaxuan): Write a half-boundary formation function and call it twice
   // to avoid duplicated manipulations on the left and right sides
   if (average_l < 0) {
     // if average_l is lower than zero, the parking spot is on the right
@@ -1589,11 +1589,11 @@ bool OpenSpaceRoiDecider::LoadObstacleInVertices(
       original_box.LateralExtend(
           config_.open_space_roi_decider_config().perception_obstacle_buffer());
 
-      // TODO(Jinyun): Check correctness of ExpandByDistance() in polygon
+      // (Jinyun): Check correctness of ExpandByDistance() in polygon
       // Polygon2d buffered_box(original_box);
       // buffered_box = buffered_box.ExpandByDistance(
       //     config_.open_space_roi_decider_config().perception_obstacle_buffer());
-      // TODO(Runxin): Rotate from origin instead
+      // (Runxin): Rotate from origin instead
       // original_box.RotateFromCenter(-1.0 * origin_heading);
       std::vector<Vec2d> vertices_ccw = original_box.GetAllCorners();
       std::vector<Vec2d> vertices_cw;

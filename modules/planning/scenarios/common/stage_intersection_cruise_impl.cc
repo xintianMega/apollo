@@ -41,7 +41,7 @@ bool StageIntersectionCruiseImpl::CheckDone(
   const auto& junction_overlaps =
       reference_line_info.reference_line().map_path().junction_overlaps();
   if (junction_overlaps.empty()) {
-    // TODO(all): remove when pnc_junction completely available on map
+    // (all): remove when pnc_junction completely available on map
     // pnc_junction not exist on map, use current traffic_sign's end_s
     // get traffic sign overlap along reference line
     hdmap::PathOverlap* traffic_sign_overlap = nullptr;

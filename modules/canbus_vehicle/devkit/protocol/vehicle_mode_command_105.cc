@@ -30,7 +30,7 @@ const int32_t Vehiclemodecommand105::ID = 0x105;
 Vehiclemodecommand105::Vehiclemodecommand105() { Reset(); }
 
 uint32_t Vehiclemodecommand105::GetPeriod() const {
-  // TODO(All) :  modify every protocol's period manually
+  // (All) :  modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -60,7 +60,7 @@ void Vehiclemodecommand105::UpdateData(uint8_t* data) {
 }
 
 void Vehiclemodecommand105::Reset() {
-  // TODO(All) :  you should check this manually
+  // (All) :  you should check this manually
   checksum_105_ = 0;
   turn_light_ctrl_ = Vehicle_mode_command_105::TURN_LIGHT_CTRL_TURNLAMP_OFF;
   vin_req_ = Vehicle_mode_command_105::VIN_REQ_VIN_REQ_DISABLE;

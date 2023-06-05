@@ -28,7 +28,7 @@ namespace perception {
 namespace camera {
 
 struct CameraPerceptionInitOptions : public BaseInitOptions {
-  // TODO(Xun): modified to be configurable
+  // (Xun): modified to be configurable
   std::string lane_calibration_working_sensor_name = "front_6mm";
   std::string calibrator_method = "LaneLineCalibrator";
 };

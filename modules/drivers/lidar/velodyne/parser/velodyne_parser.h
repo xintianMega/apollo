@@ -41,7 +41,7 @@
  *
  *     velodyne::DataXYZ -- derived class, unpacks into XYZ format
  *
- *  \todo make a separate header for each class?
+ *  \ make a separate header for each class?
  *
  *  \author Yaxin Liu
  *  \author Patrick Beeson

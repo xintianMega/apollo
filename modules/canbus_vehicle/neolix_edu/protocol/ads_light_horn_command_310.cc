@@ -30,7 +30,7 @@ const int32_t Adslighthorncommand310::ID = 0x310;
 Adslighthorncommand310::Adslighthorncommand310() { Reset(); }
 
 uint32_t Adslighthorncommand310::GetPeriod() const {
-  // TODO(All) :  modify every protocol's period manually
+  // (All) :  modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -49,7 +49,7 @@ void Adslighthorncommand310::UpdateData(uint8_t* data) {
 }
 
 void Adslighthorncommand310::Reset() {
-  // TODO(All) :  you should check this manually
+  // (All) :  you should check this manually
   turn_right_light_command_ = false;
   turn_left_light_command_ = false;
   horn_command_ = false;

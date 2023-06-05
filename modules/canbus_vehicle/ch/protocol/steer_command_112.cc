@@ -29,7 +29,7 @@ const int32_t Steercommand112::ID = 0x112;
 Steercommand112::Steercommand112() { Reset(); }
 
 uint32_t Steercommand112::GetPeriod() const {
-  // TODO(All) :  modify every protocol's period manually
+  // (All) :  modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -40,7 +40,7 @@ void Steercommand112::UpdateData(uint8_t* data) {
 }
 
 void Steercommand112::Reset() {
-  // TODO(All) :  you should check this manually
+  // (All) :  you should check this manually
   steer_angle_en_ctrl_ = Steer_command_112::STEER_ANGLE_EN_CTRL_DISABLE;
   steer_angle_cmd_ = 0.0;
 }

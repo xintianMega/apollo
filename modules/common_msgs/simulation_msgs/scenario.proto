@@ -24,7 +24,7 @@ message Scenario {
     optional double x = 1;
     optional double y = 2;
     optional double heading = 3;
-    // TODO: add lane-id and ratio.
+    // : add lane-id and ratio.
   }
   // Only use in WorldSim.
   optional Point start = 3;

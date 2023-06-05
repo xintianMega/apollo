@@ -186,7 +186,7 @@ Chassis TransitController::chassis() {
                      Llc_motionfeedback1_20::LLC_FBK_STATE_AUTONOMY);
 
   if (motion20.has_llc_fbk_brakepercentrear()) {
-    // TODO(Udelv): fix scaling
+    // (Udelv): fix scaling
     chassis_.set_brake_percentage(
         static_cast<float>(motion20.llc_fbk_brakepercentrear()));
   }
@@ -406,7 +406,7 @@ void TransitController::Gear(Chassis::GearPosition gear_position) {
 // -> pedal
 void TransitController::Brake(double pedal) {
   // double real_value = params_.max_acc() * acceleration / 100;
-  // TODO(QiL):  Update brake value based on mode
+  // (QiL):  Update brake value based on mode
   if (driving_mode() != Chassis::COMPLETE_AUTO_DRIVE &&
       driving_mode() != Chassis::AUTO_SPEED_ONLY) {
     AINFO << "The current drive mode does not need to set acceleration.";
@@ -455,7 +455,7 @@ void TransitController::Steer(double angle) {
     AINFO << "The current driving mode does not need to set steer.";
     return;
   }
-  // TODO(All): remove -1.0 once Udelv has a complete fix.
+  // (All): remove -1.0 once Udelv has a complete fix.
   const double real_angle =
       button_pressed_
           ? vehicle_params_.max_steer_angle() * angle / 100.0 * 180 / M_PI
@@ -473,14 +473,14 @@ void TransitController::Steer(double angle, double angle_spd) {
     return;
   }
 
-  // TODO(All): remove -1.0 once Udelv has a complete fix.
+  // (All): remove -1.0 once Udelv has a complete fix.
   const double real_angle =
       button_pressed_
           ? vehicle_params_.max_steer_angle() * angle / 100.0 * 180 / M_PI
           : 0;
 
   adc_motioncontrol1_10_->set_adc_cmd_steerwheelangle(real_angle);
-  // TODO(QiL) : re-enable the angle_spd ajustment
+  // (QiL) : re-enable the angle_spd ajustment
 }
 
 void TransitController::SetEpbBreak(const ControlCommand& command) {
@@ -530,7 +530,7 @@ void TransitController::ResetProtocol() {
 }
 
 bool TransitController::CheckChassisError() {
-  // TODO(QiL): re-design later
+  // (QiL): re-design later
   return true;
 }
 
@@ -598,7 +598,7 @@ void TransitController::SecurityDogThreadFunc() {
 }
 
 bool TransitController::CheckResponse() {
-  // TODO(Udelv): Add separate indicators
+  // (Udelv): Add separate indicators
   Transit chassis_detail;
   if (message_manager_->GetSensorData(&chassis_detail) != ErrorCode::OK) {
     AERROR_EVERY(100) << "get chassis detail failed.";

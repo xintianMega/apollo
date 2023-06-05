@@ -25,7 +25,7 @@ namespace perception {
 namespace fusion {
 const double SHAPE_FUSION_PI = 3.1415926;
 
-/* TODO(all): not compiling. to be fixed
+/* (all): not compiling. to be fixed
 TEST(MotionFusionTest, lidar_test) {
   FLAGS_work_root = "/apollo/modules/perception/testdata/"
       "fusion/kalman_motion_fusion";
@@ -190,7 +190,7 @@ TEST(MotionFusionTest, lidar_test) {
 }
 */
 
-/* TODO(all): Initialize() not compiling. to be fixed
+/* (all): Initialize() not compiling. to be fixed
 TEST(MotionFusionTest, radar_test) {
   FLAGS_work_root = "/apollo/modules/perception/testdata/"
       "fusion/kalman_motion_fusion";
@@ -341,7 +341,7 @@ TEST(MotionFusionTest, radar_test) {
 }
 */
 
-/* TODO(all): Initialize() not compiling. to be fixed
+/* (all): Initialize() not compiling. to be fixed
 TEST(MotionFusionTest, get_history_test) {
   FLAGS_work_root = "/apollo/modules/perception/testdata/"
       "fusion/kalman_motion_fusion";

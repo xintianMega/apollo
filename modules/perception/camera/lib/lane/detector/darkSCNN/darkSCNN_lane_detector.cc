@@ -174,7 +174,7 @@ bool DarkSCNNLaneDetector::Init(const StageConfig& stage_config) {
   darkscnn_param_ = stage_config.dark_scnn_param();
   const auto& model_param = darkscnn_param_.model_param();
 
-  // todo(zero): options
+  // (zero): options
   std::string model_root =
       GetAbsolutePath(darkscnn_param_.root_dir(), model_param.model_name());
   std::string proto_file =

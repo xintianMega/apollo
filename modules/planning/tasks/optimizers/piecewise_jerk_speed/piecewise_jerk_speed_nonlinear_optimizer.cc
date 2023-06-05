@@ -181,7 +181,7 @@ Status PiecewiseJerkSpeedNonlinearOptimizer::SetUpStatesAndBounds(
   // Set st problem dimensions
   const StGraphData& st_graph_data =
       *reference_line_info_->mutable_st_graph_data();
-  // TODO(Jinyun): move to confs
+  // (Jinyun): move to confs
   delta_t_ = 0.1;
   total_length_ = st_graph_data.path_length();
   total_time_ = st_graph_data.total_time_by_conf();
@@ -203,7 +203,7 @@ Status PiecewiseJerkSpeedNonlinearOptimizer::SetUpStatesAndBounds(
   s_ddot_min_ = -1.0 * std::abs(veh_param.max_deceleration());
 
   // Set s_dddot boundary
-  // TODO(Jinyun): allow the setting of jerk_lower_bound and move jerk config to
+  // (Jinyun): allow the setting of jerk_lower_bound and move jerk config to
   // a better place
   s_dddot_min_ = -std::abs(FLAGS_longitudinal_jerk_lower_bound);
   s_dddot_max_ = FLAGS_longitudinal_jerk_upper_bound;
@@ -212,7 +212,7 @@ Status PiecewiseJerkSpeedNonlinearOptimizer::SetUpStatesAndBounds(
   if (FLAGS_use_soft_bound_in_nonlinear_speed_opt) {
     s_bounds_.clear();
     s_soft_bounds_.clear();
-    // TODO(Jinyun): move to confs
+    // (Jinyun): move to confs
     for (int i = 0; i < num_of_knots_; ++i) {
       double curr_t = i * delta_t_;
       double s_lower_bound = 0.0;
@@ -265,7 +265,7 @@ Status PiecewiseJerkSpeedNonlinearOptimizer::SetUpStatesAndBounds(
     }
   } else {
     s_bounds_.clear();
-    // TODO(Jinyun): move to confs
+    // (Jinyun): move to confs
     for (int i = 0; i < num_of_knots_; ++i) {
       double curr_t = i * delta_t_;
       double s_lower_bound = 0.0;
@@ -321,7 +321,7 @@ bool PiecewiseJerkSpeedNonlinearOptimizer::CheckSpeedLimitFeasibility() {
 
 Status PiecewiseJerkSpeedNonlinearOptimizer::SmoothSpeedLimit() {
   // using piecewise_jerk_path to fit a curve of speed_ref
-  // TODO(Hongyi): move smooth configs to gflags
+  // (Hongyi): move smooth configs to gflags
   double delta_s = 2.0;
   std::vector<double> speed_ref;
   for (int i = 0; i < 100; ++i) {
@@ -373,7 +373,7 @@ Status PiecewiseJerkSpeedNonlinearOptimizer::SmoothSpeedLimit() {
 Status PiecewiseJerkSpeedNonlinearOptimizer::SmoothPathCurvature(
     const PathData& path_data) {
   // using piecewise_jerk_path to fit a curve of path kappa profile
-  // TODO(Jinyun): move smooth configs to gflags
+  // (Jinyun): move smooth configs to gflags
   const auto& cartesian_path = path_data.discretized_path();
   const double delta_s = 0.5;
   std::vector<double> path_curvature;
@@ -439,7 +439,7 @@ Status PiecewiseJerkSpeedNonlinearOptimizer::OptimizeByQP(
   piecewise_jerk_problem.set_dddx_bound(s_dddot_min_, s_dddot_max_);
   piecewise_jerk_problem.set_x_bounds(s_bounds_);
 
-  // TODO(Jinyun): parameter tunnings
+  // (Jinyun): parameter tunnings
   const auto& config =
       config_.piecewise_jerk_nonlinear_speed_optimizer_config();
   piecewise_jerk_problem.set_weight_x(0.0);
@@ -491,10 +491,10 @@ Status PiecewiseJerkSpeedNonlinearOptimizer::OptimizeByNLP(
 
   ptr_interface->set_curvature_curve(smoothed_path_curvature_);
 
-  // TODO(Hongyi): add debug_info for speed_limit fitting curve
+  // (Hongyi): add debug_info for speed_limit fitting curve
   ptr_interface->set_speed_limit_curve(smoothed_speed_limit_);
 
-  // TODO(Jinyun): refactor warms start setting API
+  // (Jinyun): refactor warms start setting API
   if (config.use_warm_start()) {
     const auto& warm_start_distance = *distance;
     const auto& warm_start_velocity = *velocity;
@@ -520,7 +520,7 @@ Status PiecewiseJerkSpeedNonlinearOptimizer::OptimizeByNLP(
 
   if (FLAGS_use_smoothed_dp_guide_line) {
     ptr_interface->set_reference_spatial_distance(*distance);
-    // TODO(Jinyun): move to confs
+    // (Jinyun): move to confs
     ptr_interface->set_w_reference_spatial_distance(10.0);
   } else {
     std::vector<double> spatial_potantial(num_of_knots_, total_length_);

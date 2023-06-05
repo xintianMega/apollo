@@ -45,7 +45,7 @@ bool EvaluatorSubmodule::Init() {
                                       prediction_conf)) {
     return false;
   }
-  // TODO(kechxu) change topic name when finalized
+  // (kechxu) change topic name when finalized
   evaluator_writer_ = node_->CreateWriter<SubmoduleOutput>(
       prediction_conf.topic_conf().evaluator_topic_name());
   return true;

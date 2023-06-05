@@ -21,7 +21,7 @@ cc_library(
     ],
 )
 
-# todo(zero): need fix
+# (zero): need fix
 # cc_test(
 #     name = "object_filter_bank_test",
 #     size = "small",

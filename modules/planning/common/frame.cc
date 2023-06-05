@@ -324,7 +324,7 @@ Status Frame::Init(
     const std::list<hdmap::RouteSegments> &segments,
     const std::vector<routing::LaneWaypoint> &future_route_waypoints,
     const EgoInfo *ego_info) {
-  // TODO(QiL): refactor this to avoid redundant nullptr checks in scenarios.
+  // (QiL): refactor this to avoid redundant nullptr checks in scenarios.
   auto status = InitFrameData(vehicle_state_provider, ego_info);
   if (!status.ok()) {
     AERROR << "failed to init frame:" << status.ToString();

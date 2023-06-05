@@ -175,7 +175,7 @@ class NaviObstacleDecider : public NaviTask {
   FRIEND_TEST(NaviObstacleDeciderTest, ComputeNudgeDist3);
   FRIEND_TEST(NaviObstacleDeciderTest, ComputeNudgeDist4);
   FRIEND_TEST(NaviObstacleDeciderTest, GetUnsafeObstaclesID);
-  // TODO(all): Add your member functions and variables.
+  // (all): Add your member functions and variables.
 };
 
 inline const apollo::common::VehicleParam &NaviObstacleDecider::VehicleParam() {

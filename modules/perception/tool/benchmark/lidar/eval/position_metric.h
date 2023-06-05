@@ -22,7 +22,7 @@ namespace perception {
 namespace benchmark {
 
 struct PositionMetricOption {
-  // TODO(...): add hdmap, pose, ...
+  // (...): add hdmap, pose, ...
   bool roi_is_main_lanes = false;
 };
 

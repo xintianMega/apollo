@@ -154,7 +154,7 @@ DEFINE_string(front_radar_topic, "/apollo/sensor/radar/front",
               "front radar topic name");
 DEFINE_string(rear_radar_topic, "/apollo/sensor/radar/rear",
               "rear radar topic name");
-// TODO(Authors): Change the topic name
+// (Authors): Change the topic name
 DEFINE_string(compressed_image_topic, "camera/image_raw",
               "CompressedImage topic name");
 DEFINE_string(image_front_topic, "/apollo/sensor/camera/front_6mm/image",

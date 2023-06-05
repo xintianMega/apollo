@@ -16,7 +16,7 @@ service_path="${cyber_tool_path}/cyber_service"
 monitor_path="${cyber_tool_path}/cyber_monitor"
 visualizer_path="${bazel_bin_path}/modules/tools/visualizer"
 
-# TODO(all): place all these in one place and pathprepend
+# (all): place all these in one place and pathprepend
 for entry in "${mainboard_path}" \
     "${recorder_path}" "${monitor_path}"  \
     "${channel_path}" "${node_path}" \

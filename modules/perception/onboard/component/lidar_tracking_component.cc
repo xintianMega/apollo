@@ -147,7 +147,7 @@ bool LidarTrackingComponent::InternalProc(
   //   AERROR << "Lidar recognition process error, " << ret.log;
   //   return true;
   // }
-  // TODO(shigintmin)
+  // (shigintmin)
   out_message->hdmap_ = lidar_frame->hdmap_struct;
   auto& frame = out_message->frame_;
   frame = base::FramePool::Instance().Get();

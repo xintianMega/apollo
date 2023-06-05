@@ -143,7 +143,7 @@ class OfflineLidarObstaclePerception {
           FLAGS_enable_tracking = false;
         }
       }
-      // TODO(shitingmin) undo timestamp.
+      // (shitingmin) undo timestamp.
       LidarProcessResult segment_result =
           lidar_segmentation_->Process(segment_options_, frame_.get());
       if (segment_result.error_code != LidarErrorCode::Succeed) {

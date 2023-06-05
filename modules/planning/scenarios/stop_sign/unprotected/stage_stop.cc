@@ -209,7 +209,7 @@ int StopSignUnprotectedStageStop::RemoveWatchVehicle(
       ADEBUG << "obstacle_id[" << perception_obstacle_id << "] distance["
              << distance << "]";
 
-      // TODO(all): move 10.0 to conf
+      // (all): move 10.0 to conf
       if (distance > 10.0) {
         ADEBUG << "mark ERASE obstacle_id[" << perception_obstacle_id << "]";
         remove_vehicles.push_back(perception_obstacle_id);

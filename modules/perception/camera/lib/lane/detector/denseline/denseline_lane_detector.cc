@@ -154,7 +154,7 @@ bool DenselineLaneDetector::Init(const StageConfig& stage_config) {
   }
 
   denseline_param_ = stage_config.denseline_param();
-  // todo(zero): options
+  // (zero): options
   const auto& model_param = denseline_param_.model_param();
   std::string model_root =
       GetAbsolutePath(denseline_param_.root_dir(), model_param.model_name());

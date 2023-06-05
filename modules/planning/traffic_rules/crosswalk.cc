@@ -375,7 +375,7 @@ bool Crosswalk::CheckStopForObstacle(
     // (4) when l_distance is between loose_l and strict_l
     //     use history decision of this crosswalk to smooth unsteadiness
 
-    // TODO(all): replace this temp implementation
+    // (all): replace this temp implementation
     if (is_path_cross) {
       stop = true;
     }

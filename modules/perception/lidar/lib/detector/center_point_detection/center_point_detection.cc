@@ -78,7 +78,7 @@ bool CenterPointDetection::Init(const LidarDetectorInitOptions &options) {
     }
     config.EnableTensorRtEngine(1 << 30, 1, 3, precision, FLAGS_trt_use_static,
                                 false);
-    // todo: solve EnableTunedTensorRtDynamicShape
+    // : solve EnableTunedTensorRtDynamicShape
     config.CollectShapeRangeInfo(FLAGS_dynamic_shape_file);
     // config.EnableTunedTensorRtDynamicShape(FLAGS_dynamic_shape_file, true);
 
@@ -118,7 +118,7 @@ bool CenterPointDetection::Init(const StageConfig& stage_config) {
     }
     config.EnableTensorRtEngine(1 << 30, 1, 3, precision, FLAGS_trt_use_static,
                                 false);
-    // todo: solve EnableTunedTensorRtDynamicShape
+    // : solve EnableTunedTensorRtDynamicShape
     config.CollectShapeRangeInfo(FLAGS_dynamic_shape_file);
     // config.EnableTunedTensorRtDynamicShape(FLAGS_dynamic_shape_file, true);
 
@@ -348,7 +348,7 @@ void CenterPointDetection::DoInference(const std::vector<float> &points_data,
                                        std::vector<float> *out_detections,
                                        std::vector<int64_t> *out_labels,
                                        std::vector<float> *out_scores) {
-  // todo: check gpu_id
+  // : check gpu_id
   std::vector<int> points_shape;
   points_shape.push_back(in_num_points);
   points_shape.push_back(FLAGS_num_point_feature);

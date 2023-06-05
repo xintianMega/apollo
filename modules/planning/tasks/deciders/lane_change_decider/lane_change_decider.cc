@@ -111,7 +111,7 @@ Status LaneChangeDecider::Process(
       }
       return Status::OK();
     } else if (prev_status->status() == ChangeLaneStatus::CHANGE_LANE_FAILED) {
-      // TODO(SHU): add an optimization_failure counter to enter
+      // (SHU): add an optimization_failure counter to enter
       // change_lane_failed status
       if (now - prev_status->timestamp() <
           lane_change_decider_config.change_lane_fail_freeze_time()) {
@@ -214,7 +214,7 @@ void LaneChangeDecider::PrioritizeChangeLane(
 
   const auto& lane_change_decider_config = config_.lane_change_decider_config();
 
-  // TODO(SHU): disable the reference line order change for now
+  // (SHU): disable the reference line order change for now
   if (!lane_change_decider_config.enable_prioritize_change_lane()) {
     return;
   }
@@ -242,7 +242,7 @@ void LaneChangeDecider::PrioritizeChangeLane(
 void LaneChangeDecider::RemoveChangeLane(
     std::list<ReferenceLineInfo>* reference_line_info) const {
   const auto& lane_change_decider_config = config_.lane_change_decider_config();
-  // TODO(SHU): fix core dump when removing change lane
+  // (SHU): fix core dump when removing change lane
   if (!lane_change_decider_config.enable_remove_change_lane()) {
     return;
   }
@@ -322,7 +322,7 @@ bool LaneChangeDecider::IsClearToChangeLane(
       same_direction = heading_difference < (M_PI / 2.0);
     }
 
-    // TODO(All) move to confs
+    // (All) move to confs
     static constexpr double kSafeTimeOnSameDirection = 3.0;
     static constexpr double kSafeTimeOnOppositeDirection = 5.0;
     static constexpr double kForwardMinSafeDistanceOnSameDirection = 10.0;

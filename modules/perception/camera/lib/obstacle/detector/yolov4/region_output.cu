@@ -454,7 +454,7 @@ void get_objects_gpu(const YoloBlobs &yolo_blobs, const cudaStream_t &stream,
           ? get_gpu_data(model_param.with_box3d(), *yolo_blobs.det3_dim_blob)
           : nullptr};
 
-  // TODO[KaWai]: add 3 scale frbox data and light data.
+  // [KaWai]: add 3 scale frbox data and light data.
   const float *lof_data =
       get_gpu_data(model_param.with_frbox(), *yolo_blobs.lof_blob);
   const float *lor_data =
@@ -487,7 +487,7 @@ void get_objects_gpu(const YoloBlobs &yolo_blobs, const cudaStream_t &stream,
   float *res_box_data = yolo_blobs.res_box_blob->mutable_gpu_data();
   float *res_cls_data = yolo_blobs.res_cls_blob->mutable_gpu_data();
   const int thread_size = 512;
-  // TODO[KaWai]: use different stream to process scales in parallel.
+  // [KaWai]: use different stream to process scales in parallel.
   int num_candidates_offset = 0;
   for (int i = 0; i < num_candidates_vec.size(); i++) {
     int block_size = (num_candidates_vec[i] + thread_size - 1) / thread_size;

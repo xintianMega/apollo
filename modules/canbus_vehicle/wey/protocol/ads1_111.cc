@@ -30,7 +30,7 @@ const int32_t Ads1111::ID = 0x111;
 Ads1111::Ads1111() { Reset(); }
 
 uint32_t Ads1111::GetPeriod() const {
-  // TODO(ChaoMa) :modify every protocol's period manually
+  // (ChaoMa) :modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -45,7 +45,7 @@ void Ads1111::UpdateData(uint8_t* data) {
 }
 
 void Ads1111::Reset() {
-  // TODO(ChaoMa) :you should check this manually
+  // (ChaoMa) :you should check this manually
   ads_dectostop_ = Ads1_111::ADS_DECTOSTOP_NO_DEMAND;
   ads_mode_ = Ads1_111::ADS_MODE_OFF_MODE;
   ads_taracce_ = 0.0;

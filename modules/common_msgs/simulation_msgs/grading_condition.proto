@@ -286,7 +286,7 @@ message KeyPoint {
 
 // 这个条件是针对高速足跳变所设计，通过设置道路的检查点，看车辆是否保持合理的运
 // 行轨迹
-// TODO: 在解析评测配置的处增加根据路线生成检查点的逻辑
+// : 在解析评测配置的处增加根据路线生成检查点的逻辑
 message KeyPointCondition {
   optional bool use_score = 1 [default = false];
   optional bool in_order = 2 [default = true];

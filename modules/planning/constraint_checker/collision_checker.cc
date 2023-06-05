@@ -64,7 +64,7 @@ bool CollisionChecker::InCollision(
                   ego_theta, ego_length, ego_width);
 
     // correct the inconsistency of reference point and center point
-    // TODO(all): move the logic before constructing the ego_box
+    // (all): move the logic before constructing the ego_box
     double shift_distance = ego_length / 2.0 - ego_back_edge_to_center;
     Vec2d shift_vec(shift_distance * std::cos(ego_theta),
                     shift_distance * std::sin(ego_theta));

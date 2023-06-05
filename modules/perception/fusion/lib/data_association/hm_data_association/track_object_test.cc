@@ -28,7 +28,7 @@ namespace apollo {
 namespace perception {
 namespace fusion {
 /*
-TODO(all): not compiling. to be fixed
+(all): not compiling. to be fixed
 
 TEST(MatcherTest, test_generate_unassign) {
   HMTrackersObjectsAssociation matcher;

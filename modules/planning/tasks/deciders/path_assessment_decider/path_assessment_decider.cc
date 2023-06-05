@@ -288,7 +288,7 @@ bool ComparePathData(const PathData& lhs, const PathData& rhs,
       ContainsOutOnReverseLane(lhs.path_point_decision_guide());
   int rhs_on_reverse =
       ContainsOutOnReverseLane(rhs.path_point_decision_guide());
-  // TODO(jiacheng): make this a flag.
+  // (jiacheng): make this a flag.
   if (std::abs(lhs_on_reverse - rhs_on_reverse) > 6) {
     return lhs_on_reverse < rhs_on_reverse;
   }

@@ -156,7 +156,7 @@ void MlfTrackData::PredictState(double timestamp) const {
   predict_.state(5) = static_cast<float>(latest_velocity(2));
 
   predict_.timestamp = timestamp;
-  // TODO(.): predict cloud and polygon if needed in future.
+  // (.): predict cloud and polygon if needed in future.
 }
 
 void MlfTrackData::GetAndCleanCachedObjectsInTimeInterval(

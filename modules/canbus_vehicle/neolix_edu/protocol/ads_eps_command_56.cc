@@ -30,7 +30,7 @@ const int32_t Adsepscommand56::ID = 0x56;
 Adsepscommand56::Adsepscommand56() { Reset(); }
 
 uint32_t Adsepscommand56::GetPeriod() const {
-  // TODO(All) :  modify every protocol's period manually
+  // (All) :  modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -47,7 +47,7 @@ void Adsepscommand56::UpdateData(uint8_t* data) {
 }
 
 void Adsepscommand56::Reset() {
-  // TODO(All) :  you should check this manually
+  // (All) :  you should check this manually
   drive_enable_ = false;
   auto_target_angle_ = 0.0;
   auto_drivercmd_alivecounter_ = 0;

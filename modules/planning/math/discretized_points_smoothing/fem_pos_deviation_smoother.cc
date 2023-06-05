@@ -122,7 +122,7 @@ bool FemPosDeviationSmoother::SqpWithOsqp(
 
   std::vector<std::pair<double, double>> opt_xy = solver.opt_xy();
 
-  // TODO(Jinyun): unify output data container
+  // (Jinyun): unify output data container
   opt_x->resize(opt_xy.size());
   opt_y->resize(opt_xy.size());
   for (size_t i = 0; i < opt_xy.size(); ++i) {

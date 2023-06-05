@@ -145,7 +145,7 @@ class STBoundary : public common::math::Polygon2d {
    * two straightlines. In this case, the intermediate points are removed,
    * with only the end-points retained.
    */
-  // TODO(all): When slope is high, this may introduce significant errors.
+  // (all): When slope is high, this may introduce significant errors.
   // Also, when accumulated for multiple t, the error can get significant.
   // This function should be reconsidered, because it may be dangerous.
   void RemoveRedundantPoints(

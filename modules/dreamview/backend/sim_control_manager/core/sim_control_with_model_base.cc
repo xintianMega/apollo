@@ -132,7 +132,7 @@ void SimControlWithModelBase::Start() {
   std::lock_guard<std::mutex> lock(mutex_);
   if (!enabled_) {
     InternalReset();
-    // todo: Compatible with scenario conf and default value
+    // : Compatible with scenario conf and default value
     Json start_point_attr({});
     // start_point_attr:from scenario conf json or default value.here dm is
     // divided from scenario use default value
@@ -305,7 +305,7 @@ void SimControlWithModelBase::InitStartPoint(nlohmann::json start_point_attr,
     point.set_y(start_point_attr["y"]);
     // z use default 0
     point.set_z(0);
-    // Todo(@lijin): tmp not support map service,support theta
+    // (@lijin): tmp not support map service,support theta
     // double theta = 0.0;
     // double s = 0.0;
     // map_service_->GetPoseWithRegardToLane(x, y, &theta, &s);

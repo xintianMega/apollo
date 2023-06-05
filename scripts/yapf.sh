@@ -36,7 +36,7 @@ function check_yapf() {
 }
 
 function yapf_run() {
-  # TODO(storypku): yapf has a '--recursive' option.
+  # (storypku): yapf has a '--recursive' option.
   yapf -i --style='{based_on_style: google}' "$@"
 }
 

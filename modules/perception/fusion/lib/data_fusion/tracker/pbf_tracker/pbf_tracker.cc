@@ -29,7 +29,7 @@ namespace fusion {
 
 using cyber::common::GetAbsolutePath;
 
-// TODO(all) fix the static string lint issue
+// (all) fix the static string lint issue
 std::string PbfTracker::s_type_fusion_method_ = "DstTypeFusion";  // NOLINT
 std::string PbfTracker::s_existence_fusion_method_ =              // NOLINT
     "DstExistenceFusion";

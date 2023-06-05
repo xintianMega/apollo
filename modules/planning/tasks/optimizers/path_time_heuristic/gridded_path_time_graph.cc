@@ -275,7 +275,7 @@ void GriddedPathTimeGraph::GetRowRange(const StGraphPoint& point,
                                        size_t* next_highest_row,
                                        size_t* next_lowest_row) {
   double v0 = 0.0;
-  // TODO(all): Record speed information in StGraphPoint and deprecate this.
+  // (all): Record speed information in StGraphPoint and deprecate this.
   // A scaling parameter for DP range search due to the lack of accurate
   // information of the current velocity (set to 1 by default since we use
   // past 1 second's average v as approximation)
@@ -392,7 +392,7 @@ void GriddedPathTimeGraph::CalculateCostAt(
           pre_col[r_pre].pre_point() == nullptr) {
         continue;
       }
-      // TODO(Jiaxuan): Calculate accurate acceleration by recording speed
+      // (Jiaxuan): Calculate accurate acceleration by recording speed
       // data in ST point.
       // Use curr_v = (point.s - pre_point.s) / unit_t as current v
       // Use pre_v = (pre_point.s - prepre_point.s) / unit_t as previous v

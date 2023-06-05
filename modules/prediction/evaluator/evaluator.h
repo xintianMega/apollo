@@ -49,7 +49,7 @@ class Evaluator {
    */
   virtual ~Evaluator() = default;
 
-  // TODO(all): Need to merge the following two functions into a single one.
+  // (all): Need to merge the following two functions into a single one.
   // Can try using proto to pass static/dynamic env info.
 
   /**

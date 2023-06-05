@@ -89,6 +89,8 @@ class PlanningBase {
   std::unique_ptr<Frame> frame_;
   std::unique_ptr<Planner> planner_;
   std::unique_ptr<PublishableTrajectory> last_publishable_trajectory_;
+
+  //规划调度器
   std::unique_ptr<PlannerDispatcher> planner_dispatcher_;
   std::shared_ptr<DependencyInjector> injector_;
 };

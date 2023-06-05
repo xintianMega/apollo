@@ -186,7 +186,7 @@ Status STObstaclesProcessor::MapObstaclesToSTBoundaries(
               kSIgnoreThreshold &&
           boundary.bottom_left_point().t() > kTIgnoreThreshold) {
         // Ignore obstacles that are behind.
-        // TODO(jiacheng): don't ignore if ADC is in dangerous segments.
+        // (jiacheng): don't ignore if ADC is in dangerous segments.
         continue;
       }
       obs_id_to_st_boundary_[obs_ptr->Id()] = boundary;
@@ -506,7 +506,7 @@ bool STObstaclesProcessor::ComputeObstacleSTBoundary(
     // figure out the overlapping s-max and s-min one by one.
     bool is_obs_first_traj_pt = true;
     for (const auto& obs_traj_pt : obs_trajectory.trajectory_point()) {
-      // TODO(jiacheng): Currently, if the obstacle overlaps with ADC at
+      // (jiacheng): Currently, if the obstacle overlaps with ADC at
       // disjoint segments (happens very rarely), we merge them into one.
       // In the future, this could be considered in greater details rather
       // than being approximated.

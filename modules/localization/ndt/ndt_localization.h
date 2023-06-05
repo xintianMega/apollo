@@ -104,7 +104,7 @@ class NDTLocalization {
   void ComposeLocalizationStatus(const drivers::gnss::InsStat& status,
                                  LocalizationStatus* localization_status);
   /**@brief find nearest odometry status */
-  bool FindNearestOdometryStatus(const double odometry_timestamp,
+  bool FindNearesmetryStatus(const double odometry_timestamp,
                                  drivers::gnss::InsStat* status);
 
  private:

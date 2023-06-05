@@ -114,7 +114,7 @@ void Hesai40Parser::ParseRawPacket(const uint8_t *buf, const int len,
           static_cast<double>(range) * LASER_RETURN_TO_DISTANCE_RATE;
       unit.intensity = (buf[index + 2] & 0xff);
 
-      // TODO(Philip.Pi): Filtering wrong data for LiDAR.
+      // (Philip.Pi): Filtering wrong data for LiDAR.
       if ((unit.distance == 0x010101 && unit.intensity == 0x0101) ||
           unit.distance > (200 * 1000 / 2 /* 200m -> 2mm */)) {
         unit.distance = 0;

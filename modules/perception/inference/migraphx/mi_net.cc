@@ -520,7 +520,7 @@ void MINet::addArgmaxLayer(const LayerParameter &layer_param,
   const auto params = layer_param.argmax_param();
   const size_t axis = params.axis();
 
-  // TODO(B1tway): Caffe also defines out_max_val and top_k argmax parameters,
+  // (B1tway): Caffe also defines out_max_val and top_k argmax parameters,
   // but they are not supported yet
   ACHECK(!(params.has_out_max_val() || params.has_top_k()));
 
@@ -960,7 +960,7 @@ void MINet::init_blob(std::map<std::string, Tensor> *tensor_map) {
 }
 
 bool MINet::Init(const std::map<std::string, std::vector<int>> &shapes) {
-  // TODO(B1tway): add cpu support
+  // (B1tway): add cpu support
   if (gpu_id_ < 0) {
     AINFO << "must use gpu mode";
     return false;

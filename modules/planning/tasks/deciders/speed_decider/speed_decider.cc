@@ -339,7 +339,7 @@ bool SpeedDecider::CreateStopDecision(const Obstacle& obstacle,
                                       double stop_distance) const {
   const auto& boundary = obstacle.path_st_boundary();
 
-  // TODO(all): this is a bug! Cannot mix reference s and path s!
+  // (all): this is a bug! Cannot mix reference s and path s!
   // Replace boundary.min_s() with computed reference line s
   // fence is set according to reference line s.
   double fence_s = adc_sl_boundary_.end_s() + boundary.min_s() + stop_distance;

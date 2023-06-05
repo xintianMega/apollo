@@ -30,7 +30,7 @@ const int32_t Adsbrakecommand46::ID = 0x46;
 Adsbrakecommand46::Adsbrakecommand46() { Reset(); }
 
 uint32_t Adsbrakecommand46::GetPeriod() const {
-  // TODO(All) :  modify every protocol's period manually
+  // (All) :  modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -49,7 +49,7 @@ void Adsbrakecommand46::UpdateData(uint8_t* data) {
 }
 
 void Adsbrakecommand46::Reset() {
-  // TODO(All) :  you should check this manually
+  // (All) :  you should check this manually
   drive_enable_ = false;
   auto_brake_command_ = 0;
   auto_parking_command_ = false;

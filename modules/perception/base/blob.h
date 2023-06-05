@@ -82,7 +82,7 @@ constexpr size_t kMaxBlobAxes = 32;
  * @brief A wrapper around SyncedMemory holders serving as the basic
  *        computational unit for images, feature maps, etc.
  *
- * TODO(dox): more thorough description.
+ * (dox): more thorough description.
  */
 template <typename Dtype>
 class Blob {

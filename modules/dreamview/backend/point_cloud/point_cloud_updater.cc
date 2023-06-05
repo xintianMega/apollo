@@ -278,7 +278,7 @@ void PointCloudUpdater::FilterPointCloud(
   /*
       By default, disable voxel filter since it's taking more than 500ms
       ideally the most efficient sampling method is to
-      use per beam random sample for organized cloud(TODO)
+      use per beam random sample for organized cloud()
   */
   if (enable_voxel_filter_) {
     pcl::VoxelGrid<pcl::PointXYZ> voxel_grid;

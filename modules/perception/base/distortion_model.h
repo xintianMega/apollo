@@ -49,7 +49,7 @@ class BaseCameraDistortionModel {
   size_t height_ = 0;
 };
 
-/* TODO(all): to remove
+/* (all): to remove
 typedef std::shared_ptr<BaseCameraDistortionModel> BaseCameraDistortionModelPtr;
 typedef std::shared_ptr<const BaseCameraDistortionModel>
     BaseCameraDistortionModelConstPtr;

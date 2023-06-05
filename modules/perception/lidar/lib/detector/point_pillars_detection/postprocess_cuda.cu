@@ -258,7 +258,7 @@ void PostprocessCuda::DoPostprocessCuda(
   thrust::host_vector<int> host_indexes(host_filter_count[0]);
   thrust::sequence(host_indexes.begin(), host_indexes.end());
 
-  // TODO(chenjiahao): using GPU may cause crash, so use CPU here to sort,
+  // (chenjiahao): using GPU may cause crash, so use CPU here to sort,
   //  temporarily. Will change to GPU after upgrading CUDA in the future.
   thrust::sort_by_key(host_filtered_score.begin(),
                       host_filtered_score.end(),

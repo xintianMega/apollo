@@ -108,7 +108,7 @@ def gen_camera_params(camera_name, calibrated_sensor, calibration_file_path):
   camera_intrinsics['header']['frame_id'] = CAMERA_FRAME_ID
   camera_intrinsics['K'] = list(chain.from_iterable(raw_camera_intrinsic))
 
-  # Todo(zero): need to complete
+  # (zero): need to complete
   # camera_intrinsics['D'] =
   # camera_intrinsics['R'] =
   # camera_intrinsics['P'] =

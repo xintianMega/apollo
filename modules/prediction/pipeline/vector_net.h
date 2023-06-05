@@ -69,7 +69,7 @@ class VectorNet {
                      const double obstacle_phi, const std::string file_name);
 
  private:
-  // TODO(Yiqun): 1.Left/Right boundary 2.Ordinal Encoding
+  // (Yiqun): 1.Left/Right boundary 2.Ordinal Encoding
   const std::map<ATTRIBUTE_TYPE, double> attribute_map{
       {ROAD, 0.0},
       {LANE_UNKOWN, 1.0},

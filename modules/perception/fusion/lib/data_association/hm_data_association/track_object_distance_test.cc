@@ -31,7 +31,7 @@ namespace apollo {
 namespace perception {
 namespace fusion {
 /*
-TODO(all): not compiling. to be fixed
+(all): not compiling. to be fixed
 
 class TrackObjectDistanceTest : public testing::Test {
  protected:

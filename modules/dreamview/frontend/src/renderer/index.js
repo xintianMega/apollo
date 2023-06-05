@@ -154,7 +154,7 @@ class Renderer {
     this.scene.add(ambient);
     this.scene.add(directionalLight);
 
-    // TODO maybe add sanity check.
+    //  maybe add sanity check.
 
     // Actually start the animation.
     this.animate();
@@ -438,7 +438,7 @@ class Renderer {
 
   // Render one frame. This supports the main draw/render loop.
   render() {
-    // TODO should also return when no need to update.
+    //  should also return when no need to update.
     if (!this.coordinates.isInitialized()) {
       return;
     }

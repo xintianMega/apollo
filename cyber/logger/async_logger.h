@@ -128,7 +128,7 @@ class AsyncLogger : public google::base::Logger {
  private:
   // A buffered message.
   //
-  // TODO(todd): using std::string for buffered messages is convenient but not
+  // (todd): using std::string for buffered messages is convenient but not
   // as efficient as it could be. It's better to make the buffers just be
   // Arenas and allocate both the message data and Msg struct from them, forming
   // a linked list.

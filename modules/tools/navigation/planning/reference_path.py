@@ -105,7 +105,7 @@ class ReferencePath:
         path_x = []
         path_y = []
         for i in range(int(path_length)):
-            # TODO(yifei): more accurate shift is needed.
+            # (yifei): more accurate shift is needed.
             y = (lmpath_y[i] * quality + rpath_y[i] - routing_shift) / (
                 1 + quality)
             path_x.append(i)

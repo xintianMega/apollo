@@ -171,7 +171,7 @@ Chassis LexusController::chassis() {
   }
 
   if (chassis_detail.has_wheel_speed_rpt_407()) {
-    // TODO(QiL) : No wheel speed valid bit in lexus, so default valid
+    // (QiL) : No wheel speed valid bit in lexus, so default valid
     chassis_.mutable_wheel_speed()->set_is_wheel_spd_rr_valid(true);
     // chassis_.mutable_wheel_speed()->set_wheel_direction_rr(true);
     chassis_.mutable_wheel_speed()->set_wheel_spd_rr(
@@ -207,7 +207,7 @@ Chassis LexusController::chassis() {
   // 8
   if (chassis_detail.has_accel_rpt_200() &&
       chassis_detail.accel_rpt_200().has_output_value()) {
-    // TODO(snehagn): Temp fix until AS to fix the scaling
+    // (snehagn): Temp fix until AS to fix the scaling
     chassis_.set_throttle_percentage(static_cast<float>(
         chassis_detail.accel_rpt_200().output_value() * 100));
   } else {
@@ -216,7 +216,7 @@ Chassis LexusController::chassis() {
   // 9
   if (chassis_detail.has_brake_rpt_204() &&
       chassis_detail.brake_rpt_204().has_output_value()) {
-    // TODO(snehagn): Temp fix until AS to fix the scaling
+    // (snehagn): Temp fix until AS to fix the scaling
     chassis_.set_brake_percentage(static_cast<float>(
         chassis_detail.brake_rpt_204().output_value() * 100));
   } else {
@@ -253,7 +253,7 @@ Chassis LexusController::chassis() {
   }
 
   // 11
-  // TODO(QiL) : verify the unit here.
+  // (QiL) : verify the unit here.
   if (chassis_detail.has_steering_rpt_22c() &&
       chassis_detail.steering_rpt_22c().has_output_value()) {
     chassis_.set_steering_percentage(
@@ -285,7 +285,7 @@ Chassis LexusController::chassis() {
         common::VehicleSignal::TURN_NONE);
   }
 
-  // TODO(all): implement the rest here/
+  // (all): implement the rest here/
   // 26
   if (chassis_error_mask_) {
     chassis_.set_chassis_error_mask(chassis_error_mask_);
@@ -482,7 +482,7 @@ void LexusController::Acceleration(double acc) {
   // None
 }
 
-// TODO(Yu/QiL): double check the physical range, unit and direction for Lexus
+// (Yu/QiL): double check the physical range, unit and direction for Lexus
 // lexus default -32.768 ~ 32.767, unit: rad, left:-, right:+ in canbus protocol
 // need to be compatible with control module, so reverse steering
 // angle:-99.99~0.00~99.99, unit: %, left:+, right:- in control module
@@ -493,13 +493,13 @@ void LexusController::Steer(double angle) {
     return;
   }
   const double real_angle = vehicle_params_.max_steer_angle() * angle / 100.0;
-  // TODO(Yu/QiL): double checck to decide if reverse sign needed
+  // (Yu/QiL): double checck to decide if reverse sign needed
   steering_cmd_12c_->set_position(real_angle);
-  // TODO(QiL) : double check this rate
+  // (QiL) : double check this rate
   steering_cmd_12c_->set_rotation_rate(40);
 }
 
-// TODO(Yu/QiL): double check the physical range, unit and direction for Lexus
+// (Yu/QiL): double check the physical range, unit and direction for Lexus
 // lexus default -32.768 ~ 32.767, unit: rad, left:-, right:+ in canbus protocol
 // lexus default 0 ~ 65.535, unit: rad/sec, in canbus protocol
 // steering with new angle speed
@@ -518,7 +518,7 @@ void LexusController::Steer(double angle, double angle_spd) {
           vehicle_params_.min_steer_angle_rate(),
           vehicle_params_.max_steer_angle_rate(),
           vehicle_params_.max_steer_angle_rate() * angle_spd / 100.0);
-  // TODO(Yu/QiL): double checck to decide if reverse sign needed
+  // (Yu/QiL): double checck to decide if reverse sign needed
   steering_cmd_12c_->set_position(real_angle);
   steering_cmd_12c_->set_rotation_rate(real_angle_spd);
 }
@@ -637,7 +637,7 @@ void LexusController::SecurityDogThreadFunc() {
 bool LexusController::CheckResponse(const int32_t flags, bool need_wait) {
   // for Lexus, we assume CheckResponse will take 300ms. We leave a 100ms buffer
   // for it.
-  // TODO(Yu) : check whether the current retry_num match the assumed time
+  // (Yu) : check whether the current retry_num match the assumed time
   // consumption
   int32_t retry_num = 20;
   Lexus chassis_detail;

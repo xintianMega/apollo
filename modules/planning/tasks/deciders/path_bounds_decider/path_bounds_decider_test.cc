@@ -52,7 +52,7 @@ TEST_F(PathBoundsDeciderTest, InitPathBoundary) {
   PathBoundsDecider path_bounds_decider(config_, injector_);
   path_bounds_decider.adc_frenet_s_ = 10.0;
 
-  // TODO(all): implement this unit test.
+  // (all): implement this unit test.
 
   // ReferenceLine reference_line;
   // reference_line.map_path_.length_ = 200.0;
@@ -63,7 +63,7 @@ TEST_F(PathBoundsDeciderTest, InitPathBoundary) {
 TEST_F(PathBoundsDeciderTest, GetBoundaryFromLanesAndADC) {
   PathBoundsDecider path_bounds_decider(config_, injector_);
   path_bounds_decider.adc_frenet_s_ = 10.0;
-  // TODO(all): implement this unit test.
+  // (all): implement this unit test.
 }
 
 TEST_F(PathBoundsDeciderTest, GetBoundaryFromStaticObstacles) {

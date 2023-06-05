@@ -44,7 +44,7 @@ using apollo::common::math::Vec2d;
 
 IterativeAnchoringSmoother::IterativeAnchoringSmoother(
     const PlannerOpenSpaceConfig& planner_open_space_config) {
-  // TODO(Jinyun, Yu): refactor after stabilized.
+  // (Jinyun, Yu): refactor after stabilized.
   const auto& vehicle_param =
       common::VehicleConfigHelper::Instance()->GetConfig().vehicle_param();
   ego_length_ = vehicle_param.length();
@@ -178,7 +178,7 @@ bool IterativeAnchoringSmoother::Smooth(
     return false;
   }
 
-  // TODO(Jinyun): Evaluate performance
+  // (Jinyun): Evaluate performance
   // SpeedData smoothed_speeds;
   // if (!GenerateStopProfileFromPolynomial(
   //         init_a, init_v, smoothed_path_points.Length(), &smoothed_speeds)) {
@@ -277,7 +277,7 @@ bool IterativeAnchoringSmoother::ReAnchoring(
     }
   }
 
-  // TODO(Jinyun): move to confs
+  // (Jinyun): move to confs
   const size_t reanchoring_trails_num = static_cast<size_t>(
       planner_open_space_config_.iterative_anchoring_smoother_config()
           .reanchoring_trails_num());
@@ -361,7 +361,7 @@ bool IterativeAnchoringSmoother::ReAnchoring(
         }
 
         // Adjust heading accordingly
-        // TODO(Jinyun): refactor into math module
+        // (Jinyun): refactor into math module
         // current point heading adjustment
         for (size_t i = index - 1; i < index + 2; ++i) {
           path_points->at(i).set_theta(CalcHeadings(*path_points, i));
@@ -403,7 +403,7 @@ bool IterativeAnchoringSmoother::GenerateInitialBounds(
     return true;
   }
 
-  // TODO(Jinyun): refine obstacle formulation and speed it up
+  // (Jinyun): refine obstacle formulation and speed it up
   for (const auto& path_point : path_points) {
     double min_bound = std::numeric_limits<double>::infinity();
     for (const auto& obstacle_linesegments : obstacles_linesegments_vec_) {
@@ -434,7 +434,7 @@ bool IterativeAnchoringSmoother::SmoothPath(
       planner_open_space_config_.iterative_anchoring_smoother_config()
           .fem_pos_deviation_smoother_config());
 
-  // TODO(Jinyun): move to confs
+  // (Jinyun): move to confs
   const size_t max_iteration_num = 50;
 
   bool is_collision_free = false;
@@ -702,7 +702,7 @@ bool IterativeAnchoringSmoother::CombinePathAndSpeed(
     DiscretizedTrajectory* discretized_trajectory) {
   CHECK_NOTNULL(discretized_trajectory);
   discretized_trajectory->clear();
-  // TODO(Jinyun): move to confs
+  // (Jinyun): move to confs
   const double kDenseTimeResolution = 0.1;
   const double time_horizon =
       speed_points.TotalTime() + kDenseTimeResolution * 1.0e-6;

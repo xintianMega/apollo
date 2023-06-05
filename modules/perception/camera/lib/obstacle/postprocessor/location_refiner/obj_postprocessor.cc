@@ -17,7 +17,7 @@
 
 #include <limits>
 
-// TODO(Xun & Yucheng): code completion
+// (Xun & Yucheng): code completion
 namespace apollo {
 namespace perception {
 namespace camera {

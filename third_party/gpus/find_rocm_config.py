@@ -301,7 +301,7 @@ def _find_hipblas_config(rocm_install_path, required_version=''):
       raise ConfigError(
           'hipblas version file "{}" not found'.format(version_file))
     major = _get_header_version(version_file, "hipblasVersionMajor")
-    # ToDo: Fix typo in "hipblaseVersionMinor" with switching to ROCM 5.1.0 or higher, where the typo is fixed
+    # : Fix typo in "hipblaseVersionMinor" with switching to ROCM 5.1.0 or higher, where the typo is fixed
     minor = _get_header_version(version_file, "hipblaseVersionMinor")
     patch = _get_header_version(version_file, "hipblasVersionPatch")
     return _get_composite_version_number(major, minor, patch)

@@ -30,7 +30,7 @@ const int32_t Gearcontrola1::ID = 0xA1;
 Gearcontrola1::Gearcontrola1() { Reset(); }
 
 uint32_t Gearcontrola1::GetPeriod() const {
-  // TODO(ChaoM) :  modify every protocol's period manually
+  // (ChaoM) :  modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -41,7 +41,7 @@ void Gearcontrola1::UpdateData(uint8_t* data) {
 }
 
 void Gearcontrola1::Reset() {
-  // TODO(ChaoM) :  you should check this manually
+  // (ChaoM) :  you should check this manually
   gear_state_target_ = Gear_control_a1::GEAR_STATE_TARGET_P;
   gear_enable_control_ =
       Gear_control_a1::GEAR_ENABLE_CONTROL_GEAR_MANUALCONTROL;

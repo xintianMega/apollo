@@ -64,7 +64,7 @@ TEST_F(SunnyvaleLoopTest, cruise) {
 /*
  * stop case to trigger QP ST failed to solve
  */
-// TODO(all): need fix test data.
+// (all): need fix test data.
 // the existing obstacle is not along reference line and gets ignored
 /*
 TEST_F(SunnyvaleLoopTest, stop) {

@@ -37,7 +37,7 @@ cc_binary(
     ],
 )
 
-# TODO(all): Extract the large library to thin pieces.
+# (all): Extract the large library to thin pieces.
 qt_cc_library(
     name = "visualizer_lib",
     srcs = glob(
@@ -71,7 +71,7 @@ qt_cc_library(
     ],
 )
 
-# TODO(all): Disable linter temporarily as the generated ui files should be
+# (all): Disable linter temporarily as the generated ui files should be
 # excluded from check. But we should also check the .h and .cc files, if they
-# are extracted to their own cc_libraries. See the TODO above.
+# are extracted to their own cc_libraries. See the  above.
 # cpplint()

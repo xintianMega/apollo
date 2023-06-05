@@ -262,7 +262,7 @@ bool PiecewiseJerkSpeedNonlinearIpoptInterface::get_starting_point(
 
   return true;
 
-  // TODO(Jinyun): Implement better default warm start based on safety_bounds
+  // (Jinyun): Implement better default warm start based on safety_bounds
   for (int i = 0; i < num_of_points_; ++i) {
     x[i] = std::min(5.0 * delta_t_ * i + s_init_, s_max_);
   }

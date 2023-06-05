@@ -42,7 +42,7 @@ message Uncertainty {
   // second.
   optional apollo.common.Point3D angular_velocity_std_dev = 5;
 
-  // TODO: Define covariance items when needed.
+  // : Define covariance items when needed.
 }
 
 message LocalizationEstimate {

@@ -30,7 +30,7 @@ const int32_t Brakecontrola4::ID = 0xA4;
 Brakecontrola4::Brakecontrola4() { Reset(); }
 
 uint32_t Brakecontrola4::GetPeriod() const {
-  // TODO(ChaoM) :  modify every protocol's period manually
+  // (ChaoM) :  modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -41,7 +41,7 @@ void Brakecontrola4::UpdateData(uint8_t* data) {
 }
 
 void Brakecontrola4::Reset() {
-  // TODO(ChaoM) :  you should check this manually
+  // (ChaoM) :  you should check this manually
   brake_torque_ = 0.0;
   brake_enable_control_ = Brake_control_a4::BRAKE_ENABLE_CONTROL_BRAKE_MANUAL;
 }

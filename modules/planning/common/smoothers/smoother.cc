@@ -50,7 +50,7 @@ bool Smoother::IsCloseStop(const common::VehicleState& vehicle_state,
   return true;
 }
 
-// TODO(all): extend more smooth policies into different objects
+// (all): extend more smooth policies into different objects
 // when more use cases happens later.
 apollo::common::Status Smoother::Smooth(
     const FrameHistory* frame_history, const Frame* current_frame,

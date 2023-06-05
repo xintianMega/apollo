@@ -70,7 +70,7 @@ using apollo::drivers::canbus::SensorCanbusConf;
 
 class RacobitRadarCanbusComponent : public apollo::cyber::Component<> {
  public:
-  // TODO(lizh): check whether we need a new msg item, say
+  // (lizh): check whether we need a new msg item, say
   // MonitorMessageItem::SENSORCANBUS
   RacobitRadarCanbusComponent();
   ~RacobitRadarCanbusComponent();

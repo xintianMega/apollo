@@ -30,7 +30,7 @@ const int32_t Adsdrivecommand50::ID = 0x50;
 Adsdrivecommand50::Adsdrivecommand50() { Reset(); }
 
 uint32_t Adsdrivecommand50::GetPeriod() const {
-  // TODO(All) :  modify every protocol's period manually
+  // (All) :  modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -48,7 +48,7 @@ void Adsdrivecommand50::UpdateData(uint8_t* data) {
 }
 
 void Adsdrivecommand50::Reset() {
-  // TODO(All) :  you should check this manually
+  // (All) :  you should check this manually
   drive_enable_ = false;
   auto_shift_command_ = Ads_drive_command_50::AUTO_SHIFT_COMMAND_N;
   auto_drive_torque_ = 0.0;

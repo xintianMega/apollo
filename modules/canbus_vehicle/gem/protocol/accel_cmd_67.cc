@@ -30,7 +30,7 @@ const int32_t Accelcmd67::ID = 0x67;
 Accelcmd67::Accelcmd67() { Reset(); }
 
 uint32_t Accelcmd67::GetPeriod() const {
-  // TODO(QiL) :modify every protocol's period manually
+  // (QiL) :modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -40,7 +40,7 @@ void Accelcmd67::UpdateData(uint8_t* data) {
 }
 
 void Accelcmd67::Reset() {
-  // TODO(QiL) :you should check this manually
+  // (QiL) :you should check this manually
   accel_cmd_ = 0.0;
 }
 

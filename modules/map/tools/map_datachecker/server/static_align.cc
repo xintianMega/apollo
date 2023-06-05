@@ -117,7 +117,7 @@ double StaticAlign::StaticAlignDynamicCentroid(
 }
 
 double StaticAlign::StaticAlignRansac(const std::vector<FramePose>& poses) {
-  // TODO(yuanyijun): implementation of selecting an center by RANSAC
+  // (yuanyijun): implementation of selecting an center by RANSAC
   return 0.0;
 }
 

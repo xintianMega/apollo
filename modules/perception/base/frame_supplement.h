@@ -59,7 +59,7 @@ struct alignas(16) CameraFrameSupplement {
   // @brief only reference of the image data
   Image8UPtr image_ptr = nullptr;
 
-  // TODO(guiyilin): modify interfaces of visualizer, use Image8U
+  // (guiyilin): modify interfaces of visualizer, use Image8U
   std::shared_ptr<Blob<uint8_t>> image_blob = nullptr;
 
   void Reset() {

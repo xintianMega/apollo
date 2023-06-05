@@ -38,7 +38,7 @@ DEFINE_string(canbus_test_file,
               "canbus tester input test file, in ControlCommand pb format.");
 
 // enable receiving guardian command
-// TODO(QiL) : depreciate this after test
+// (QiL) : depreciate this after test
 DEFINE_bool(receive_guardian, false,
             "Enable receiving guardian message on canbus side");
 

@@ -259,7 +259,7 @@ def InvokeNvcc(argv, log=False):
          ' -I .' +
          ' -x cu ' + opt + includes + ' -c ' + srcs + out)
 
-  # TODO(zhengxq): for some reason, 'gcc' needs this help to find 'as'.
+  # (zhengxq): for some reason, 'gcc' needs this help to find 'as'.
   # Need to investigate and fix.
   cmd = 'PATH=' + PREFIX_DIR + ':$PATH ' + cmd
   if log: Log(cmd)

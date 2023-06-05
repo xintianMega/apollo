@@ -56,7 +56,7 @@ MovingResult MovingDetection::DetectSingleChannel(
          kFrameNumStored) {
     signal_stats_[channel_index].pop_front();
   }
-  // TODO(kechxu) refactor the following initial version
+  // (kechxu) refactor the following initial version
   MovingResult power_result = AnalyzePower(signal_stats_[channel_index]);
   if (power_result != UNKNOWN) {
     return power_result;

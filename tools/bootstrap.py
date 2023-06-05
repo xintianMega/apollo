@@ -150,7 +150,7 @@ def write_action_env_to_bazelrc(var_name, var):
 
 
 def write_build_var_to_bazelrc(bazel_config_name, option_name):
-    # TODO(build): Migrate all users of configure.py to use --config Bazel
+    # (build): Migrate all users of configure.py to use --config Bazel
     # options and not to set build configs through environment variables.
     write_to_bazelrc('build:%s --define %s=true' % (bazel_config_name,
                                                     option_name))
@@ -999,7 +999,7 @@ def setup_cuda_family_config_interactively(environ_cp):
         # validated.
         environ_cp = dict(environ_save)
 
-        # TODO(build): revisit these settings
+        # (build): revisit these settings
         set_cuda_version(environ_cp)
         set_cudnn_version(environ_cp)
         set_tensorrt_version(environ_cp)

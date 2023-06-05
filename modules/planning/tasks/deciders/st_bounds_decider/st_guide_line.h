@@ -37,7 +37,7 @@
 namespace apollo {
 namespace planning {
 
-// TODO(jiacheng): currently implemented a constant velocity model for
+// (jiacheng): currently implemented a constant velocity model for
 // guide-line. Upgrade it to a constant acceleration model.
 class STGuideLine {
  public:

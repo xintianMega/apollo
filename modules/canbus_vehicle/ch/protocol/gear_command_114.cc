@@ -29,7 +29,7 @@ const int32_t Gearcommand114::ID = 0x114;
 Gearcommand114::Gearcommand114() { Reset(); }
 
 uint32_t Gearcommand114::GetPeriod() const {
-  // TODO(All) :  modify every protocol's period manually
+  // (All) :  modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -39,7 +39,7 @@ void Gearcommand114::UpdateData(uint8_t* data) {
 }
 
 void Gearcommand114::Reset() {
-  // TODO(All) :  you should check this manually
+  // (All) :  you should check this manually
   gear_cmd_ = Gear_command_114::GEAR_CMD_NEUTRAL;
 }
 

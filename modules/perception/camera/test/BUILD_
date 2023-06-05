@@ -460,7 +460,7 @@ cc_test(
     ]),
 )
 
-# TODO(private)
+# (private)
 # cc_test(
 #     name = "camera_lib_obstacle_tracker_omt_omt_obstacle_tracker_test",
 #     srcs = ["camera_lib_obstacle_tracker_omt_omt_obstacle_tracker_test.cc"],
@@ -478,7 +478,7 @@ cc_test(
 #     ],
 # )
 
-# TODO(private)
+# (private)
 # cc_test(
 #     name = "camera_lib_obstacle_tracker_omt_reference_test",
 #     srcs = ["camera_lib_obstacle_tracker_omt_reference_test.cc"],
@@ -600,7 +600,7 @@ cc_test(
     ],
 )
 
-# TODO(private)
+# (private)
 #cc_test(
 #    name = "camera_lib_traffic_light_preprocessor_test",
 #    srcs = ["camera_lib_traffic_light_preprocessor_test.cc"],

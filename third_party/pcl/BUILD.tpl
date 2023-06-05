@@ -8,7 +8,7 @@ cc_library(
     strip_include_prefix = "pcl/include",
 )
 
-# TODO(storypku): split pcl into individual components
+# (storypku): split pcl into individual components
 cc_library(
     name = "pcl",
     linkopts = %{pcl_linkopts},

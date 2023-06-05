@@ -99,7 +99,7 @@ bool ValetParkingScenario::GetScenarioConfig() {
 
 bool ValetParkingScenario::IsTransferable(const Frame& frame,
                                           const double parking_start_range) {
-  // TODO(all) Implement available parking spot detection by preception results
+  // (all) Implement available parking spot detection by preception results
   std::string target_parking_spot_id;
   if (frame.local_view().routing->routing_request().has_parking_info() &&
       frame.local_view()
@@ -161,7 +161,7 @@ bool ValetParkingScenario::CheckDistanceToParkingSpot(
     const VehicleState& vehicle_state, const Path& nearby_path,
     const double parking_start_range,
     const PathOverlap& parking_space_overlap) {
-  // TODO(Jinyun) parking overlap s are wrong on map, not usable
+  // (Jinyun) parking overlap s are wrong on map, not usable
   // double parking_space_center_s =
   //     (parking_space_overlap.start_s + parking_space_overlap.end_s) / 2.0;
   const hdmap::HDMap* hdmap = hdmap::HDMapUtil::BaseMapPtr();

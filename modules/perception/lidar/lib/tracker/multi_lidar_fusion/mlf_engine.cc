@@ -258,7 +258,7 @@ void convertPoseToLoc(const Eigen::Affine3d& pose,
   localization->mutable_pose()->mutable_orientation()->set_qw(p.w());
 }
 
-// TODO(all): semantic map related, for debugging
+// (all): semantic map related, for debugging
 // void MlfEngine::AttachDebugInfo(
 //    std::vector<std::shared_ptr<base::Object>>* foreground_objs) {
 //  for (auto i : obstacle_container_.curr_frame_movable_obstacle_ids()) {
@@ -280,7 +280,7 @@ void convertPoseToLoc(const Eigen::Affine3d& pose,
 //  }
 //}
 
-// TODO(all): semantic map related, for debugging
+// (all): semantic map related, for debugging
 // void MlfEngine::AttachSemanticPredictedTrajectory(
 //    const std::vector<MlfTrackDataPtr>& tracks) {
 //  for (auto i : obstacle_container_.curr_frame_movable_obstacle_ids()) {
@@ -318,7 +318,7 @@ void MlfEngine::CollectTrackedResult(LidarFrame* frame) {
   };
   collect(&foreground_track_data_);
   // update semantic map object container
-// TODO(all): semantic map related, for debugging
+// (all): semantic map related, for debugging
 //  if (use_semantic_map_) {
 //    obstacle_container_.CleanUp();
 //    // use msg serializer to convert object to perception obstacles

@@ -254,7 +254,7 @@ bool PluginManager::CheckPluginStatus(const string& plugin_name) {
     AERROR << "Failed to register this plugin, cann't check!";
     return false;
   }
-  // todo: Extract the logic for monitoring plugin status
+  // : Extract the logic for monitoring plugin status
   std::vector<string> running_processes;
   for (const auto& cmd_file : cyber::common::Glob("/proc/*/cmdline")) {
     // Get process command string.

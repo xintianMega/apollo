@@ -94,7 +94,7 @@ def _get_cxx_inc_directories_impl(repository_ctx, cc, lang_is_cpp):
     else:
         lang = "c"
 
-    # TODO: We pass -no-canonical-prefixes here to match the compiler flags,
+    # : We pass -no-canonical-prefixes here to match the compiler flags,
     #       but in rocm_clang CROSSTOOL file that is a `feature` and we should
     #       handle the case when it's disabled and no flag is passed
     result = raw_exec(repository_ctx, [

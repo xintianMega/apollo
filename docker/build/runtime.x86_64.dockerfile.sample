@@ -59,7 +59,7 @@ RUN bash /opt/apollo/installers/install_python_modules.sh
 
 RUN python3 -m pip install --timeout 30 --no-cache-dir opencv-python
 
-# TODO(storypku): NodeJS
+# (storypku): NodeJS
 COPY --from=devel /usr/local/fast-rtps  /usr/local/fast-rtps
 COPY --from=devel /usr/local/libtorch_gpu /usr/local/libtorch_gpu
 COPY --from=devel /usr/local/qt5 /usr/local/qt5

@@ -439,7 +439,7 @@ ScenarioType ScenarioManager::SelectStopSignScenario(
       (adc_distance_to_stop_sign > 0.0 &&
        adc_distance_to_stop_sign <=
            scenario_config.start_stop_sign_scenario_distance());
-  const bool stop_sign_all_way = false;  // TODO(all)
+  const bool stop_sign_all_way = false;  // (all)
 
   switch (current_scenario_->scenario_type()) {
     case ScenarioType::LANE_FOLLOW:
@@ -714,7 +714,7 @@ ScenarioType ScenarioManager::SelectValetParkingScenario(const Frame& frame) {
   const auto& scenario_config =
       config_map_[ScenarioType::VALET_PARKING].valet_parking_config();
 
-  // TODO(All) trigger valet parking by route message definition as of now
+  // (All) trigger valet parking by route message definition as of now
   double parking_spot_range_to_start =
       scenario_config.parking_spot_range_to_start();
   if (scenario::valet_parking::ValetParkingScenario::IsTransferable(
@@ -732,7 +732,7 @@ ScenarioType ScenarioManager::SelectParkAndGoScenario(const Frame& frame) {
   const auto vehicle_state_provider = injector_->vehicle_state();
   common::VehicleState vehicle_state = vehicle_state_provider->vehicle_state();
   auto adc_point = common::util::PointFactory::ToPointENU(vehicle_state);
-  // TODO(SHU) might consider gear == GEAR_PARKING
+  // (SHU) might consider gear == GEAR_PARKING
   double adc_speed = vehicle_state_provider->linear_velocity();
   double s = 0.0;
   double l = 0.0;

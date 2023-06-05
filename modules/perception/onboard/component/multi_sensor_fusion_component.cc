@@ -80,7 +80,7 @@ bool MultiSensorFusionComponent::Proc(
                                                       SensorFrameMessage);
   bool status = InternalProc(message, out_message, viz_message);
   if (status) {
-    // TODO(conver sensor id)
+    // (conver sensor id)
     if (message->sensor_id_ != fusion_main_sensor_) {
       AINFO << "Fusion receive from " << message->sensor_id_ << "not from "
             << fusion_main_sensor_ << ". Skip send.";
@@ -186,7 +186,7 @@ bool MultiSensorFusionComponent::InternalProc(
       position.z = sensor2world_pose(2, 3);
       hdmap_input_->GetRoiHDMapStruct(position, radius_for_roi_object_check_,
                                       hdmap);
-      // TODO(use check)
+      // (use check)
       // ObjectInRoiSlackCheck(hdmap, fused_objects, &valid_objects);
       valid_objects.assign(fused_objects.begin(), fused_objects.end());
     } else {

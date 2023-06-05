@@ -27,7 +27,7 @@
 #elif GPU_PLATFORM == AMD
   #include "modules/perception/inference/migraphx/mi_net.h"
   #define RTNET MINet(proto_file, weight_file, outputs, inputs)
-  // TODO(B1tway) Add quantization int8 support for RTNetInt8.
+  // (B1tway) Add quantization int8 support for RTNetInt8.
   // RTNetInt8 on MIGraphX currently works with fp32.
   #define RTNET8 RTNET
 #endif

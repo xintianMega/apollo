@@ -46,7 +46,7 @@ const std::size_t kMaxObjectNum = 100;
 const std::size_t kMaxAllowedSkipObject = 10;
 
 static constexpr uint32_t kMaxNumVirtualLanePoint = 25;
-// TODO(All) average image frame rate should come from other header file.
+// (All) average image frame rate should come from other header file.
 static constexpr float kAverageFrameRate = 0.05f;
 
 class Cipv : public BaseCipv {

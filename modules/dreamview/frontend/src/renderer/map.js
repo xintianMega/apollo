@@ -154,7 +154,7 @@ export default class Map {
     });
 
     const rightLaneType = lane.rightBoundary.boundaryType[0].types[0];
-    // TODO: this is a temp. fix for repeated boundary types.
+    // : this is a temp. fix for repeated boundary types.
     lane.rightBoundary.curve.segment.forEach((segment, index) => {
       const points = coordinates.applyOffsetToArray(segment.lineSegment.point);
       const boundary = this.addLaneMesh(rightLaneType, points);

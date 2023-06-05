@@ -73,7 +73,7 @@ Status SpeedLimitDecider::GetSpeedLimits(
                             speed_bounds_config_.minimal_kappa()));
 
     // (3) speed limit from nudge obstacles
-    // TODO(all): in future, expand the speed limit not only to obstacles with
+    // (all): in future, expand the speed limit not only to obstacles with
     // nudge decisions.
     double speed_limit_from_nearby_obstacles =
         std::numeric_limits<double>::max();
@@ -94,7 +94,7 @@ Status SpeedLimitDecider::GetSpeedLimits(
        * ------------|  obstacle |------
        */
 
-      // TODO(all): potential problem here;
+      // (all): potential problem here;
       // frenet and cartesian coordinates are mixed.
       const double vehicle_front_s =
           reference_line_s + vehicle_param_.front_edge_to_center();
@@ -129,7 +129,7 @@ Status SpeedLimitDecider::GetSpeedLimits(
                collision_safety_range <
            frenet_point_l + vehicle_param_.left_edge_to_center());
 
-      // TODO(all): dynamic obstacles do not have nudge decision
+      // (all): dynamic obstacles do not have nudge decision
       if (is_close_on_left || is_close_on_right) {
         double nudge_speed_ratio = 1.0;
         if (ptr_obstacle->IsStatic()) {

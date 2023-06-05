@@ -30,7 +30,7 @@ const int32_t Brakecmd6b::ID = 0x6B;
 Brakecmd6b::Brakecmd6b() { Reset(); }
 
 uint32_t Brakecmd6b::GetPeriod() const {
-  // TODO(QiL) :modify every protocol's period manually
+  // (QiL) :modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -40,7 +40,7 @@ void Brakecmd6b::UpdateData(uint8_t* data) {
 }
 
 void Brakecmd6b::Reset() {
-  // TODO(QiL) :you should check this manually
+  // (QiL) :you should check this manually
   brake_cmd_ = 0.0;
 }
 

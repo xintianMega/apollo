@@ -3,7 +3,7 @@ syntax = "proto2";
 package apollo.canbus;
 
 // Gem vehicle starts from here
-// TODO(QiL) : Re-factor needed here
+// (QiL) : Re-factor needed here
 
 message Global_rpt_6a {
   // Report Message

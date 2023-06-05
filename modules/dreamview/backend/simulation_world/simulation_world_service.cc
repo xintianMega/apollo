@@ -368,7 +368,7 @@ void SimulationWorldService::Update() {
   UpdateWithLatestObserved(localization_reader_.get());
 
   // Clear objects received from last frame and populate with the new objects.
-  // TODO(siyangy, unacao): For now we are assembling the simulation_world with
+  // (siyangy, unacao): For now we are assembling the simulation_world with
   // latest received perception, prediction and planning message. However, they
   // may not always be perfectly aligned and belong to the same frame.
   obj_map_.clear();

@@ -30,7 +30,7 @@ const int32_t Turncmd130::ID = 0x130;
 Turncmd130::Turncmd130() { Reset(); }
 
 uint32_t Turncmd130::GetPeriod() const {
-  // TODO(QiL) modify every protocol's period manually
+  // (QiL) modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -44,7 +44,7 @@ void Turncmd130::UpdateData(uint8_t* data) {
 }
 
 void Turncmd130::Reset() {
-  // TODO(QiL) you should check this manually
+  // (QiL) you should check this manually
   ignore_overrides_ = false;
   enable_ = false;
   clear_override_ = false;

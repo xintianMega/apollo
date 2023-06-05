@@ -113,7 +113,7 @@ TEST_F(LidarLibROIServiceFilterTest, lidar_lib_roi_service_filter_test) {
 
   HdmapROIFilter roi_filter;
   ACHECK(roi_filter.Init(ROIFilterInitOptions()));
-  // TODO(All): Add back tests when data is ready.
+  // (All): Add back tests when data is ready.
   /*
   ACHECK(roi_filter.Filter(ROIFilterOptions(), &frame));
 

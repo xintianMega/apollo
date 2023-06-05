@@ -66,7 +66,7 @@ bool HMTrackersObjectsAssociation::Associate(
   double measurement_timestamp = sensor_objects[0]->GetTimestamp();
   track_object_distance_.ResetProjectionCache(measurement_sensor_id,
                                               measurement_timestamp);
-  // TODO(chenjiahao): specify prohibited sensors in config
+  // (chenjiahao): specify prohibited sensors in config
   bool do_nothing = (sensor_objects[0]->GetSensorId() == "radar_front");
   IdAssign(fusion_tracks, sensor_objects, &association_result->assignments,
            &association_result->unassigned_tracks,
@@ -259,7 +259,7 @@ void HMTrackersObjectsAssociation::ComputeDistance(
     SensorObjectConstPtr lidar_object = fusion_track->GetLatestLidarObject();
     SensorObjectConstPtr radar_object = fusion_track->GetLatestRadarObject();
     if (IsCamera(min_sensor_object)) {
-      // TODO(linjian) not reasonable,
+      // (linjian) not reasonable,
       // just for return dist score, the dist score is
       // a similarity probability [0, 1] 1 is the best
       association_result->track2measurements_dist[track_ind] = 0.0;
@@ -304,7 +304,7 @@ void HMTrackersObjectsAssociation::ComputeAssociationDistanceMat(
     std::vector<std::vector<double>>* association_mat) {
   // if (sensor_objects.empty()) return;
   TrackObjectDistanceOptions opt;
-  // TODO(linjian) ref_point
+  // (linjian) ref_point
   Eigen::Vector3d tmp = Eigen::Vector3d::Zero();
   opt.ref_point = &tmp;
   association_mat->resize(unassigned_tracks.size());

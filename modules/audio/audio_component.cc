@@ -29,7 +29,7 @@ using apollo::drivers::microphone::config::AudioData;
 AudioComponent::~AudioComponent() {}
 
 std::string AudioComponent::Name() const {
-  // TODO(all) implement
+  // (all) implement
   return "";
 }
 
@@ -50,7 +50,7 @@ bool AudioComponent::Init() {
 }
 
 bool AudioComponent::Proc(const std::shared_ptr<AudioData>& audio_data) {
-  // TODO(all) remove GetSignals() multiple calls
+  // (all) remove GetSignals() multiple calls
   AudioDetection audio_detection;
   MessageProcess::OnMicrophone(*audio_data, respeaker_extrinsics_file_,
       &audio_info_, &direction_detection_, &moving_detection_,

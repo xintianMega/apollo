@@ -69,7 +69,7 @@ using Writer = apollo::cyber::Writer<T>;
 template <typename SensorType>
 class SensorCanbus : public apollo::cyber::Component<> {
  public:
-  // TODO(lizh): check whether we need a new msg item, say
+  // (lizh): check whether we need a new msg item, say
   // MonitorMessageItem::SENSORCANBUS
   SensorCanbus()
       : monitor_logger_buffer_(

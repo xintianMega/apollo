@@ -212,7 +212,7 @@ bool ObstacleDetectionCamera::Init(const PipelineConfig &pipeline_config) {
     ObjectTemplateManagerInitOptions init_options;
     auto plugin_param =
         camera_detection_config_.object_template_param().plugin_param();
-    // todo(zero): need fix work_root
+    // (zero): need fix work_root
     init_options.root_dir = GetAbsolutePath(work_root, plugin_param.root_dir());
     init_options.conf_file = plugin_param.config_file();
     ACHECK(ObjectTemplateManager::Instance()->Init(init_options));
@@ -296,7 +296,7 @@ bool ObstacleDetectionCamera::Perception(const CameraPerceptionOptions &options,
       absl::StrCat(perception_param_.debug_param().detection_out_dir(), "/",
                    frame->frame_id, ".txt"),
       frame->detected_objects);
-  // todo(zero): need fix
+  // (zero): need fix
   // if (extractor_ && !extractor_->Extract(extractor_options, frame)) {
   //   AERROR << "Failed to extractor";
   //   return false;

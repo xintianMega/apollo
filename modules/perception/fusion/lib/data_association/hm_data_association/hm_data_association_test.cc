@@ -30,7 +30,7 @@ namespace perception {
 namespace fusion {
 
 /*
-TODO(all): not compiling. to be fixed
+(all): not compiling. to be fixed
 
 TEST(ProjectionCacheTest, test_projection_cache_basic_function) {
   ProjectionCacheObject projection_cache_object;

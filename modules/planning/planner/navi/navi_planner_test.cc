@@ -28,7 +28,7 @@
 
 namespace apollo {
 namespace planning {
-// TODO(all): Add your unit test code here according to the Google Unit Testing
+// (all): Add your unit test code here according to the Google Unit Testing
 // Specification.
 TEST(NaviPlannerTest, ComputeTrajectory) {}
 

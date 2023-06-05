@@ -656,7 +656,7 @@ double TrackObjectDistance::ComputeLidarCameraSimilarity(
 // observation is similar to the camera one, the similarity would
 // close to 1. Otherwise, it would close to 0.
 // @NOTE: original method name is compute_radar_camera_dist_score
-// @TODO: THIS METHOD SHOULD RETURN 0, IF RADAR IS IN FRONT OF CAMERA DETECTION
+// @: THIS METHOD SHOULD RETURN 0, IF RADAR IS IN FRONT OF CAMERA DETECTION
 double TrackObjectDistance::ComputeRadarCameraSimilarity(
     const SensorObjectConstPtr& radar, const SensorObjectConstPtr& camera) {
   double similarity = 0.0;

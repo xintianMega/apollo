@@ -134,11 +134,13 @@ Status OnLanePlanning::Init(const PlanningConfig& config) {
   ACHECK(hdmap_) << "Failed to load map";
 
   // instantiate reference line provider
+  // 启动参考线提供器，会另启动一个线程，执行一个定时任务，每隔50ms提供一次参考线
   reference_line_provider_ = std::make_unique<ReferenceLineProvider>(
       injector_->vehicle_state(), hdmap_);
   reference_line_provider_->Start();
 
   // dispatch planner
+  // 为Planning分配具体的Planner
   planner_ = planner_dispatcher_->DispatchPlanner(config_, injector_);
   if (!planner_) {
     return Status(
@@ -221,7 +223,7 @@ Status OnLanePlanning::InitFrame(const uint32_t sequence_num,
   return Status::OK();
 }
 
-// TODO(all): fix this! this will cause unexpected behavior from controller
+// (all): fix this! this will cause unexpected behavior from controller
 void OnLanePlanning::GenerateStopTrajectory(ADCTrajectory* ptr_trajectory_pb) {
   ptr_trajectory_pb->clear_trajectory_point();
 
@@ -244,6 +246,7 @@ void OnLanePlanning::GenerateStopTrajectory(ADCTrajectory* ptr_trajectory_pb) {
   }
 }
 
+//TODO: TX
 void OnLanePlanning::RunOnce(const LocalView& local_view,
                              ADCTrajectory* const ptr_trajectory_pb) {
   // when rerouting, reference line might not be updated. In this case, planning
@@ -282,7 +285,7 @@ void OnLanePlanning::RunOnce(const LocalView& local_view,
         ->mutable_not_ready()
         ->set_reason(msg);
     status.Save(ptr_trajectory_pb->mutable_header()->mutable_status());
-    // TODO(all): integrate reverse gear
+    //(all): integrate reverse gear
     ptr_trajectory_pb->set_gear(canbus::Chassis::GEAR_DRIVE);
     FillPlanningPb(start_timestamp, ptr_trajectory_pb);
     GenerateStopTrajectory(ptr_trajectory_pb);
@@ -337,6 +340,8 @@ void OnLanePlanning::RunOnce(const LocalView& local_view,
 
   injector_->ego_info()->Update(stitching_trajectory.back(), vehicle_state);
   const uint32_t frame_num = static_cast<uint32_t>(seq_num_++);
+
+  //TODO: 初始化Frame
   status = InitFrame(frame_num, stitching_trajectory.back(), vehicle_state);
 
   if (status.ok()) {
@@ -370,7 +375,6 @@ void OnLanePlanning::RunOnce(const LocalView& local_view,
       status.Save(ptr_trajectory_pb->mutable_header()->mutable_status());
       GenerateStopTrajectory(ptr_trajectory_pb);
     }
-    // TODO(all): integrate reverse gear
     ptr_trajectory_pb->set_gear(canbus::Chassis::GEAR_DRIVE);
     FillPlanningPb(start_timestamp, ptr_trajectory_pb);
     frame_->set_current_frame_planned_trajectory(*ptr_trajectory_pb);
@@ -379,6 +383,7 @@ void OnLanePlanning::RunOnce(const LocalView& local_view,
     return;
   }
 
+  //TODO: 判断是否符合交通规则
   for (auto& ref_line_info : *frame_->mutable_reference_line_info()) {
     TrafficDecider traffic_decider;
     traffic_decider.Init(traffic_rule_configs_);
@@ -391,6 +396,7 @@ void OnLanePlanning::RunOnce(const LocalView& local_view,
     }
   }
 
+  //TODO: 执行计划
   status = Plan(start_timestamp, stitching_trajectory, ptr_trajectory_pb);
 
   for (const auto& p : ptr_trajectory_pb->trajectory_point()) {
@@ -437,7 +443,7 @@ void OnLanePlanning::RunOnce(const LocalView& local_view,
     ref_line_task->set_time_ms(reference_line_provider_->LastTimeDelay() *
                                1000.0);
     ref_line_task->set_name("ReferenceLineProvider");
-    // TODO(all): integrate reverse gear
+    // (all): integrate reverse gear
     ptr_trajectory_pb->set_gear(canbus::Chassis::GEAR_DRIVE);
     FillPlanningPb(start_timestamp, ptr_trajectory_pb);
     ADEBUG << "Planning pb:" << ptr_trajectory_pb->header().DebugString();
@@ -537,6 +543,7 @@ Status OnLanePlanning::Plan(
     frame_->mutable_open_space_info()->sync_debug_instance();
   }
 
+  //TODO: 调用具体的(PUBLIC_ROAD)Planner执行
   auto status = planner_->Plan(stitching_trajectory.back(), frame_.get(),
                                ptr_trajectory_pb);
 
@@ -552,7 +559,7 @@ Status OnLanePlanning::Plan(
     publishable_trajectory.PopulateTrajectoryProtobuf(ptr_trajectory_pb);
     ptr_trajectory_pb->set_gear(publishable_trajectory_gear);
 
-    // TODO(QiL): refine engage advice in open space trajectory optimizer.
+    // (QiL): refine engage advice in open space trajectory optimizer.
     auto* engage_advice = ptr_trajectory_pb->mutable_engage_advice();
 
     // enable start auto from open_space planner.
@@ -565,7 +572,7 @@ Status OnLanePlanning::Plan(
       engage_advice->set_advice(EngageAdvice::KEEP_ENGAGED);
       engage_advice->set_reason("Keep engage while in parking");
     }
-    // TODO(QiL): refine the export decision in open space info
+    // (QiL): refine the export decision in open space info
     ptr_trajectory_pb->mutable_decision()
         ->mutable_main_decision()
         ->mutable_parking()
@@ -576,7 +583,7 @@ Status OnLanePlanning::Plan(
       frame_->mutable_open_space_info()->RecordDebug(ptr_debug);
       ADEBUG << "Open space debug information added!";
       // call open space info load debug
-      // TODO(Runxin): create a new flag to enable openspace chart
+      // (Runxin): create a new flag to enable openspace chart
       ExportOpenSpaceChart(ptr_trajectory_pb->debug(), *ptr_trajectory_pb,
                            ptr_debug);
     }
@@ -693,7 +700,7 @@ bool OnLanePlanning::CheckPlanningConfig(const PlanningConfig& config) {
   if (!config.standard_planning_config().has_planner_public_road_config()) {
     return false;
   }
-  // TODO(All): check other config params
+  // (All): check other config params
   return true;
 }
 
@@ -1193,7 +1200,7 @@ void OnLanePlanning::AddPublishedSpeed(const ADCTrajectory& trajectory_pb,
 
 VehicleState OnLanePlanning::AlignTimeStamp(const VehicleState& vehicle_state,
                                             const double curr_timestamp) const {
-  // TODO(Jinyun): use the same method in trajectory stitching
+  // (Jinyun): use the same method in trajectory stitching
   //               for forward prediction
   auto future_xy = injector_->vehicle_state()->EstimateFuturePosition(
       curr_timestamp - vehicle_state.timestamp());

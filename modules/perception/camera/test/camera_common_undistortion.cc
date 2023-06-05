@@ -127,7 +127,7 @@ int ImageGpuPreprocessHandler::handle(uint8_t *src, uint8_t *dst) {
     return static_cast<int>(eStatusNPP);
   }
 #elif GPU_PLATFORM == AMD
-  // TODO(B1tway): Add necesssary RPP code
+  // (B1tway): Add necesssary RPP code
 #endif
   BASE_GPU_CHECK(cudaMemcpy(dst, _d_dst, _out_size, cudaMemcpyDeviceToHost));
   return 0;

@@ -100,7 +100,7 @@ Stage::StageStatus LaneFollowStage::Process(
   unsigned int count = 0;
 
   for (auto& reference_line_info : *frame->mutable_reference_line_info()) {
-    // TODO(SHU): need refactor
+    // (SHU): need refactor
     if (count++ == frame->mutable_reference_line_info()->size()) {
       break;
     }
@@ -179,7 +179,7 @@ Status LaneFollowStage::PlanOnReferenceLine(
       break;
     }
 
-    // TODO(SHU): disable reference line order changes for now
+    // (SHU): disable reference line order changes for now
     // updated reference_line_info, because it is changed in
     // lane_change_decider by PrioritizeChangeLane().
     // reference_line_info = &frame->mutable_reference_line_info()->front();

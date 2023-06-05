@@ -561,7 +561,7 @@ void DevkitController::Gear(Chassis::GearPosition gear_position) {
 // pedal:0.00~99.99, unit:%
 void DevkitController::Brake(double pedal) {
   // double real_value = params_.max_acc() * acceleration / 100;
-  // TODO(All) :  Update brake value based on mode
+  // (All) :  Update brake value based on mode
   if (driving_mode() != Chassis::COMPLETE_AUTO_DRIVE &&
       driving_mode() != Chassis::AUTO_SPEED_ONLY) {
     AINFO << "The current drive mode does not need to set brake pedal.";

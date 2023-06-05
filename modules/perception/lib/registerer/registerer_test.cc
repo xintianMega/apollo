@@ -60,7 +60,7 @@ TEST(RegistererTest, Test) {
   ObjectFactoryDerivedClass1 obj_factory_drived1;
   obj_factory_drived1.NewInstance();
   Any any;
-  // TODO(all) enable this check
+  // (all) enable this check
   // EXPECT_EQ(any.content_, nullptr);
 }
 

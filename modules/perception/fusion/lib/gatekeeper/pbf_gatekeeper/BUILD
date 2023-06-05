@@ -18,7 +18,7 @@ cc_library(
     ],
 )
 
-# todo(zero)
+# (zero)
 # cc_test(
 #     name = "pbf_gatekeeper_test",
 #     size = "small",

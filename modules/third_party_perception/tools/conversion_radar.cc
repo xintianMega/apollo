@@ -72,7 +72,7 @@ RadarObstacles ContiToRadarObstacles(
 
     Point relative_pos_sl;
 
-    // TODO(QiL): load the radar configs here
+    // (QiL): load the radar configs here
     relative_pos_sl.set_x(contiobs.longitude_dist());
     relative_pos_sl.set_y(contiobs.lateral_dist());
     rob.mutable_relative_position()->CopyFrom(relative_pos_sl);
@@ -123,7 +123,7 @@ RadarObstacles ContiToRadarObstacles(
       absolute_vel.set_z(0.0);
 
       // Overwrite heading here with relative headings
-      // TODO(QiL) : refind the logic here.
+      // (QiL) : refind the logic here.
       if (contiobs.clusterortrack() == 0) {
         rob.set_theta(contiobs.oritation_angle() / 180 * M_PI);
       } else {

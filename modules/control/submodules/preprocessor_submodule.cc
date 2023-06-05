@@ -120,7 +120,7 @@ bool PreprocessorSubmodule::Proc(const std::shared_ptr<LocalView> &local_view) {
 
 Status PreprocessorSubmodule::ProducePreprocessorStatus(
     Preprocessor *control_preprocessor) {
-  // TODO(SJiang): rename this function since local view got changed in this
+  // (SJiang): rename this function since local view got changed in this
   // function.
   Status status = CheckInput(control_preprocessor->mutable_local_view());
 

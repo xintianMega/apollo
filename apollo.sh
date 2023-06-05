@@ -99,7 +99,7 @@ function apollo_env_setup() {
     env ${APOLLO_ENV} bash "${APOLLO_ROOT_DIR}/scripts/apollo_config.sh" --noninteractive
 }
 
-#TODO(all): Update node modules
+#(all): Update node modules
 function build_dreamview_frontend() {
     pushd "${APOLLO_ROOT_DIR}/modules/dreamview/frontend" >/dev/null
     yarn build

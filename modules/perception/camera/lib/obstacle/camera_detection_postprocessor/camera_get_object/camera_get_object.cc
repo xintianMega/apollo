@@ -54,7 +54,7 @@ void CameraGetObject::get_smoke_objects_cpu(
     int width, int height, std::vector<base::ObjectPtr> *objects) {
   objects->clear();
 
-  // todo(zero): need fix model_param
+  // (zero): need fix model_param
   // int len_pred = 14;
   // for (int i = 0; i < 50; i++) {
   //   const float *bbox = detect_result.data() + i * len_pred;

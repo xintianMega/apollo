@@ -30,7 +30,7 @@ const int32_t Shiftcmd65::ID = 0x65;
 Shiftcmd65::Shiftcmd65() { Reset(); }
 
 uint32_t Shiftcmd65::GetPeriod() const {
-  // TODO(QiL) :modify every protocol's period manually
+  // (QiL) :modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -40,7 +40,7 @@ void Shiftcmd65::UpdateData(uint8_t* data) {
 }
 
 void Shiftcmd65::Reset() {
-  // TODO(QiL) :you should check this manually
+  // (QiL) :you should check this manually
   shift_cmd_ = Shift_cmd_65::SHIFT_CMD_PARK;
 }
 

@@ -27,7 +27,7 @@ cc_library(
     ],
 )
 
-# ignore temporarily TODO:// need fix logic 
+# ignore temporarily :// need fix logic
 
 # cc_test(
 #     name = "ground_service_detector_test",

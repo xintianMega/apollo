@@ -62,7 +62,7 @@ bool ExtrapolationPredictor::Predict(
 
 void ExtrapolationPredictor::PostProcess(Trajectory* trajectory_ptr,
                                          ObstacleClusters* clusters_ptr) {
-  // TODO(kechxu) handle corner cases
+  // (kechxu) handle corner cases
   static constexpr int kNumTailPoint = 5;
   ExtrapolationPredictor::LaneSearchResult lane_search_result =
       SearchExtrapolationLane(*trajectory_ptr, kNumTailPoint);

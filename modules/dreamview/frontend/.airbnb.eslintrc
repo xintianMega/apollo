@@ -33,7 +33,7 @@
     "func-names": 0,
     // Allow use global variables such as location/event
     "no-restricted-globals": 0,
-    // Allow use await inside loop, because we have codes that output of one iteration is used as input to another 
+    // Allow use await inside loop, because we have codes that output of one iteration is used as input to another
     "no-await-in-loop": 0,
 
     "react/jsx-indent": [2, 4, {checkAttributes: true}],
@@ -41,21 +41,21 @@
     // Same as before
     "react/destructuring-assignment": 0,
     // Allow not checking if props params exist
-    // TODO: add propTypes
+    // : add propTypes
     "react/prop-types": 0,
     // Allow .js as JSX component
     "react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx"] }],
 
     // Allow static components has 'onClick' method
-    // TODO: use 'onClick' method on non-static components such as button
+    // : use 'onClick' method on non-static components such as button
     "jsx-a11y/no-static-element-interactions": 0,
     // Allow only use 'onClick' method without keyboard listener
-    // TODO: add keyboard listener
+    // : add keyboard listener
     "jsx-a11y/click-events-have-key-events": 0,
     // Allow use onClick in <a>
     "jsx-a11y/anchor-is-valid": 0,
     // Allow noninteractive elements use onClick without keyboard listener
-    // TODO: Add keyboard listener
+    // : Add keyboard listener
     "jsx-a11y/no-noninteractive-element-interactions": 0,
 
     // Allow module.exports for unnamed exports

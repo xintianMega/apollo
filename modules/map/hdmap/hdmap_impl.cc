@@ -49,7 +49,7 @@ constexpr int kBackwardDistance = 4;
 
 int HDMapImpl::LoadMapFromFile(const std::string& map_filename) {
   Clear();
-  // TODO(All) seems map_ can be changed to a local variable of this
+  // (All) seems map_ can be changed to a local variable of this
   // function, but test will fail if I do so. if so.
   if (absl::EndsWith(map_filename, ".xml")) {
     if (!adapter::OpendriveAdapter::LoadData(map_filename, &map_)) {

@@ -537,7 +537,7 @@ bool ReferenceLineInfo::CombinePathAndSpeedProfile(
   return true;
 }
 
-// TODO(all): It is a brutal way to insert the planning init point, one elegant
+// (all): It is a brutal way to insert the planning init point, one elegant
 // way would be bypassing trajectory stitching logics somehow, or use planing
 // init point from trajectory stitching to compute the trajectory at the very
 // start
@@ -980,7 +980,7 @@ bool ReferenceLineInfo::GetIntersectionRightofWayStatus(
     return false;
   }
 
-  // TODO(all): iterate exits of intersection to check/compare speed-limit
+  // (all): iterate exits of intersection to check/compare speed-limit
   return true;
 }
 

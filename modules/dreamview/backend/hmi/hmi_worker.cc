@@ -478,7 +478,7 @@ void HMIWorker::SubmitDriveEvent(const uint64_t event_time_ms,
                                  const bool is_reportable) {
   std::shared_ptr<DriveEvent> drive_event = std::make_shared<DriveEvent>();
   apollo::common::util::FillHeader("HMI", drive_event.get());
-  // TODO(xiaoxq): Here we reuse the header time field as the event occurring
+  // (xiaoxq): Here we reuse the header time field as the event occurring
   // time. A better solution might be adding the field to DriveEvent proto to
   // make it clear.
   drive_event->mutable_header()->set_timestamp_sec(
@@ -591,7 +591,7 @@ void HMIWorker::ChangeVehicle(const std::string &vehicle_name) {
     }
     try {
       // try to get vehicle type from calibration data directory
-      // TODO(jinping): add vehicle config specs and move to vehicle config
+      // (jinping): add vehicle config specs and move to vehicle config
       const std::string vehicle_type_file_path = *vehicle_dir + "/vehicle_type";
       std::string vehicle_type_str;
       cyber::common::GetContent(vehicle_type_file_path, &vehicle_type_str);
@@ -817,7 +817,7 @@ bool HMIWorker::StopModuleByCommand(const std::string &stop_command) const {
 }
 
 bool HMIWorker::ResetSimObstacle(const std::string &scenario_id) {
-  // Todo: Check sim obstacle status before closing it
+  // : Check sim obstacle status before closing it
   const std::string absolute_path =
       cyber::common::GetEnv("HOME") + FLAGS_sim_obstacle_path;
   if (!cyber::common::PathExists(absolute_path)) {
@@ -900,7 +900,7 @@ void HMIWorker::ChangeScenario(const std::string &scenario_id) {
     }
     if (scenario_id.empty()) {
       // stop sim obstacle
-      // todo： add check status
+      // ： add check status
       // directly think pkill successful
       StopModuleByCommand(FLAGS_sim_obstacle_stop_command);
     } else {

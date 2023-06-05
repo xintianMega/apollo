@@ -199,7 +199,7 @@ bool LaneDetectionComponent::Init() {
   SetCameraHeightAndPitch();
 
   // Init visualizer
-  // TODO(techoe, yg13): homography from image to ground should be
+  // (techoe, yg13): homography from image to ground should be
   // computed from camera height and pitch.
   // Apply online calibration to adjust pitch/height automatically
   // Temporary code is used here for testing
@@ -269,7 +269,7 @@ void LaneDetectionComponent::OnMotionService(
 
   mot_buffer_->push_back(vehicledata);
 
-  // TODO(@yg13): output motion in text file
+  // (@yg13): output motion in text file
 }
 
 void LaneDetectionComponent::OnReceiveImage(
@@ -682,7 +682,7 @@ int LaneDetectionComponent::InternalProc(
   }
 
   // send out lane message
-  // TODO(yg13): add lanes in world coordinates
+  // (yg13): add lanes in world coordinates
   std::shared_ptr<apollo::perception::PerceptionLanes> lanes_msg(
       new (std::nothrow) apollo::perception::PerceptionLanes);
   if (MakeProtobufMsg(msg_timestamp, camera_name, camera_frame,

@@ -30,7 +30,7 @@ const int32_t Brakecommand101::ID = 0x101;
 Brakecommand101::Brakecommand101() { Reset(); }
 
 uint32_t Brakecommand101::GetPeriod() const {
-  // TODO(All) :  modify every protocol's period manually
+  // (All) :  modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -60,7 +60,7 @@ void Brakecommand101::UpdateData(uint8_t* data) {
 }
 
 void Brakecommand101::Reset() {
-  // TODO(All) :  you should check this manually
+  // (All) :  you should check this manually
   aeb_en_ctrl_ = Brake_command_101::AEB_EN_CTRL_DISABLE_AEB;
   brake_dec_ = 0.0;
   checksum_101_ = 0;

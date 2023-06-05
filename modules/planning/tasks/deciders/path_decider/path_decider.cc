@@ -77,7 +77,7 @@ bool PathDecider::MakeObjectDecision(const PathData &path_data,
   return true;
 }
 
-// TODO(jiacheng): eventually this entire "path_decider" should be retired.
+// (jiacheng): eventually this entire "path_decider" should be retired.
 // Before it gets retired, its logics are slightly modified so that everything
 // still works well for now.
 bool PathDecider::MakeStaticObstacleDecision(

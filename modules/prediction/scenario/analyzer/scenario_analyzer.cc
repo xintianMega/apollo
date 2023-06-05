@@ -44,7 +44,7 @@ std::shared_ptr<ScenarioFeatures> ScenarioAnalyzer::Analyze(
   if (scenario_type == Scenario::JUNCTION) {
     auto junction_scenario_features =
         std::make_shared<JunctionScenarioFeatures>();
-    // TODO(all) refactor this part
+    // (all) refactor this part
     junction_scenario_features->BuildJunctionScenarioFeatures(
         environment_features);
     return junction_scenario_features;

@@ -90,7 +90,7 @@ void MlfShapeFilter::UpdateWithObject(const MlfFilterOptions& options,
 void MlfShapeFilter::UpdateWithoutObject(const MlfFilterOptions& options,
                                          double timestamp,
                                          MlfTrackDataPtr track_data) {
-  // TODO(.)
+  // (.)
 }
 
 PERCEPTION_REGISTER_MLFFILTER(MlfShapeFilter);

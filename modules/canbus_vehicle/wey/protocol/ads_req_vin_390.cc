@@ -30,7 +30,7 @@ const int32_t Adsreqvin390::ID = 0x390;
 Adsreqvin390::Adsreqvin390() { Reset(); }
 
 uint32_t Adsreqvin390::GetPeriod() const {
-  // TODO(ChaoMa) :modify every protocol's period manually
+  // (ChaoMa) :modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -40,7 +40,7 @@ void Adsreqvin390::UpdateData(uint8_t* data) {
 }
 
 void Adsreqvin390::Reset() {
-  // TODO(ChaoMa) :you should check this manually
+  // (ChaoMa) :you should check this manually
   req_vin_signal_ = Ads_req_vin_390::REQ_VIN_SIGNAL_NO_REQUEST;
 }
 

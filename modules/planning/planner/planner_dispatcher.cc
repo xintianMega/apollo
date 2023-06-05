@@ -28,21 +28,29 @@ namespace apollo {
 namespace planning {
 
 void PlannerDispatcher::RegisterPlanners() {
+  // rtk - 根据录制的轨迹来规划行车路线
   planner_factory_.Register(
       PlannerType::RTK,
       [](const std::shared_ptr<DependencyInjector>& injector) -> Planner* {
         return new RTKReplayPlanner(injector);
       });
+
+  // public_road - 开放道路的轨迹规划器
+  //open_space - 自主泊车规划器
   planner_factory_.Register(
       PlannerType::PUBLIC_ROAD,
       [](const std::shared_ptr<DependencyInjector>& injector) -> Planner* {
         return new PublicRoadPlanner(injector);
       });
+
+  // lattice - 基于网格算法的轨迹规划器
   planner_factory_.Register(
       PlannerType::LATTICE,
       [](const std::shared_ptr<DependencyInjector>& injector) -> Planner* {
         return new LatticePlanner(injector);
       });
+
+  //navi - 基于实时相对地图的规划器
   planner_factory_.Register(
       PlannerType::NAVI,
       [](const std::shared_ptr<DependencyInjector>& injector) -> Planner* {

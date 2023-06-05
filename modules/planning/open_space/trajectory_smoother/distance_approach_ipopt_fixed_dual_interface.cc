@@ -592,7 +592,7 @@ void DistanceApproachIPOPTFixedDualInterface::eval_obj(int n, const T* x,
   int time_index = time_start_index_;
   int state_index = state_start_index_;
 
-  // TODO(QiL): Initial implementation towards earlier understanding and debug
+  // (QiL): Initial implementation towards earlier understanding and debug
   // purpose, later code refine towards improving efficiency
 
   *obj_value = 0.0;

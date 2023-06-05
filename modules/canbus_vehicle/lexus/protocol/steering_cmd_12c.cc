@@ -30,7 +30,7 @@ const int32_t Steeringcmd12c::ID = 0x12C;
 Steeringcmd12c::Steeringcmd12c() { Reset(); }
 
 uint32_t Steeringcmd12c::GetPeriod() const {
-  // TODO(QiL) : modify every protocol's period manually
+  // (QiL) : modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -45,7 +45,7 @@ void Steeringcmd12c::UpdateData(uint8_t* data) {
 }
 
 void Steeringcmd12c::Reset() {
-  // TODO(QiL) : you should check this manually
+  // (QiL) : you should check this manually
   ignore_overrides_ = false;
   enable_ = false;
   clear_override_ = false;
@@ -116,7 +116,7 @@ void Steeringcmd12c::set_p_clear_faults(uint8_t* data, bool clear_faults) {
 }
 
 Steeringcmd12c* Steeringcmd12c::set_position(double position) {
-  // TODO(AS): fix this direction and scaling.
+  // (AS): fix this direction and scaling.
   position_ = position;
   return this;
 }

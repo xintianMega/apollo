@@ -35,7 +35,7 @@ using apollo::common::Status;
 using apollo::common::math::Vec2d;
 
 namespace {
-// TODO(ALL): temporarily copy the value from lane_follow_stage.cc, will extract
+// (ALL): temporarily copy the value from lane_follow_stage.cc, will extract
 // as a common value for planning later
 constexpr double kStraightForwardLineCost = 10.0;
 }  // namespace
@@ -103,7 +103,7 @@ void RuleBasedStopDecider::CheckLaneChangeUrgency(Frame *const frame) {
         continue;
       }
       // In urgent case, set a temporary stop fence and wait to change lane
-      // TODO(Jiaxuan Xu): replace the stop fence to more intelligent actions
+      // (Jiaxuan Xu): replace the stop fence to more intelligent actions
       const std::string stop_wall_id = "lane_change_stop";
       std::vector<std::string> wait_for_obstacles;
       util::BuildStopDecision(

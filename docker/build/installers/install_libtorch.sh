@@ -21,7 +21,7 @@ set -e
 CURR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 . ${CURR_DIR}/installer_base.sh
 
-# TODO(build): Docs on how to build libtorch on Jetson boards
+# (build): Docs on how to build libtorch on Jetson boards
 # References:
 #   https://github.com/ApolloAuto/apollo/blob/pre6/docker/build/installers/install_libtorch.sh
 #   https://github.com/dusty-nv/jetson-containers/blob/master/Dockerfile.pytorch

@@ -30,7 +30,7 @@ const int32_t Parkcommand104::ID = 0x104;
 Parkcommand104::Parkcommand104() { Reset(); }
 
 uint32_t Parkcommand104::GetPeriod() const {
-  // TODO(All) :  modify every protocol's period manually
+  // (All) :  modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -54,7 +54,7 @@ void Parkcommand104::UpdateData(uint8_t* data) {
 }
 
 void Parkcommand104::Reset() {
-  // TODO(All) :  you should check this manually
+  // (All) :  you should check this manually
   checksum_104_ = 0;
   park_target_ = Park_command_104::PARK_TARGET_RELEASE;
   park_en_ctrl_ = Park_command_104::PARK_EN_CTRL_DISABLE;

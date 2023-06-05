@@ -388,7 +388,7 @@ void Neolix_eduController::Gear(Chassis::GearPosition gear_position) {
 // brake with pedal
 // pedal:0.00~99.99, unit:
 void Neolix_eduController::Brake(double pedal) {
-  // TODO(All) :  Update brake value based on mode
+  // (All) :  Update brake value based on mode
   if (driving_mode() != Chassis::COMPLETE_AUTO_DRIVE &&
       driving_mode() != Chassis::AUTO_SPEED_ONLY) {
     AINFO << "The current drive mode does not need to set brake pedal.";

@@ -30,7 +30,7 @@ const int32_t Parkingcontrola5::ID = 0xA5;
 Parkingcontrola5::Parkingcontrola5() { Reset(); }
 
 uint32_t Parkingcontrola5::GetPeriod() const {
-  // TODO(ChaoM) :  modify every protocol's period manually
+  // (ChaoM) :  modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -41,7 +41,7 @@ void Parkingcontrola5::UpdateData(uint8_t* data) {
 }
 
 void Parkingcontrola5::Reset() {
-  // TODO(ChaoM) :  you should check this manually
+  // (ChaoM) :  you should check this manually
   parking_target_ = Parking_control_a5::PARKING_TARGET_RELEASE;
   parking_enable_control_ =
       Parking_control_a5::PARKING_ENABLE_CONTROL_PARKING_MANUALCONTROL;

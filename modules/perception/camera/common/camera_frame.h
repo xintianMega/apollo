@@ -67,7 +67,7 @@ struct CameraFrame {
   // camera to world pose
   Eigen::Affine3d camera2world_pose = Eigen::Affine3d::Identity();
 
-  // todo(zero): Add stage status to distinguish different stages
+  // (zero): Add stage status to distinguish different stages
   // stage status
   // StageStatus stage_status;
   TrackState track_state = TrackState::Predict;

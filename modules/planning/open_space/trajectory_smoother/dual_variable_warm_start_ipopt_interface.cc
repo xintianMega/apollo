@@ -167,7 +167,7 @@ bool DualVariableWarmStartIPOPTInterface::get_bounds_info(int n, double* x_l,
   // 3. d, [0, obstacles_num-1] * [0, horizon_]
   for (int i = 0; i < horizon_ + 1; ++i) {
     for (int j = 0; j < obstacles_num_; ++j) {
-      // TODO(QiL): Load this from configuration
+      // (QiL): Load this from configuration
       x_l[variable_index] = -2e19;
       x_u[variable_index] = 2e19;  // nlp_upper_bound_limit
       ++variable_index;
@@ -409,11 +409,11 @@ bool DualVariableWarmStartIPOPTInterface::eval_jac_g(int n, const double* x,
         Eigen::MatrixXd bj =
             obstacles_b_.block(edges_counter, 0, current_edges_num, 1);
 
-        // TODO(QiL) : Remove redundant calculation
+        // (QiL) : Remove redundant calculation
         double tmp1 = 0;
         double tmp2 = 0;
         for (int k = 0; k < current_edges_num; ++k) {
-          // TODO(QiL) : replace this one directly with x
+          // (QiL) : replace this one directly with x
           tmp1 += Aj(k, 0) * x[l_index + k];
           tmp2 += Aj(k, 1) * x[l_index + k];
         }
@@ -460,7 +460,7 @@ bool DualVariableWarmStartIPOPTInterface::eval_jac_g(int n, const double* x,
         ++nz_index;
 
         //  3. -g'*mu + (A*t - b)*lambda > 0
-        // TODO(QiL): Revise dual variables modeling here.
+        // (QiL): Revise dual variables modeling here.
         double tmp3 = 0.0;
         double tmp4 = 0.0;
         for (int k = 0; k < 4; ++k) {
@@ -647,7 +647,7 @@ bool DualVariableWarmStartIPOPTInterface::eval_constraints(int n, const T* x,
                                 sin(xWS_(2, i)) * tmp1 + cos(xWS_(2, i)) * tmp2;
 
       //  d - (-g'*mu + (A*t - b)*lambda) = 0
-      // TODO(QiL): Need to revise according to dual modeling
+      // (QiL): Need to revise according to dual modeling
       T tmp3 = 0.0;
       for (int k = 0; k < 4; ++k) {
         tmp3 += g_[k] * x[n_index + k];

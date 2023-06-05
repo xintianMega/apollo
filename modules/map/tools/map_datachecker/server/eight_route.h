@@ -27,7 +27,7 @@
 
 namespace apollo {
 namespace hdmap {
-// TODO(yuanyijun): change EightRoute to FigureEight
+// (yuanyijun): change EightRoute to FigureEight
 class EightRoute : public Alignment {
  public:
   explicit EightRoute(std::shared_ptr<JsonConf> sp_conf);

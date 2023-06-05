@@ -177,7 +177,7 @@ apollo::perception::PerceptionObstacles SmartereyeToPerceptionObstacles(
 
     Point xy_point = SLtoXY(sma_x, sma_y, adc_theta);
 
-    // TODO(QiL) : Clean this up after data collection and validation
+    // (QiL) : Clean this up after data collection and validation
     double converted_x = 0.0;
     double converted_y = 0.0;
     double converted_z = 0.0;

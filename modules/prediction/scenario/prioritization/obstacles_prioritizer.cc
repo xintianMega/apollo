@@ -211,7 +211,7 @@ void ObstaclesPrioritizer::AssignCautionLevel() {
 void ObstaclesPrioritizer::AssignCautionLevelInJunction(
     const Obstacle& ego_vehicle, ObstaclesContainer* obstacles_container,
     const std::string& junction_id) {
-  // TODO(Hongyi): get current junction_id from Storytelling
+  // (Hongyi): get current junction_id from Storytelling
   const auto& obstacle_ids =
       obstacles_container->curr_frame_movable_obstacle_ids();
   for (const int obstacle_id : obstacle_ids) {

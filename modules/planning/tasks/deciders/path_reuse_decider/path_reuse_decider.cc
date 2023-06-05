@@ -328,7 +328,7 @@ bool PathReuseDecider::IsCollisionFree(
 
 // check the length of the path
 bool PathReuseDecider::NotShortPath(const DiscretizedPath& current_path) {
-  // TODO(shu): use gflag
+  // (shu): use gflag
   static constexpr double kShortPathThreshold = 60;
   return current_path.size() >= kShortPathThreshold;
 }

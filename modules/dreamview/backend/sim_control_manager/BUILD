@@ -21,7 +21,7 @@ cc_library(
     ],
 )
 
-# todo: add test file
+# : add test file
 # cc_test(
 #     name = "sim_control_test",
 #     size = "small",

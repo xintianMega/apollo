@@ -62,7 +62,7 @@ void EgoInfo::Clear() {
   front_clear_distance_ = FLAGS_default_front_clear_distance;
 }
 
-// TODO(all): remove this function and "front_clear_distance" related.
+// (all): remove this function and "front_clear_distance" related.
 // It doesn't make sense when:
 // 1. the heading is not necessaries align with the road
 // 2. the road is not necessaries straight

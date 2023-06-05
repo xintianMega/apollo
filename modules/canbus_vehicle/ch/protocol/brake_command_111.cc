@@ -29,7 +29,7 @@ const int32_t Brakecommand111::ID = 0x111;
 Brakecommand111::Brakecommand111() { Reset(); }
 
 uint32_t Brakecommand111::GetPeriod() const {
-  // TODO(All) :  modify every protocol's period manually
+  // (All) :  modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -40,7 +40,7 @@ void Brakecommand111::UpdateData(uint8_t* data) {
 }
 
 void Brakecommand111::Reset() {
-  // TODO(All) :  you should check this manually
+  // (All) :  you should check this manually
   brake_pedal_en_ctrl_ = Brake_command_111::BRAKE_PEDAL_EN_CTRL_DISABLE;
   brake_pedal_cmd_ = 0;
 }

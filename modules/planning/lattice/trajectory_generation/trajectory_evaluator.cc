@@ -239,7 +239,7 @@ double TrajectoryEvaluator::LonObjectiveCost(
          (FLAGS_weight_target_speed + FLAGS_weight_dist_travelled);
 }
 
-// TODO(all): consider putting pointer of reference_line_info and frame
+// (all): consider putting pointer of reference_line_info and frame
 // while constructing trajectory evaluator
 double TrajectoryEvaluator::LonCollisionCost(
     const PtrTrajectory1d& lon_trajectory) const {

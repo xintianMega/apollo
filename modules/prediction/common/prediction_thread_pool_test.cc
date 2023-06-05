@@ -33,7 +33,7 @@ TEST(PredictionThreadPoolTest, global_for_each) {
   EXPECT_EQ(expect, real);
 }
 
-/* TODO(kechxu) uncomment this when deadlock issue is fixed
+/* (kechxu) uncomment this when deadlock issue is fixed
 TEST(PredictionThreadPoolTest, avoid_deadlock) {
   std::vector<int> expect = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
   std::vector<int> real = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};

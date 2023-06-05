@@ -217,7 +217,7 @@ class OpenSpaceInfo {
   }
 
   const std::vector<TrajGearPair> &partitioned_trajectories() const {
-    // TODO(Runxin): export to chart
+    // (Runxin): export to chart
     return partitioned_trajectories_;
   }
 
@@ -234,7 +234,7 @@ class OpenSpaceInfo {
   }
 
   const TrajGearPair &chosen_partitioned_trajectory() const {
-    // TODO(Runxin): export to chart
+    // (Runxin): export to chart
     return chosen_partitioned_trajectory_;
   }
 
@@ -266,7 +266,7 @@ class OpenSpaceInfo {
     return publishable_trajectory_data_;
   }
 
-  // TODO(QiL, Jinyun) refactor and merge this with debug
+  // (QiL, Jinyun) refactor and merge this with debug
   common::TrajectoryPoint *mutable_future_collision_point() {
     return &future_collision_point_;
   }
@@ -275,7 +275,7 @@ class OpenSpaceInfo {
     return future_collision_point_;
   }
 
-  // TODO(QiL, Jinyun): refactor open_space_info vs debug
+  // (QiL, Jinyun): refactor open_space_info vs debug
 
   apollo::planning_internal::Debug *mutable_debug() { return debug_; }
 

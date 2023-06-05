@@ -550,7 +550,7 @@ bool BaseMap::CheckMap() {
 }
 
 bool BaseMap::CheckMapStrictly() {
-  // TODO(fuxiangyu@baidu.com)
+  // (fuxiangyu@baidu.com)
   return true;
 }
 

@@ -71,7 +71,7 @@ class PinholeCameraModel : public BaseCameraModel {
   Eigen::Matrix3f intrinsic_params_;
 };
 
-// TODO(all) remove later
+// (all) remove later
 typedef std::shared_ptr<BaseCameraModel> BaseCameraModelPtr;
 typedef std::shared_ptr<const BaseCameraModel> BaseCameraModelConstPtr;
 typedef std::shared_ptr<PinholeCameraModel> PinholeCameraModelPtr;

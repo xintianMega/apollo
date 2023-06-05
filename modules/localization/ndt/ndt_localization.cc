@@ -162,7 +162,7 @@ void NDTLocalization::OdometryCallback(
   ComposeLocalizationEstimate(localization_pose, odometry_msg,
                               &localization_result_);
   drivers::gnss::InsStat odometry_status;
-  FindNearestOdometryStatus(odometry_time, &odometry_status);
+  FindNearesmetryStatus(odometry_time, &odometry_status);
   ComposeLocalizationStatus(odometry_status, &localization_status_);
   is_service_started_ = true;
 }
@@ -595,7 +595,7 @@ bool NDTLocalization::LoadZoneIdFromFolder(const std::string& folder_path,
   return false;
 }
 
-bool NDTLocalization::FindNearestOdometryStatus(
+bool NDTLocalization::FindNearesmetryStatus(
     const double odometry_timestamp, drivers::gnss::InsStat* status) {
   CHECK_NOTNULL(status);
 

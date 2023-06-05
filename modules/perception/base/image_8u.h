@@ -39,7 +39,7 @@ const std::map<Color, int> kChannelsMap{
  * @brief A wrapper around Blob holders serving as the basic
  *        computational unit for images.
  *
- * TODO(dox): more thorough description.
+ * (dox): more thorough description.
  */
 class Image8U {
  public:

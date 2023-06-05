@@ -47,7 +47,7 @@ MaskPillarsDetection::MaskPillarsDetection()
   }
 }
 
-// TODO(chenjiahao):
+// (chenjiahao):
 //  specify score threshold and nms over lap threshold for each class.
 bool MaskPillarsDetection::Init(const LidarDetectorInitOptions& options) {
   point_pillars_ptr_.reset(
@@ -380,8 +380,8 @@ void MaskPillarsDetection::GetObjects(
   }
 }
 
-// TODO(all): update the base ObjectSubType with more fine-grained types
-// TODO(chenjiahao): move types into an array in the same order as offline
+// (all): update the base ObjectSubType with more fine-grained types
+// (chenjiahao): move types into an array in the same order as offline
 base::ObjectSubType MaskPillarsDetection::GetObjectSubType(const int label) {
   switch (label) {
     case 0:

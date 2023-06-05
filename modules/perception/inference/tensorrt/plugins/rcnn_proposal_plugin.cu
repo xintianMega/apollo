@@ -137,7 +137,7 @@ int RCNNProposalPlugin::enqueue(int batchSize, const void *const *inputs,
 
   int nthreads, block_size;
 
-  // TODO(chenjiahao): filter roi that has img_id == -1 at first
+  // (chenjiahao): filter roi that has img_id == -1 at first
 
   float *host_thresholds = new float[num_class_];
   for (int i = 0; i < num_class_; ++i) {
@@ -264,7 +264,7 @@ int RCNNProposalPlugin::enqueue(int batchSize, const void *const *inputs,
   int cur_ptr = 0;
   acc_box_num_ = 0;
   for (int batch_id = 0; batch_id < batchSize; ++batch_id) {
-    // TODO(chenjiahao): replace 300 with input dims
+    // (chenjiahao): replace 300 with input dims
     cur_ptr = batch_id * 300;
     BASE_GPU_CHECK(cudaMemsetAsync(
         max_bbox, 0, max_candidate_n_ * 4 * sizeof(float), stream));
@@ -349,7 +349,7 @@ int RCNNProposalPlugin::enqueue(int batchSize, const void *const *inputs,
                &acc_box_num_, stream);
   }
 
-  // TODO(chenjiahao): rescale bbox
+  // (chenjiahao): rescale bbox
 
   // Free device memory
   BASE_GPU_CHECK(cudaFree(dev_thresholds));

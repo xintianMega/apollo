@@ -156,7 +156,7 @@ message IterativeAnchoringConfig {
   optional double vehicle_shortest_dimension = 7 [default = 1.04];
   optional FemPosDeviationSmootherConfig fem_pos_deviation_smoother_config = 8;
   optional double collision_decrease_ratio = 9 [default = 0.9];
-  // TODO(QiL, Jinyun): Merge following with overall config for open space
+  // (QiL, Jinyun): Merge following with overall config for open space
   optional double max_forward_v = 10 [default = 2.0];
   optional double max_reverse_v = 11 [default = 2.0];
   optional double max_forward_acc = 12 [default = 3.0];

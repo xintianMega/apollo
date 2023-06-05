@@ -919,7 +919,7 @@ bool ReedShepp::SetRSP(const int size, const double* lengths, const char* types,
   return true;
 }
 
-// TODO(Jinyun) : reformulate GenerateLocalConfigurations.
+// (Jinyun) : reformulate GenerateLocalConfigurations.
 bool ReedShepp::GenerateLocalConfigurations(
     const std::shared_ptr<Node3d> start_node,
     const std::shared_ptr<Node3d> end_node, ReedSheppPath* shortest_path) {

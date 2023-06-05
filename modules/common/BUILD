@@ -35,7 +35,7 @@ install(
     ],
 )
 
-# todo:// keep *.pb.h only
+# :// keep *.pb.h only
 install(
     name = "pb_hdrs",
     data_dest = "common/include",

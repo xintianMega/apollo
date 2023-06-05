@@ -53,7 +53,7 @@ bool CameraDetectionPostprocessor::Process(
     AERROR << "Input null data_frame ptr.";
     return false;
   }
-  // todo(zero): need fix
+  // (zero): need fix
   // if (nullptr == image) {
   //   AERROR << "Input null image ptr.";
   //   return false;

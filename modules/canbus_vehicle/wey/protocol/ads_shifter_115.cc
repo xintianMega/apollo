@@ -30,7 +30,7 @@ const int32_t Adsshifter115::ID = 0x115;
 Adsshifter115::Adsshifter115() { Reset(); }
 
 uint32_t Adsshifter115::GetPeriod() const {
-  // TODO(ChaoMa) :modify every protocol's period manually
+  // (ChaoMa) :modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -41,7 +41,7 @@ void Adsshifter115::UpdateData(uint8_t* data) {
 }
 
 void Adsshifter115::Reset() {
-  // TODO(ChaoMa) :you should check this manually
+  // (ChaoMa) :you should check this manually
   ads_shiftmode_ = Ads_shifter_115::ADS_SHIFTMODE_INVALID;
   ads_targetgear_ = Ads_shifter_115::ADS_TARGETGEAR_N;
 }

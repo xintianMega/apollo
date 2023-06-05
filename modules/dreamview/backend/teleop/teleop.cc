@@ -83,8 +83,8 @@ TeleopService::TeleopService(WebSocketHandler *websocket)
 }
 
 void TeleopService::Start() {
-  // TODO get topic names from proto
-  // TODO update proto to get all modems' info combined with rank
+  //  get topic names from proto
+  //  update proto to get all modems' info combined with rank
 
   modem0_info_reader_ = node_->CreateReader<ModemInfo>(
       modem0_channel, [this](const std::shared_ptr<ModemInfo> &msg) {
@@ -268,7 +268,7 @@ void TeleopService::SendStatus(WebSocketHandler::Connection *conn) {
 
 void TeleopService::UpdateModem(const std::string &modem_id,
                                 const std::shared_ptr<ModemInfo> &modem_info) {
-  // TODO simplify data and only send necessary info for display
+  //  simplify data and only send necessary info for display
   // update modem_info_
   if (modem_info->has_technology()) {
     // teleop_status_["modems"][modem_info->provider()] =

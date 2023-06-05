@@ -61,6 +61,7 @@ bool PlanningComponent::Init() {
 
   planning_base_->Init(config_);
 
+  //读取routing模块的消息
   routing_reader_ = node_->CreateReader<RoutingResponse>(
       config_.topic_config().routing_response_topic(),
       [this](const std::shared_ptr<RoutingResponse>& routing) {
@@ -70,6 +71,7 @@ bool PlanningComponent::Init() {
         routing_.CopyFrom(*routing);
       });
 
+  // 读取红绿灯
   traffic_light_reader_ = node_->CreateReader<TrafficLightDetection>(
       config_.topic_config().traffic_light_detection_topic(),
       [this](const std::shared_ptr<TrafficLightDetection>& traffic_light) {
@@ -78,6 +80,7 @@ bool PlanningComponent::Init() {
         traffic_light_.CopyFrom(*traffic_light);
       });
 
+  // 是否使用导航模式
   pad_msg_reader_ = node_->CreateReader<PadMessage>(
       config_.topic_config().planning_pad_topic(),
       [this](const std::shared_ptr<PadMessage>& pad_msg) {
@@ -94,6 +97,7 @@ bool PlanningComponent::Init() {
         stories_.CopyFrom(*stories);
       });
 
+  // 读取相对地图
   if (FLAGS_use_navigation_mode) {
     relative_map_reader_ = node_->CreateReader<MapMsg>(
         config_.topic_config().relative_map_topic(),
@@ -103,9 +107,12 @@ bool PlanningComponent::Init() {
           relative_map_.CopyFrom(*map_message);
         });
   }
+
+  // 发布规划好的线路
   planning_writer_ = node_->CreateWriter<ADCTrajectory>(
       config_.topic_config().planning_trajectory_topic());
 
+  // 发布重新规划请求
   rerouting_writer_ = node_->CreateWriter<RoutingRequest>(
       config_.topic_config().routing_request_topic());
 
@@ -123,10 +130,10 @@ bool PlanningComponent::Proc(
         localization_estimate) {
   ACHECK(prediction_obstacles != nullptr);
 
-  // check and process possible rerouting request
+  // check and process possible rerouting request  检查是否需要重新规划线路
   CheckRerouting();
 
-  // process fused input data
+  // process fused input data  数据放入local_view_中，并且检查输入数据
   local_view_.prediction_obstacles = prediction_obstacles;
   local_view_.chassis = chassis;
   local_view_.localization_estimate = localization_estimate;
@@ -185,6 +192,7 @@ bool PlanningComponent::Proc(
     return true;
   }
 
+  // 执行注册好的Planning，生成线路
   ADCTrajectory adc_trajectory_pb;
   planning_base_->RunOnce(local_view_, &adc_trajectory_pb);
   auto start_time = adc_trajectory_pb.header().timestamp_sec();
@@ -195,6 +203,7 @@ bool PlanningComponent::Proc(
   for (auto& p : *adc_trajectory_pb.mutable_trajectory_point()) {
     p.set_relative_time(p.relative_time() + dt);
   }
+  //发布消息
   planning_writer_->Write(adc_trajectory_pb);
 
   // record in history

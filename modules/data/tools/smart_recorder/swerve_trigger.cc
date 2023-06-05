@@ -75,7 +75,7 @@ bool SwerveTrigger::IsSwerve() const {
   return delta > max_delta_;
 }
 
-// TODO(Leisheng Mu): reuse the code with hard_brake_trigger in next iteration
+// (Leisheng Mu): reuse the code with hard_brake_trigger in next iteration
 void SwerveTrigger::EnqueueMessage(const float steer) {
   current_steer_queue_.emplace_back(steer);
   current_total_ += steer;

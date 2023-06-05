@@ -161,7 +161,7 @@ bool Cipv::GetEgoLane(const std::vector<base::LaneLine> &lane_objects,
 bool Cipv::MakeVirtualLane(const LaneLineSimple &ref_lane_line,
                            const float yaw_rate, const float offset_distance,
                            LaneLineSimple *virtual_lane_line) {
-  // TODO(techoe): Use union of lane line and yaw_rate path to define the
+  // (techoe): Use union of lane line and yaw_rate path to define the
   // virtual lane
   virtual_lane_line->line_point.clear();
   for (uint32_t i = 0; i < ref_lane_line.line_point.size(); ++i) {
@@ -187,7 +187,7 @@ float Cipv::VehicleDynamics(const uint32_t tick, const float yaw_rate,
   *y = displacement * static_cast<float>(sin(theta));
 
   // Option 3. Bicycle model
-  // TODO(techoe): Apply bicycle model for vehicle dynamics (need wheel base)
+  // (techoe): Apply bicycle model for vehicle dynamics (need wheel base)
 
   return true;
 }
@@ -220,7 +220,7 @@ float Cipv::VehicleDynamics(const uint32_t tick, const float yaw_rate,
              half_vehicle_width;
 
   // Option 3. Bicycle model
-  // TODO(techoe): Apply bicycle model for vehicle dynamics (need wheel base)
+  // (techoe): Apply bicycle model for vehicle dynamics (need wheel base)
 
   return true;
 }
@@ -352,7 +352,7 @@ bool Cipv::FindClosestObjectImage(const std::shared_ptr<base::Object> &object,
   return true;
 }
 // Get closest edge of an object in ground coordinate
-// TODO(techoe): This function should be changed to find min-y and max-y edges
+// (techoe): This function should be changed to find min-y and max-y edges
 // to decide CIPV.
 bool Cipv::FindClosestObjectGround(const std::shared_ptr<base::Object> &object,
                                    const EgoLane &egolane_ground,
@@ -1039,7 +1039,7 @@ bool Cipv::CollectDrops(const base::MotionBufferPtr &motion_buffer,
   }
 
   // Currently remove trajectory if they do not exist in the current frame
-  // TODO(techoe): need to wait several frames
+  // (techoe): need to wait several frames
   for (const auto &each_object : object_trackjectories_) {
     int obj_id = each_object.first;
     bool b_found_id = false;

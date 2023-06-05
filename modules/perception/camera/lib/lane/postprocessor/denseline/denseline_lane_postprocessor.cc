@@ -87,7 +87,7 @@ bool DenselineLanePostprocessor::Init(const StageConfig& stage_config) {
   //  read postprocessor parameter
   lane_postprocessor_param_ = stage_config.lane_postprocessor_param();
 
-  // todo(zero): Repeat with ModelParam
+  // (zero): Repeat with ModelParam
   input_offset_x_ = lane_postprocessor_param_.input_offset_x();
   input_offset_y_ = lane_postprocessor_param_.input_offset_y();
   input_crop_width_ = lane_postprocessor_param_.crop_width();

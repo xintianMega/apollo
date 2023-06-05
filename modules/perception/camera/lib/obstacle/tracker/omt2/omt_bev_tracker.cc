@@ -43,11 +43,11 @@ bool OMTBEVTracker::Init(const StageConfig& stage_config) {
 
   frame_list_.Init(omt_param_.img_capability());
   gpu_id_ = omt_param_.gpu_id();
-  // todo(zero): need to cacl similar by detection model output feature
+  // (zero): need to cacl similar by detection model output feature
   // similar_map_.Init(omt_param_.img_capability(), gpu_id_);
   // similar_.reset(new GPUSimilar);
 
-  // todo(zero): do we need to adjust object size by reference
+  // (zero): do we need to adjust object size by reference
   // base::BaseCameraModelPtr model =
   //     common::SensorManager::Instance()->GetUndistortCameraModel(
   //         omt_param_.camera_name());
@@ -79,7 +79,7 @@ bool OMTBEVTracker::Predict(const ObstacleTrackerOptions& options,
                             CameraFrame* frame) {
   for (auto& target : targets_) {
     target.Predict(frame);
-    // todo(zero): proposed_objects not used by detection model
+    // (zero): proposed_objects not used by detection model
     auto obj = target.latest_object;
     frame->proposed_objects.push_back(obj->object);
   }
@@ -88,7 +88,7 @@ bool OMTBEVTracker::Predict(const ObstacleTrackerOptions& options,
 
 float OMTBEVTracker::ScoreAppearance(const Target& target,
                                      TrackObjectPtr object) {
-  // todo(zero): need tracking feature to cacl
+  // (zero): need tracking feature to cacl
   return 0.0f;
 }
 
@@ -143,13 +143,13 @@ void OMTBEVTracker::GenerateHypothesis(const TrackObjectPtrs& objects,
       hypo.target_idx = static_cast<int>(i);
       hypo.object_idx = static_cast<int>(j);
 
-      // todo(zero): need to complete ScoreAppearance
+      // (zero): need to complete ScoreAppearance
       float sa = ScoreAppearance(targets_[i], objects[j]);
       float sm = ScoreMotion(targets_[i], objects[j]);
       float ss = ScoreShape(targets_[i], objects[j]);
       float so = ScoreOverlap(targets_[i], objects[j]);
 
-      // todo(zero): always sa == 0 for now.
+      // (zero): always sa == 0 for now.
       if (sa == 0) {
         hypo.score = omt_param_.weight_diff_camera().motion() * sm +
                      omt_param_.weight_diff_camera().shape() * ss +
@@ -191,7 +191,7 @@ int OMTBEVTracker::CreateNewTarget(const TrackObjectPtrs& objects) {
   }
   int created_count = 0;
   for (size_t i = 0; i < objects.size(); ++i) {
-    // todo(zero): OutOfValidRegion
+    // (zero): OutOfValidRegion
     bool is_covered = false;
     base::RectF rect(objects[i]->projected_box);
     for (auto& target_rect : target_rects) {
@@ -264,7 +264,7 @@ bool OMTBEVTracker::CombineDuplicateTargets() {
         auto p2 = targets_[j][index2];
         if (std::abs(p1->timestamp - p2->timestamp) <
             omt_param_.same_ts_eps()) {
-          // todo(zero): Remove duplicate objects in multi-camera
+          // (zero): Remove duplicate objects in multi-camera
           auto box1 = p1->projected_box;
           auto box2 = p2->projected_box;
           score += common::CalculateIOUBBox(box1, box2);
@@ -415,9 +415,9 @@ bool OMTBEVTracker::Associate3D(const ObstacleTrackerOptions& options,
 
   inference::CudaUtil::set_device_id(gpu_id_);
   frame_list_.Add(frame);
-  // todo(zero): need to calc similar for objects in each frame
+  // (zero): need to calc similar for objects in each frame
   // for (int t = 0; t < frame_list_.Size(); t++) {
-  //   // todo(zero): frame_id equal to index?
+  //   // (zero): frame_id equal to index?
   //   int frame1 = frame_list_[t]->frame_id;
   //   int frame2 = frame_list_[-1]->frame_id;
   //   similar_->Calc(frame_list_[frame1], frame_list_[frame2],
@@ -438,7 +438,7 @@ bool OMTBEVTracker::Associate3D(const ObstacleTrackerOptions& options,
     track_ptr->indicator = PatchIndicator(frame->frame_id, static_cast<int>(i),
                                           frame->data_provider->sensor_name());
 
-    // todo(zero): world coor！ OBB-box is better, but for now we use AABB-box
+    // (zero): world coor！ OBB-box is better, but for now we use AABB-box
     base::BBox2DF box_target;
 
     double x = frame->detected_objects[i]->center[0];
@@ -453,7 +453,7 @@ bool OMTBEVTracker::Associate3D(const ObstacleTrackerOptions& options,
     track_objects.push_back(track_ptr);
   }
 
-  // todo(zero): reference_
+  // (zero): reference_
   // reference_.CorrectSize(frame);
 
   std::vector<HypothesisBev> score_list;
@@ -492,11 +492,11 @@ bool OMTBEVTracker::Associate3D(const ObstacleTrackerOptions& options,
       target.Clear();
     }
   }
-  // todo(zero): Remove duplicate objects in different cameras
+  // (zero): Remove duplicate objects in different cameras
   // CombineDuplicateTargets();
   ClearTargets();
 
-  // todo(zero): reference_.UpdateReference
+  // (zero): reference_.UpdateReference
   TrackObjectPtrs invalid_track_objects;
   FindAbnormalTrack(&invalid_track_objects);
 

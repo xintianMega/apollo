@@ -30,7 +30,7 @@ const int32_t Shiftcmd128::ID = 0x128;
 Shiftcmd128::Shiftcmd128() { Reset(); }
 
 uint32_t Shiftcmd128::GetPeriod() const {
-  // TODO(QiL) modify every protocol's period manually
+  // (QiL) modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -44,7 +44,7 @@ void Shiftcmd128::UpdateData(uint8_t* data) {
 }
 
 void Shiftcmd128::Reset() {
-  // TODO(QiL) you should check this manually
+  // (QiL) you should check this manually
   ignore_overrides_ = false;
   enable_ = false;
   clear_override_ = false;

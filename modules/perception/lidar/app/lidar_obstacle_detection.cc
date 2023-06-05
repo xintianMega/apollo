@@ -47,7 +47,7 @@ bool LidarObstacleDetection::Init(
   ACHECK(cyber::common::GetProtoFromFile(config_file, &config));
   use_map_manager_ = config.use_map_manager();
   use_object_filter_bank_ = config.use_object_filter_bank();
-  // todo(zero): need fix, always true?
+  // (zero): need fix, always true?
   use_object_builder_ = ("PointPillarsDetection" != config.detector() ||
                          "MaskPillarsDetection" != config.detector()  ||
                           "CenterPointDetection" != config.detector());

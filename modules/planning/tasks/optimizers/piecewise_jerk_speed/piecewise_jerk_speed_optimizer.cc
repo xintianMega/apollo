@@ -110,7 +110,7 @@ Status PiecewiseJerkSpeedOptimizer::Process(const PathData& path_data,
           s_upper_bound = std::fmin(s_upper_bound, s_upper);
           break;
         case STBoundary::BoundaryType::FOLLOW:
-          // TODO(Hongyi): unify follow buffer on decision side
+          // (Hongyi): unify follow buffer on decision side
           s_upper_bound = std::fmin(s_upper_bound, s_upper - 8.0);
           break;
         case STBoundary::BoundaryType::OVERTAKE:

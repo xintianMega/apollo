@@ -202,7 +202,7 @@ Status OpenSpaceTrajectoryProvider::Process() {
       ++optimizer_thread_counter;
       std::lock_guard<std::mutex> lock(open_space_mutex_);
       trajectory_error_.store(false);
-      // TODO(Jinyun) Use other fallback mechanism when last iteration smoothing
+      // (Jinyun) Use other fallback mechanism when last iteration smoothing
       // result has out of bound pathpoint which is not allowed for next
       // iteration hybrid astar algorithm which requires start position to be
       // strictly in bound
@@ -361,7 +361,7 @@ bool OpenSpaceTrajectoryProvider::IsVehicleStopDueToFallBack(
 void OpenSpaceTrajectoryProvider::GenerateStopTrajectory(
     DiscretizedTrajectory* const trajectory_data) {
   double relative_time = 0.0;
-  // TODO(Jinyun) Move to conf
+  // (Jinyun) Move to conf
   static constexpr int stop_trajectory_length = 10;
   static constexpr double relative_stop_time = 0.1;
   static constexpr double vEpsilon = 0.00001;

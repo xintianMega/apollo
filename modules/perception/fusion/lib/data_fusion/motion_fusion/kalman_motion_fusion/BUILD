@@ -20,7 +20,7 @@ cc_library(
     ],
 )
 
-# todo(zero): need fix
+# (zero): need fix
 # cc_test(
 #     name = "kalman_motion_fusion_test",
 #     size = "small",

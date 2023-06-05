@@ -271,7 +271,7 @@ def _find_cuda_config(base_paths, required_version):
     nvvm_library_dir = os.path.dirname(nvvm_path)
 
     # XLA requires the toolkit path to find ptxas and libdevice.
-    # TODO(csigg): pass in both directories instead.
+    # (csigg): pass in both directories instead.
     cuda_toolkit_paths = (
         os.path.normpath(os.path.join(cuda_binary_dir, "..")),
         os.path.normpath(os.path.join(nvvm_library_dir, "../..")),

@@ -26,7 +26,7 @@
 #include "Eigen/Core"
 #include "Eigen/Geometry"
 
-// TODO(Localization): Fix the typo of "forecast".
+// (Localization): Fix the typo of "forecast".
 #include "localization_msf/pose_forcast.h"
 #include "localization_msf/sins_struct.h"
 #include "modules/common/status/status.h"

@@ -70,7 +70,7 @@ def main(args):
             "Type in obstacle ID and press Enter (current time: " +
             str(datetime.datetime.now()) + ")\n>")
         obstacle_id = obstacle_id.strip()
-        # TODO(QiL) add obstacle id sanity check.
+        # (QiL) add obstacle id sanity check.
         current_time = cyber_time.Time.now().to_sec()
         moving_result = None
         audio_type = None

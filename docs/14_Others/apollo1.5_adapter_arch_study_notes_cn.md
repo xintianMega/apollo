@@ -10,7 +10,7 @@
  * node_handle_指针，指向node handle指针，后续话题的发布都是基于此。
  * Enable##name()函数：创建nodehandle和topic，也就是init调用的函数。
  * Add##name##Callback函数：添加回调函数。name换成相应的模块名字。
- * observers_变量和Observe()函数：//TODO
+ * observers_变量和Observe()函数：//
 ### 类AdapterManager使用：
  * adapter可用于创建node handle及其topic，可通过配置文件配置。
  * 使用时只需要创建相应的配置文件（可参考/apollo/modules/perception/conf/adapter.conf，及相应的BUILD文件），

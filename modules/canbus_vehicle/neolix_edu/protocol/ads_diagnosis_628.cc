@@ -30,7 +30,7 @@ const int32_t Adsdiagnosis628::ID = 0x628;
 Adsdiagnosis628::Adsdiagnosis628() { Reset(); }
 
 uint32_t Adsdiagnosis628::GetPeriod() const {
-  // TODO(All) :  modify every protocol's period manually
+  // (All) :  modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -43,7 +43,7 @@ void Adsdiagnosis628::UpdateData(uint8_t* data) {
 }
 
 void Adsdiagnosis628::Reset() {
-  // TODO(All) :  you should check this manually
+  // (All) :  you should check this manually
   faultrank_ = 0;
   adas_fault_code_ = 0;
   adas_softwareversion_ = 0;

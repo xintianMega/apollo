@@ -150,7 +150,7 @@ PerceptionObstacles MobileyeToPerceptionObstacles(
 
     Point xy_point = SLtoXY(mob_x, mob_y, adc_theta);
 
-    // TODO(QiL) : Clean this up after data collection and validation
+    // (QiL) : Clean this up after data collection and validation
     double converted_x = 0.0;
     double converted_y = 0.0;
     double converted_speed = 0.0;

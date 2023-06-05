@@ -51,7 +51,7 @@ class ConcurrentObjectPool : public BaseObjectPool<ObjectType> {
   }
   // @brief overrided function to get object smart pointer
   std::shared_ptr<ObjectType> Get() override {
-// TODO(All): remove conditional build
+// (All): remove conditional build
 #ifndef PERCEPTION_BASE_DISABLE_POOL
     ObjectType* ptr = nullptr;
     {

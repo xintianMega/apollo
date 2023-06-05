@@ -157,7 +157,7 @@ if __name__ == '__main__':
 
                 else:
                     print(None)
-                    # TODO: implement those non-splitting category
+                    # : implement those non-splitting category
         else:
             print("Fail to find", path)
             os._exit(-1)

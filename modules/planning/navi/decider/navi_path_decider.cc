@@ -38,7 +38,7 @@ using apollo::common::math::Box2d;
 using apollo::common::math::Vec2d;
 
 NaviPathDecider::NaviPathDecider() : NaviTask("NaviPathDecider") {
-  // TODO(all): Add your other initialization.
+  // (all): Add your other initialization.
 }
 
 bool NaviPathDecider::Init(const PlanningConfig& config) {

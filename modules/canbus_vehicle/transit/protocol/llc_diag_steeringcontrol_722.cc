@@ -30,7 +30,7 @@ const int32_t Llcdiagsteeringcontrol722::ID = 0x722;
 Llcdiagsteeringcontrol722::Llcdiagsteeringcontrol722() { Reset(); }
 
 uint32_t Llcdiagsteeringcontrol722::GetPeriod() const {
-  // TODO(All) :  modify every protocol's period manually
+  // (All) :  modify every protocol's period manually
   static const uint32_t PERIOD = 10 * 1000;
   return PERIOD;
 }
@@ -42,7 +42,7 @@ void Llcdiagsteeringcontrol722::UpdateData(uint8_t* data) {
 }
 
 void Llcdiagsteeringcontrol722::Reset() {
-  // TODO(All) :  you should check this manually
+  // (All) :  you should check this manually
   llc_dbg_steeringsensorposition_ = 0.0;
   llc_dbg_steeringrackinputtorque_ = 0;
   llc_dbg_steeringmotorposition_ = 0.0;

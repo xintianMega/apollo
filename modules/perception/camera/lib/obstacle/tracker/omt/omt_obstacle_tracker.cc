@@ -87,7 +87,7 @@ bool OMTObstacleTracker::Init(const StageConfig &stage_config) {
   track_id_ = 0;
   frame_num_ = 0;
   frame_list_.Init(omt_param_.img_capability());
-  // todo(zero): options.gpu_id
+  // (zero): options.gpu_id
   gpu_id_ = omt_param_.gpu_id();
   similar_map_.Init(omt_param_.img_capability(), gpu_id_);
   similar_.reset(new GPUSimilar);
@@ -409,7 +409,7 @@ bool OMTObstacleTracker::Associate2D(const ObstacleTrackerOptions &options,
   }
   TrackObjectPtrs track_objects;
   for (size_t i = 0; i < frame->detected_objects.size(); ++i) {
-    // TODO(gaohan): use pool
+    // (gaohan): use pool
     TrackObjectPtr track_ptr(new TrackObject);
     track_ptr->object = frame->detected_objects[i];
     track_ptr->object->id = static_cast<int>(i);

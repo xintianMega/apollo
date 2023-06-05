@@ -27,7 +27,7 @@ namespace base {
 template <class ObjectType>
 class BaseObjectPool {
  public:
-  // TODO(All): remove
+  // (All): remove
   // typedef std::shared_ptr<ObjectType> ObjectTypePtr;
 
   // @brief default constructor

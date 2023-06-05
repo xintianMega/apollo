@@ -30,7 +30,7 @@ const int32_t Steeringcmd6d::ID = 0x6D;
 Steeringcmd6d::Steeringcmd6d() { Reset(); }
 
 uint32_t Steeringcmd6d::GetPeriod() const {
-  // TODO(QiL) :modify every protocol's period manually
+  // (QiL) :modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -41,7 +41,7 @@ void Steeringcmd6d::UpdateData(uint8_t* data) {
 }
 
 void Steeringcmd6d::Reset() {
-  // TODO(QiL) :you should check this manually
+  // (QiL) :you should check this manually
   position_value_ = 0.0;
   speed_limit_ = 0.0;
 }

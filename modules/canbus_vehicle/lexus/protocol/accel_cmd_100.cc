@@ -32,7 +32,7 @@ const int32_t Accelcmd100::ID = 0x100;
 Accelcmd100::Accelcmd100() { Reset(); }
 
 uint32_t Accelcmd100::GetPeriod() const {
-  // TODO(QiL) modify every protocol's period manually
+  // (QiL) modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -46,7 +46,7 @@ void Accelcmd100::UpdateData(uint8_t* data) {
 }
 
 void Accelcmd100::Reset() {
-  // TODO(QiL) you should check this manually
+  // (QiL) you should check this manually
   ignore_overrides_ = false;
   enable_ = false;
   clear_override_ = false;
@@ -127,7 +127,7 @@ void Accelcmd100::set_p_accel_cmd(uint8_t* data, double accel_cmd) {
   const double scaling_gain = 1.20;  // estimated from the garage test data
   accel_cmd = std::max(0.0, (accel_cmd - scaling_bias) / (scaling_gain * 100));
   accel_cmd = ProtocolData::BoundedValue(0.0, 1.0, accel_cmd);
-  // TODO(AS): fix this scaling.
+  // (AS): fix this scaling.
   int x = static_cast<int>(accel_cmd / 0.001000);
   uint8_t t = 0;
 

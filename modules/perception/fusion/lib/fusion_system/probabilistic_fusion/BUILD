@@ -34,7 +34,7 @@ cc_library(
     alwayslink = True,
 )
 
-# ignore temporarily TODO:// need fix logic 
+# ignore temporarily :// need fix logic
 
 # cc_test(
 #     name = "probabilistic_fusion_test",

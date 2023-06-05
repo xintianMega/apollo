@@ -167,7 +167,7 @@ static bool GetProjectMatrix(
     const EigenMap<std::string, Eigen::Matrix4d> &extrinsic_map,
     const EigenMap<std::string, Eigen::Matrix3f> &intrinsic_map,
     Eigen::Matrix3d *project_matrix, double *pitch_diff = nullptr) {
-  // TODO(techoe): This condition should be removed.
+  // (techoe): This condition should be removed.
   if (camera_names.size() != 2) {
     AINFO << "camera number must be 2!";
     return false;
@@ -233,7 +233,7 @@ bool CameraObstacleDetectionComponent::Init() {
   // SetCameraHeightAndPitch();
 
   // Init visualizer
-  // TODO(techoe, yg13): homography from image to ground should be
+  // (techoe, yg13): homography from image to ground should be
   // computed from camera height and pitch.
   // Apply online calibration to adjust pitch/height automatically
   // Temporary code is used here for test
@@ -677,7 +677,7 @@ void CameraObstacleDetectionComponent::OnMotionService(
   vehicledata.motion = motion_2d;
 
   motion_buffer_->push_back(vehicledata);
-  // TODO(@yg13): output motion in text file
+  // (@yg13): output motion in text file
 }
 
 /*
@@ -755,7 +755,7 @@ int CameraObstacleDetectionComponent::InternalProc(
   }
 
   prefused_message->frame_->objects = camera_frame.tracked_objects;
-  // TODO(gaohan02, wanji): check the boxes with 0-width in perception-camera
+  // (gaohan02, wanji): check the boxes with 0-width in perception-camera
   prefused_message->frame_->objects.clear();
   for (auto obj : camera_frame.tracked_objects) {
     auto &box = obj->camera_supplement.box;

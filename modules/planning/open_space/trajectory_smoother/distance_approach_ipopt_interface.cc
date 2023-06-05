@@ -862,7 +862,7 @@ bool DistanceApproachIPOPTInterface::eval_jac_g_ser(int n, const double* x,
     int state_index = state_start_index_;
     int control_index = control_start_index_;
 
-    // TODO(QiL) : initially implemented to be debug friendly, later iterate
+    // (QiL) : initially implemented to be debug friendly, later iterate
     // towards better efficiency
     // 1. state constraints 4 * [0, horizons-1]
     for (int i = 0; i < horizon_; ++i) {
@@ -1132,11 +1132,11 @@ bool DistanceApproachIPOPTInterface::eval_jac_g_ser(int n, const double* x,
         Eigen::MatrixXd bj =
             obstacles_b_.block(edges_counter, 0, current_edges_num, 1);
 
-        // TODO(QiL) : Remove redundant calculation
+        // (QiL) : Remove redundant calculation
         double tmp1 = 0;
         double tmp2 = 0;
         for (int k = 0; k < current_edges_num; ++k) {
-          // TODO(QiL) : replace this one directly with x
+          // (QiL) : replace this one directly with x
           tmp1 += Aj(k, 0) * x[l_index + k];
           tmp2 += Aj(k, 1) * x[l_index + k];
         }
@@ -1486,7 +1486,7 @@ void DistanceApproachIPOPTInterface::eval_obj(int n, const T* x, T* obj_value) {
   int time_index = time_start_index_;
   int state_index = state_start_index_;
 
-  // TODO(QiL): Initial implementation towards earlier understanding and debug
+  // (QiL): Initial implementation towards earlier understanding and debug
   // purpose, later code refine towards improving efficiency
 
   *obj_value = 0.0;
@@ -1570,7 +1570,7 @@ void DistanceApproachIPOPTInterface::eval_constraints(int n, const T* x, int m,
              cos(x[state_index + 2] + ts_ * x[time_index] * 0.5 *
                                           x[state_index + 3] *
                                           tan(x[control_index]) / wheelbase_));
-    // TODO(Jinyun): evaluate performance of different models
+    // (Jinyun): evaluate performance of different models
     // g[constraint_index] =
     //     x[state_index + 4] -
     //     (x[state_index] +
@@ -1703,7 +1703,7 @@ void DistanceApproachIPOPTInterface::eval_constraints(int n, const T* x, int m,
       T tmp1 = 0.0;
       T tmp2 = 0.0;
       for (int k = 0; k < current_edges_num; ++k) {
-        // TODO(QiL) : replace this one directly with x
+        // (QiL) : replace this one directly with x
         tmp1 += Aj(k, 0) * x[l_index + k];
         tmp2 += Aj(k, 1) * x[l_index + k];
       }

@@ -622,7 +622,7 @@ void DistanceApproachIPOPTFixedTsInterface::eval_obj(int n, const T* x,
   // int time_index = time_start_index_;
   int state_index = state_start_index_;
 
-  // TODO(QiL): Initial implementation towards earlier understanding and debug
+  // (QiL): Initial implementation towards earlier understanding and debug
   // purpose, later code refine towards improving efficiency
 
   *obj_value = 0.0;
@@ -782,7 +782,7 @@ void DistanceApproachIPOPTFixedTsInterface::eval_constraints(int n, const T* x,
       T tmp1 = 0.0;
       T tmp2 = 0.0;
       for (int k = 0; k < current_edges_num; ++k) {
-        // TODO(QiL) : replace this one directly with x
+        // (QiL) : replace this one directly with x
         tmp1 += Aj(k, 0) * x[l_index + k];
         tmp2 += Aj(k, 1) * x[l_index + k];
       }

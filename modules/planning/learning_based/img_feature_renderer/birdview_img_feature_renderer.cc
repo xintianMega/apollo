@@ -28,7 +28,7 @@
 namespace apollo {
 namespace planning {
 
-// TODO(Jinyun): take map name from upstream and move to conf
+// (Jinyun): take map name from upstream and move to conf
 static const char ROADMAP_IMG_PATH[] =
     "/apollo/modules/planning/data/semantic_map/sunnyvale_with_two_offices.png";
 static const char SPEEDLIMITMAP_IMG_PATH[] =
@@ -50,12 +50,12 @@ bool BirdviewImgFeatureRenderer::Init(const PlanningSemanticMapConfig& config) {
   if (map_name != "sunnyvale_with_two_offices" && map_name != "sunnyvale") {
     AERROR << "Map other than sunnyvale_with_two_offices are not supported";
   }
-  // TODO(Jinyun): add sunnyvale map or draw basemap online
+  // (Jinyun): add sunnyvale map or draw basemap online
   if (map_name == "sunnyvale") {
     AWARN << "use sunnyvale_with_two_offices for sunnyvale for now";
   }
 
-  // TODO(Jinyun): move to a more managable place
+  // (Jinyun): move to a more managable place
   map_bottom_left_point_x_ = 585875.3316302994;
   map_bottom_left_point_y_ = 4139916.6342316796;
   bool roadmap_img_status = LoadRoadMap(ROADMAP_IMG_PATH);

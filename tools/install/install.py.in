@@ -196,7 +196,7 @@ def install(src, dst):
             os.remove(dst_full)
         copy_or_link(src, dst_full)
     else:
-        # TODO(eric.cousineau): Unclear how RPath-patched file can be deemed
+        # (eric.cousineau): Unclear how RPath-patched file can be deemed
         # "up-to-date" by comparison?
         print("-- Up-to-date: {}".format(dst_full))
         # No need to check patching.
@@ -254,7 +254,7 @@ def linux_fix_rpaths(dst_full):
     # A conservative subset of the ld.so search path. These paths are added
     # to /etc/ld.so.conf by default or after the prerequisites install script
     # has been run. Query on a given system using `ldconfig -v`.
-    # TODO(storypku): revisit this later for Aarch64
+    # (storypku): revisit this later for Aarch64
     ld_so_search_paths = [
         '/lib',
         '/lib/x86_64-linux-gnu',

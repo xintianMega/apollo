@@ -624,7 +624,7 @@ void NCut::LaplacianDecomposition(const Eigen::MatrixXf &weights,
 #ifdef DEBUG_NCUT
 // std::cout << "laplacian 2:\n " << laplacian << std::endl << std::endl;
 #endif
-  // .5 solve eigen decompostion: TODO: lanczos
+  // .5 solve eigen decompostion: : lanczos
   Eigen::EigenSolver<MatrixXf> eig_solver(laplacian);
 #ifdef DEBUG_NCUT
 // std::cout << "eigvec 1:\n " << eig_solver.eigenvectors() << std::endl <<

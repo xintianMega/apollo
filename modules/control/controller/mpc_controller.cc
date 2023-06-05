@@ -90,7 +90,7 @@ bool MPCController::LoadControlConf(const ControlConf *control_conf) {
       vehicle_param_.max_steer_angle() * 180 / M_PI;
   max_lat_acc_ = control_conf->mpc_controller_conf().max_lateral_acceleration();
 
-  // TODO(Shu, Qi, Yu): add sanity check for conf values
+  // (Shu, Qi, Yu): add sanity check for conf values
   // steering ratio should be positive
   static constexpr double kEpsilon = 1e-6;
   if (std::isnan(steer_ratio_) || steer_ratio_ < kEpsilon) {
@@ -143,7 +143,7 @@ bool MPCController::LoadControlConf(const ControlConf *control_conf) {
 
 void MPCController::ProcessLogs(const SimpleMPCDebug *debug,
                                 const canbus::Chassis *chassis) {
-  // TODO(QiL): Add debug information
+  // (QiL): Add debug information
 }
 
 void MPCController::LogInitParameters() {
@@ -185,7 +185,7 @@ Status MPCController::Init(std::shared_ptr<DependencyInjector> injector,
   matrix_a_(3, 2) = (lf_ * cf_ - lr_ * cr_) / iz_;
   matrix_a_(4, 5) = 1.0;
   matrix_a_(5, 5) = 0.0;
-  // TODO(QiL): expand the model to accommodate more combined states.
+  // (QiL): expand the model to accommodate more combined states.
 
   matrix_a_coeff_ = Matrix::Zero(basic_state_size_, basic_state_size_);
   matrix_a_coeff_(1, 1) = -(cf_ + cr_) / mass_;
@@ -432,7 +432,7 @@ Status MPCController::ComputeControlCommand(
   ADEBUG << "MPC core algorithm: calculation time is: "
          << (mpc_end_timestamp - mpc_start_timestamp) * 1000 << " ms.";
 
-  // TODO(QiL): evaluate whether need to add spline smoothing after the result
+  // (QiL): evaluate whether need to add spline smoothing after the result
   double steer_angle = steer_angle_feedback +
                        steer_angle_feedforwardterm_updated_ +
                        steer_angle_ff_compensation;
@@ -459,7 +459,7 @@ Status MPCController::ComputeControlCommand(
   debug->set_acceleration_cmd_closeloop(acc_feedback);
 
   double acceleration_cmd = acc_feedback + debug->acceleration_reference();
-  // TODO(QiL): add pitch angle feed forward to accommodate for 3D control
+  // (QiL): add pitch angle feed forward to accommodate for 3D control
 
   if ((planning_published_trajectory->trajectory_type() ==
        apollo::planning::ADCTrajectory::NORMAL) &&
@@ -473,7 +473,7 @@ Status MPCController::ComputeControlCommand(
     ADEBUG << "Stop location reached";
     debug->set_is_full_stop(true);
   }
-  // TODO(Yu): study the necessity of path_remain and add it to MPC if needed
+  // (Yu): study the necessity of path_remain and add it to MPC if needed
 
   debug->set_acceleration_cmd(acceleration_cmd);
 

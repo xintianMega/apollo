@@ -40,7 +40,7 @@ void Gearcommand103::Parse(const std::uint8_t* bytes, int32_t length,
 }
 
 uint32_t Gearcommand103::GetPeriod() const {
-  // TODO(All) :  modify every protocol's period manually
+  // (All) :  modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -54,7 +54,7 @@ void Gearcommand103::UpdateData(uint8_t* data) {
 }
 
 void Gearcommand103::Reset() {
-  // TODO(All) :  you should check this manually
+  // (All) :  you should check this manually
   gear_target_ = Gear_command_103::GEAR_TARGET_NEUTRAL;
   gear_en_ctrl_ = Gear_command_103::GEAR_EN_CTRL_DISABLE;
   checksum_103_ = 0;

@@ -21,7 +21,7 @@
    * 创建导航器navigator_ptr_。
    * 读取导航配置文件：modules/routing/conf/routing.pb.txt到routing_conf_。
    * 根据Adapter配置文件：modules/routing/conf/adapter.conf，创建nodehandle和响应topics。
-   * 设置路由请求话题的回调函数OnRouting_Request。这里为啥不直接使用rosservice？//TODO。
+   * 设置路由请求话题的回调函数OnRouting_Request。这里为啥不直接使用rosservice？//。
  * OnRouting_Request()：处理请求。
    * 输入路由请求。
    * 执行SearchRoute()函数，根据routing_request，寻找路由，并设置routing_response。

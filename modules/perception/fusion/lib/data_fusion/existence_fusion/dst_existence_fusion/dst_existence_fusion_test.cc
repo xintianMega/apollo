@@ -27,7 +27,7 @@ namespace apollo {
 namespace perception {
 namespace fusion {
 
-/* TODO(all): Initialize() not compiling. to be fixed
+/* (all): Initialize() not compiling. to be fixed
 TEST(DstExistFusionTest, test_update_with_measurement) {
   FLAGS_work_root = "/apollo/modules/perception/testdata/"
       "fusion/dst_existence_fusion";
@@ -117,7 +117,7 @@ TEST(DstExistFusionTest, test_update_with_measurement) {
 }
 */
 
-/* TODO(all): Initialize() not compiling. to be fixed
+/* (all): Initialize() not compiling. to be fixed
 TEST(DstExistFusionTest, test_update_without_measurement) {
   FLAGS_work_root = "./";
   FLAGS_obs_sensor_intrinsic_path = "./params";

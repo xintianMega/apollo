@@ -105,7 +105,7 @@ bool DynamicModelFactory::RegisterDynamicModel(const std::string &dm_dir_name) {
       home_path_ + FLAGS_dynamic_model_library_path + dm_library_name;
   SharedLibraryPtr shared_library = nullptr;
   try {
-    // todo(@lijin):when to unload
+    // (@lijin):when to unload
     shared_library =
         SharedLibraryPtr(new SharedLibrary(dynamic_model_library_path));
     create_t *create_dynamic_model =

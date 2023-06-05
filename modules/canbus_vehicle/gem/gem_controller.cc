@@ -223,7 +223,7 @@ Chassis GemController::chassis() {
   }
 
   // 11
-  // TODO(QiL) : verify the unit here.
+  // (QiL) : verify the unit here.
   if (chassis_detail.has_steering_rpt_1_6e() &&
       chassis_detail.steering_rpt_1_6e().has_output_value()) {
     chassis_.set_steering_percentage(
@@ -247,7 +247,7 @@ Chassis GemController::chassis() {
     chassis_.set_driving_mode(Chassis::COMPLETE_MANUAL);
   }
 
-  // TODO(QiL) : implement the turn light signal here
+  // (QiL) : implement the turn light signal here
 
   // 16, 17
   if (chassis_detail.has_light() &&
@@ -269,7 +269,7 @@ Chassis GemController::chassis() {
         common::VehicleSignal::TURN_NONE);
   }
 
-  // TODO(all): implement the rest here/
+  // (all): implement the rest here/
   // 26
   if (chassis_error_mask_) {
     chassis_.set_chassis_error_mask(chassis_error_mask_);
@@ -383,7 +383,7 @@ void GemController::Gear(Chassis::GearPosition gear_position) {
 // -> pedal
 void GemController::Brake(double pedal) {
   // double real_value = params_.max_acc() * acceleration / 100;
-  // TODO(QiL) Update brake value based on mode
+  // (QiL) Update brake value based on mode
   if (driving_mode() != Chassis::COMPLETE_AUTO_DRIVE &&
       driving_mode() != Chassis::AUTO_SPEED_ONLY) {
     AINFO << "The current drive mode does not need to set acceleration.";
@@ -493,7 +493,7 @@ void GemController::SetTurningSignal(const ControlCommand& command) {
 void GemController::ResetProtocol() { message_manager_->ResetSendMessages(); }
 
 bool GemController::CheckChassisError() {
-  // TODO(QiL) : implement it here
+  // (QiL) : implement it here
   return false;
 }
 

@@ -239,7 +239,7 @@ class PointCloudParser(SensorMessageParser):
             self.save_pointcloud_meta_to_file(pc_meta=self._parsed_data, pcd_file=output_file)
         else:
             raise ValueError("not implement multiple message concatenation for PointCloud2 topic")
-        # TODO(gchen-Apollo): add saint check
+        # (gchen-Apollo): add saint check
         return True
 
 
@@ -393,5 +393,5 @@ class ContiRadarParser(SensorMessageParser):
             self.save_pointcloud_meta_to_file(pc_meta=self._parsed_data, pcd_file=output_file)
         else:
             raise ValueError("not implement multiple message concatenation for COontiRadar topic")
-        # TODO(gchen-Apollo): add saint check
+        # (gchen-Apollo): add saint check
         return True

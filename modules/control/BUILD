@@ -153,7 +153,7 @@ cc_test(
     linkstatic = True,
 )
 
-# TODO(storypku): split test_data
+# (storypku): split test_data
 filegroup(
     name = "test_data",
     srcs = glob([

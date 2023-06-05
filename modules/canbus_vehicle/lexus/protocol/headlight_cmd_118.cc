@@ -30,7 +30,7 @@ const int32_t Headlightcmd118::ID = 0x118;
 Headlightcmd118::Headlightcmd118() { Reset(); }
 
 uint32_t Headlightcmd118::GetPeriod() const {
-  // TODO(QiL) modify every protocol's period manually
+  // (QiL) modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -44,7 +44,7 @@ void Headlightcmd118::UpdateData(uint8_t* data) {
 }
 
 void Headlightcmd118::Reset() {
-  // TODO(QiL) you should check this manually
+  // (QiL) you should check this manually
   ignore_overrides_ = false;
   enable_ = false;
   clear_override_ = false;

@@ -82,7 +82,7 @@ TEST(UtilTest, NormTest) {
     float *p = data.mutable_cpu_data();
     for (int i = 0; i < num; ++i) {
       for (int j = 0; j < dim; ++j) {
-        // TODO(gaohan) add a function
+        // (gaohan) add a function
         *p = rand() % 10000 / 10000.0f;  // NOLINT
         ++p;
       }

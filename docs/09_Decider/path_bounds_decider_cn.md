@@ -236,7 +236,7 @@ class ReferenceLineInfo {
     double end_s = 0.0;
     double speed_limit = 0.0;  // unit m/s
     ...};
-  
+
   // This speed limit overrides the lane speed limit
   std::vector<SpeedLimit> speed_limit_;
   std::vector<ReferencePoint> reference_points_;  // ReferencePoint包含有信息(k, dk, x, y, heading, s, l)
@@ -312,7 +312,7 @@ constexpr double kDefaultLaneWidth = 5.0;
 // Road的道路
 constexpr double kDefaultRoadWidth = 20.0;
 
-// TODO(all): Update extra tail point base on vehicle speed.
+// (all): Update extra tail point base on vehicle speed.
 constexpr int kNumExtraTailBoundPoint = 20;
 constexpr double kPulloverLonSearchCoeff = 1.5;
 constexpr double kPulloverLatSearchCoeff = 1.25;
@@ -375,7 +375,7 @@ bool PathBoundsDecider::InitPathBoundary(
 
 - GetBoundaryFromLanesAndADC
 ```C++
-// TODO(jiacheng): this function is to be retired soon.
+// (jiacheng): this function is to be retired soon.
 bool PathBoundsDecider::GetBoundaryFromLanesAndADC(
   ...
   for (size_t i = 0; i < path_bound->size(); ++i) {
@@ -520,7 +520,7 @@ bool PathBoundsDecider::SearchPullOverPosition(
       ++idx;
     }
   }
-  
+
   // 为pull over搜索到一个可行的位置，主要是确定该区域的宽度和长度
   const double pull_over_space_length =
       kPulloverLonSearchCoeff *
@@ -551,7 +551,7 @@ bool PathBoundsDecider::SearchPullOverPosition(
            (!search_backward && j < static_cast<int>(path_bound.size()) &&
             std::get<0>(path_bound[j]) - std::get<0>(path_bound[idx]) <
                 pull_over_space_length)) {...}
-    
+
     // 找到可行区域，获取停车区域的位置和姿态
     if (is_feasible_window) {
     ...
@@ -581,7 +581,7 @@ Status PathBoundsDecider::GenerateLaneChangePathBound(
   if (!GetBoundaryFromLanesAndADC(reference_line_info,
                                   LaneBorrowInfo::NO_BORROW, 0.1, path_bound,
                                   &dummy_borrow_lane_type, true)) {...}
- 
+
 
   // 3. Remove the S-length of target lane out of the path-bound.
   GetBoundaryFromLaneChangeForbiddenZone(reference_line_info, path_bound);
@@ -623,7 +623,7 @@ void PathBoundsDecider::GetBoundaryFromLaneChangeForbiddenZone(
                           &point_sl);
     lane_change_start_s = point_sl.s();
   } else {
-    // TODO(jiacheng): train ML model to learn this.
+    // (jiacheng): train ML model to learn this.
     // 设置为adc前方一段距离为变道起始点
     lane_change_start_s = FLAGS_lane_change_prepare_length + adc_frenet_s_;
 

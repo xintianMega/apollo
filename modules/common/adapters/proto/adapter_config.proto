@@ -105,6 +105,6 @@ message AdapterConfig {
 // produce.
 message AdapterManagerConfig {
   repeated AdapterConfig config = 1;
-  // TODO
+  //
   optional bool is_ros = 2;  // Whether the message comes from ROS
 }

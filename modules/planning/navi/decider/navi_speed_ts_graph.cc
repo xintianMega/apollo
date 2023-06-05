@@ -131,7 +131,7 @@ void NaviSpeedTsGraph::UpdateObstacleConstraints(double distance,
     v = start_v_;
   }
 
-  // TODO(all): if v < 0
+  // (all): if v < 0
   v = std::max(v, 0.0);
 
   // update t_min

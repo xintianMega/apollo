@@ -114,7 +114,7 @@ bool OpenSpacePreStopDecider::CheckParkingSpotPreStop(
   const hdmap::HDMap* hdmap = hdmap::HDMapUtil::BaseMapPtr();
   for (const auto& parking_overlap : parking_space_overlaps) {
     if (parking_overlap.object_id == target_parking_spot_id) {
-      // TODO(Jinyun) parking overlap s are wrong on map, not usable
+      // (Jinyun) parking overlap s are wrong on map, not usable
       // target_area_center_s =
       //     (parking_overlap.start_s + parking_overlap.end_s) / 2.0;
       hdmap::Id id;
@@ -167,7 +167,7 @@ void OpenSpacePreStopDecider::SetParkingSpotStopFence(
     stop_line_s = target_s + stop_distance_to_target;
   } else if (target_vehicle_offset < -stop_distance_to_target) {
     if (!frame->open_space_info().pre_stop_rightaway_flag()) {
-      // TODO(Jinyun) Use constant comfortable deacceleration rather than
+      // (Jinyun) Use constant comfortable deacceleration rather than
       // distance by config to set stop fence
       stop_line_s =
           adc_front_edge_s +
@@ -215,7 +215,7 @@ void OpenSpacePreStopDecider::SetPullOverStopFence(
     stop_line_s = target_s - stop_distance_to_target;
   } else {
     if (!frame->open_space_info().pre_stop_rightaway_flag()) {
-      // TODO(Jinyun) Use constant comfortable deacceleration rather than
+      // (Jinyun) Use constant comfortable deacceleration rather than
       // distance by config to set stop fence
       stop_line_s =
           adc_front_edge_s +

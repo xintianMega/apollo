@@ -357,7 +357,7 @@ Status NaviSpeedDecider::MakeSpeedDecision(
 }
 
 Status NaviSpeedDecider::AddPerceptionRangeConstraints() {
-  // TODO(all):
+  // (all):
   return Status::OK();
 }
 
@@ -411,7 +411,7 @@ Status NaviSpeedDecider::AddObstaclesConstraints(
 }
 
 Status AddTrafficDecisionConstraints() {
-  // TODO(all):
+  // (all):
   return Status::OK();
 }
 

@@ -42,7 +42,7 @@ from modules.common_msgs.localization_msgs import localization_pb2
 from modules.common_msgs.planning_msgs import planning_pb2
 import modules.tools.common.proto_utils as proto_utils
 
-# TODO(all): hard-coded path temporarily. Better approach needed.
+# (all): hard-coded path temporarily. Better approach needed.
 APOLLO_ROOT = "/apollo"
 
 SEARCH_INTERVAL = 5000

@@ -28,7 +28,7 @@ install(
 cc_library(
     name = "perception_component_inner_camera",
     srcs = [
-        # todo(zero): need fix
+        # (zero): need fix
         "camera_obstacle_detection_component.cc",
         "camera_perception_viz_message.cc",
         "fusion_camera_detection_component.cc",

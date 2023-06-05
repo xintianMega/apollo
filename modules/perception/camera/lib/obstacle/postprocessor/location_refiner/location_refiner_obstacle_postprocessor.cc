@@ -20,7 +20,7 @@
 #include "modules/perception/camera/common/global_config.h"
 #include "modules/perception/camera/lib/interface/base_calibration_service.h"
 
-// TODO(Xun): code completion
+// (Xun): code completion
 
 namespace apollo {
 namespace perception {

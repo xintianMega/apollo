@@ -361,7 +361,7 @@ bool DualVariableWarmStartIPOPTQPInterface::eval_jac_g(int n, const double* x,
         double tmp1 = 0;
         double tmp2 = 0;
         for (int k = 0; k < current_edges_num; ++k) {
-          // TODO(QiL) : replace this one directly with x
+          // (QiL) : replace this one directly with x
           tmp1 += Aj(k, 0) * x[l_index + k];
           tmp2 += Aj(k, 1) * x[l_index + k];
         }
@@ -399,7 +399,7 @@ bool DualVariableWarmStartIPOPTQPInterface::eval_jac_g(int n, const double* x,
         ++nz_index;
 
         //  2. -g'*mu + (A*t - b)*lambda > 0
-        // TODO(QiL): Revise dual variables modeling here.
+        // (QiL): Revise dual variables modeling here.
         double tmp3 = 0.0;
         double tmp4 = 0.0;
         for (int k = 0; k < 4; ++k) {

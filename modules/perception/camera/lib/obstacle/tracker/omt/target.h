@@ -44,7 +44,7 @@ struct alignas(16) Target {
 
   void Predict(CameraFrame *frame);
 
-  // todo(zero): update world in bev
+  // (zero): update world in bev
   void Update(CameraFrame *frame);
 
   void Update2D(CameraFrame *frame);

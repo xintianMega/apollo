@@ -19,7 +19,7 @@ namespace apollo {
 namespace perception {
 namespace common {
 
-/* TODO(all): to be added back
+/* (all): to be added back
 TEST(SensorManagerTest, test) {
   FLAGS_work_root = "/apollo/modules/perception/testdata/"
       "common/sensor_manager/";
@@ -101,7 +101,7 @@ TEST(SensorManagerTest, test) {
 }
 */
 
-/* TODO(all): test not working. to be added back
+/* (all): test not working. to be added back
 TEST(SensorManagerTest, test_init_error) {
   SensorManager* sensor_manager = SensorManager::Instance();
   sensor_manager->inited_ = false;

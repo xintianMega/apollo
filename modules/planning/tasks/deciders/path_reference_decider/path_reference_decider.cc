@@ -322,7 +322,7 @@ bool PathReferenceDecider::IsADCBoxAlongPathReferenceWithinPathBounds(
     for (auto line_segment : segmented_path_bound) {
       // check if all vehicle boxes along learning model outputhas
       // overlap with ADC box
-      // TODO(Shu): early stop when vehicle box is far away.
+      // (Shu): early stop when vehicle box is far away.
       for (auto vehicle_box : vehicle_boxes) {
         if (vehicle_box.HasOverlap(line_segment)) {
           ADEBUG << std::setprecision(9) << "Vehicle box:["

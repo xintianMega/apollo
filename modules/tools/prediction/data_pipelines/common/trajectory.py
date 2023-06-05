@@ -384,7 +384,7 @@ class TrajectoryToSample(object, metaclass=abc.ABCMeta):
                 continue
             curr_pos = np.array([fea.position.x, fea.position.y])
             # Only keep speed > 1
-            # TODO(all) consider recovery
+            # (all) consider recovery
             # if fea.speed <= 1:
             #     continue
             heading = math.atan2(fea.raw_velocity.y, fea.raw_velocity.x)

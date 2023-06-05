@@ -30,7 +30,7 @@ const int32_t Adseps113::ID = 0x113;
 Adseps113::Adseps113() { Reset(); }
 
 uint32_t Adseps113::GetPeriod() const {
-  // TODO(ChaoMa) :modify every protocol's period manually
+  // (ChaoMa) :modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -41,7 +41,7 @@ void Adseps113::UpdateData(uint8_t* data) {
 }
 
 void Adseps113::Reset() {
-  // TODO(ChaoMa) :you should check this manually
+  // (ChaoMa) :you should check this manually
   ads_epsmode_ = Ads_eps_113::ADS_EPSMODE_DISABLE;
   ads_reqepstargetangle_ = 0.0;
 }

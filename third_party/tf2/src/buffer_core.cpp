@@ -323,7 +323,7 @@ enum WalkEnding {
   FullPath,
 };
 
-// TODO for Jade: Merge walkToTopParent functions; this is now a stub to
+//  for Jade: Merge walkToTopParent functions; this is now a stub to
 // preserve ABI
 template <typename F>
 int BufferCore::walkToTopParent(F& f, Time time, CompactFrameID target_id,
@@ -1233,7 +1233,7 @@ TransformableRequestHandle BufferCore::addTransformableRequest(
   // Might not be transformable at all, ever (if it's too far in the past)
   if (req.target_id && req.source_id) {
     Time latest_time;
-    // TODO: This is incorrect, but better than nothing.  Really we want the
+    // : This is incorrect, but better than nothing.  Really we want the
     // latest time for
     // any of the frames
     getLatestCommonTime(req.target_id, req.source_id, latest_time, 0);
@@ -1357,7 +1357,7 @@ void BufferCore::testTransformableRequests() {
     Time latest_time;
     bool do_cb = false;
     TransformableResult result = TransformAvailable;
-    // TODO: This is incorrect, but better than nothing.  Really we want the
+    // : This is incorrect, but better than nothing.  Really we want the
     // latest time for
     // any of the frames
     getLatestCommonTime(req.target_id, req.source_id, latest_time, 0);

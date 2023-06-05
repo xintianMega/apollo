@@ -145,7 +145,7 @@ Status LearningModelInferenceTask::Process(Frame* frame) {
   }
 
   // evaluate adc future trajectory
-  // TODO(all): move to conf
+  // (all): move to conf
   constexpr double kADCFutureTrajectoryDeltaTime = 0.02;
   std::vector<TrajectoryPointFeature> future_trajectory;
   for (const auto& tp :

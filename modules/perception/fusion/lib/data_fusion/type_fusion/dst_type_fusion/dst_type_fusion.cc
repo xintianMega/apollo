@@ -172,9 +172,9 @@ void DstTypeFusion::UpdateWithoutMeasurement(const std::string &sensor_id,
       }
     }
 
-    // TODO(yuantingrong): need consider the camera object only
+    // (yuantingrong): need consider the camera object only
     // use the min_match_dist to decide the occlusion
-    // TODO(yuantingrong): not reasonable, when sensor type is camera,
+    // (yuantingrong): not reasonable, when sensor type is camera,
     // the input min_match_dist  is a probability([0, 1], 1 is better)
     // to measure how well the fused object locate
     // in a box detected by the camera.

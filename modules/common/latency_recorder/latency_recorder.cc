@@ -33,7 +33,7 @@ LatencyRecorder::LatencyRecorder(const std::string& module_name)
 void LatencyRecorder::AppendLatencyRecord(const uint64_t message_id,
                                           const Time& begin_time,
                                           const Time& end_time) {
-  // TODO(michael): ALERT for now for trouble shooting,
+  // (michael): ALERT for now for trouble shooting,
   // CHECK_LT(begin_time, end_time) in the future to enforce the validation
   if (begin_time >= end_time) {
     // In Simulation mode, there might be large number of cases where

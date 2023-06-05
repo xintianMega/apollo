@@ -30,7 +30,7 @@ const int32_t Adcmotioncontrollimits112::ID = 0x12;
 Adcmotioncontrollimits112::Adcmotioncontrollimits112() { Reset(); }
 
 uint32_t Adcmotioncontrollimits112::GetPeriod() const {
-  // TODO(All) :  modify every protocol's period manually
+  // (All) :  modify every protocol's period manually
   static const uint32_t PERIOD = 10 * 1000;
   return PERIOD;
 }
@@ -42,7 +42,7 @@ void Adcmotioncontrollimits112::UpdateData(uint8_t* data) {
 }
 
 void Adcmotioncontrollimits112::Reset() {
-  // TODO(All) :  you should check this manually
+  // (All) :  you should check this manually
   adc_cmd_throttlecommandlimit_ = 0.0;
   adc_cmd_steeringrate_ = 0.0;
   adc_cmd_steerwheelanglelimit_ = 0.0;

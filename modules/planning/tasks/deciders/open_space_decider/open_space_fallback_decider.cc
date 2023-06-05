@@ -37,7 +37,7 @@ bool OpenSpaceFallbackDecider::QuardraticFormulaLowerSolution(const double a,
                                                               const double c,
                                                               double* sol) {
   // quardratic formula: ax^2 + bx + c = 0, return lower solution
-  // TODO(QiL): use const from common::math
+  // (QiL): use const from common::math
   const double kEpsilon = 1e-6;
   *sol = 0.0;
   if (std::abs(a) < kEpsilon) {
@@ -97,7 +97,7 @@ Status OpenSpaceFallbackDecider::Process(Frame* frame) {
     double min_stop_distance =
         0.5 * fallback_start_point.v() * fallback_start_point.v() / 4.0;
 
-    // TODO(QiL): move 1.0 to configs
+    // (QiL): move 1.0 to configs
     double stop_distance =
         fallback_trajectory_pair_candidate.second == canbus::Chassis::GEAR_DRIVE
             ? std::max(future_collision_point.path_point().s() -
@@ -154,7 +154,7 @@ Status OpenSpaceFallbackDecider::Process(Frame* frame) {
       fallback_trajectory_pair_candidate.first[i].set_a(stop_deceleration);
     }
 
-    // TODO(QiL): refine the logic and remove redundant code, change 0.5 to from
+    // (QiL): refine the logic and remove redundant code, change 0.5 to from
     // loading optimizer configs
 
     // If stop_index == fallback_start_index;

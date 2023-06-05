@@ -30,7 +30,7 @@ const int32_t Torquecontrola3::ID = 0xA3;
 Torquecontrola3::Torquecontrola3() { Reset(); }
 
 uint32_t Torquecontrola3::GetPeriod() const {
-  // TODO(ChaoM) :  modify every protocol's period manually
+  // (ChaoM) :  modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -41,7 +41,7 @@ void Torquecontrola3::UpdateData(uint8_t* data) {
 }
 
 void Torquecontrola3::Reset() {
-  // TODO(ChaoM) :  you should check this manually
+  // (ChaoM) :  you should check this manually
   driven_torque_ = 0.0;
   driven_enable_control_ =
       Torque_control_a3::DRIVEN_ENABLE_CONTROL_DRIVE_MANUAL;

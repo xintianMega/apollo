@@ -90,7 +90,7 @@ cc_test(
     ],
 )
 
-# todo(zero): need fix
+# (zero): need fix
 # cc_test(
 #     name = "sensor_test",
 #     size = "small",
@@ -101,7 +101,7 @@ cc_test(
 #     ],
 # )
 
-# todo(zero): need fix
+# (zero): need fix
 # cc_test(
 #     name = "sensor_object_test",
 #     size = "small",
@@ -149,7 +149,7 @@ cc_library(
     ],
 )
 
-# todo(zero): need fix
+# (zero): need fix
 # cc_test(
 #     name = "track_test",
 #     size = "small",

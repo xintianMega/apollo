@@ -121,7 +121,7 @@ bool DarkSCNNLanePostprocessor::Init(const StageConfig& stage_config) {
     return false;
   }
 
-  // todo(zero): repeated with darkSCNN::DarkSCNNParam??
+  // (zero): repeated with darkSCNN::DarkSCNNParam??
   // Read postprocessor parameter
   lane_postprocessor_param_ = stage_config.darkscnn_lane_postprocessor_param();
 
@@ -168,9 +168,9 @@ bool DarkSCNNLanePostprocessor::Process2D(
 
   // 1. Sample points on lane_map and project them onto world coordinate
 
-  // TODO(techoe): Should be fixed
+  // (techoe): Should be fixed
   int y = static_cast<int>(lane_map.rows * 0.9 - 1);
-  // TODO(techoe): Should be fixed
+  // (techoe): Should be fixed
   int step_y = (y - 40) * (y - 40) / 6400 + 1;
 
   xy_points.clear();

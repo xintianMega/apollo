@@ -29,7 +29,7 @@ const int32_t Turnsignalcommand113::ID = 0x113;
 Turnsignalcommand113::Turnsignalcommand113() { Reset(); }
 
 uint32_t Turnsignalcommand113::GetPeriod() const {
-  // TODO(All) :  modify every protocol's period manually
+  // (All) :  modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -40,7 +40,7 @@ void Turnsignalcommand113::UpdateData(uint8_t* data) {
 }
 
 void Turnsignalcommand113::Reset() {
-  // TODO(All) :  you should check this manually
+  // (All) :  you should check this manually
   turn_signal_cmd_ = Turnsignal_command_113::TURN_SIGNAL_CMD_NONE;
   low_beam_cmd_ = Turnsignal_command_113::LOW_BEAM_CMD_OFF;
 }

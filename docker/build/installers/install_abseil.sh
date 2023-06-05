@@ -22,7 +22,7 @@ set -e
 cd "$(dirname "${BASH_SOURCE[0]}")"
 . ./installer_base.sh
 
-# todo(zero): if check "libabsl_base.so" is enough
+# (zero): if check "libabsl_base.so" is enough
 if ldconfig -p | grep -q "libabsl_base.so" ; then
     info "Found existing Abseil installation. Reinstallation skipped."
     exit 0

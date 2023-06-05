@@ -48,7 +48,7 @@ bool TrafficLightDetection::Init(
   google::protobuf::TextFormat::PrintToString(detection_param_, &param_str);
   AINFO << "TL detection param: " << param_str;
 
-  // todo:determine details
+  // :determine details
 
   std::string model_root =
       GetAbsolutePath(options.root_dir, detection_param_.model_name());
@@ -287,7 +287,7 @@ bool TrafficLightDetection::Process(DataFrame* data_frame) {
   return res;
 }
 
-// TODO(chenjiahao): temporarily do inference serially for multiple
+// (chenjiahao): temporarily do inference serially for multiple
 //  traffic lights, because so far batch size can only be 1
 bool TrafficLightDetection::Inference(
     std::vector<base::TrafficLightPtr> *lights, DataProvider *data_provider) {

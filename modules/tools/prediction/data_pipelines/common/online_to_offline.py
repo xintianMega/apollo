@@ -431,7 +431,7 @@ class LabelGenerator(object):
                     continue
                 curr_pos = np.array([fea.position.x, fea.position.y])
                 # Only keep speed > 1
-                # TODO(all) consider recovery
+                # (all) consider recovery
                 # if fea.speed <= 1:
                 #     continue
                 heading = math.atan2(fea.raw_velocity.y, fea.raw_velocity.x)
@@ -490,5 +490,5 @@ class LabelGenerator(object):
         self.LabelTrajectory()
         self.LabelSingleLane()
         self.LabelJunctionExit()
-        # TODO(all):
+        # (all):
         #   - implement label multiple lane

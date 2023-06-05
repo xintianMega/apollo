@@ -185,7 +185,7 @@ float ObjectInCameraView(SensorObjectConstPtr sensor_object,
   }
   // compute distance score, when object is too far from camera
   // the camera is hard to detect object
-  // TODO(yuantingrong):
+  // (yuantingrong):
   // maximum camera detection distance parameters, hard code
   const double max_dist = camera_max_dist;
   // 1 nearly 2m buffer

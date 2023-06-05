@@ -35,7 +35,7 @@ struct alignas(16) ImpendingCollisionEdge {
   std::vector<Eigen::Vector3d> points;
 };
 
-// TODO(all): to remove
+// (all): to remove
 // typedef std::shared_ptr<ImpendingCollisionEdge> ImpendingCollisionEdgePtr;
 // typedef std::shared_ptr<const ImpendingCollisionEdge>
 //     ImpendingCollisionEdgeConstPtr;
@@ -54,7 +54,7 @@ struct ImpendingCollisionEdges {
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 } EIGEN_ALIGN16;
 
-// TODO(all): to remove
+// (all): to remove
 // typedef std::shared_ptr<ImpendingCollisionEdges> ImpendingCollisionEdgesPtr;
 // typedef std::shared_ptr<const ImpendingCollisionEdges>
 //    ImpendingCollisionEdgesConstPtr;

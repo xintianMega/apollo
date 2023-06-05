@@ -30,7 +30,7 @@ const int32_t Wipercmd90::ID = 0x90;
 Wipercmd90::Wipercmd90() { Reset(); }
 
 uint32_t Wipercmd90::GetPeriod() const {
-  // TODO(QiL) :modify every protocol's period manually
+  // (QiL) :modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -40,7 +40,7 @@ void Wipercmd90::UpdateData(uint8_t* data) {
 }
 
 void Wipercmd90::Reset() {
-  // TODO(QiL) :you should check this manually
+  // (QiL) :you should check this manually
   wiper_cmd_ = Wiper_cmd_90::WIPER_CMD_WIPERS_OFF;
 }
 

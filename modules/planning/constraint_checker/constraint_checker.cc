@@ -101,7 +101,7 @@ ConstraintChecker::Result ConstraintChecker::ValidTrajectory(
       return Result::LAT_ACCELERATION_OUT_OF_BOUND;
     }
 
-    // TODO(zhangyajia): this is temporarily disabled
+    // (zhangyajia): this is temporarily disabled
     // due to low quality reference line.
     /**
     double d_lat_a = p1.v() * p1.v() * p1.path_point().kappa() -

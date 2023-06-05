@@ -169,7 +169,7 @@ ErrorCode EsdCanClient::Receive(std::vector<CanFrame> *const frames,
   if (*frame_num > MAX_CAN_RECV_FRAME_LEN || *frame_num < 0) {
     AERROR << "recv can frame num not in range[0, " << MAX_CAN_RECV_FRAME_LEN
            << "], frame_num:" << *frame_num;
-    // TODO(Authors): check the difference of returning frame_num/error_code
+    // (Authors): check the difference of returning frame_num/error_code
     return ErrorCode::CAN_CLIENT_ERROR_FRAME_NUM;
   }
 

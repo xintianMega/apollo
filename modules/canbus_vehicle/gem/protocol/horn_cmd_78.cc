@@ -30,7 +30,7 @@ const int32_t Horncmd78::ID = 0x78;
 Horncmd78::Horncmd78() { Reset(); }
 
 uint32_t Horncmd78::GetPeriod() const {
-  // TODO(QiL) :modify every protocol's period manually
+  // (QiL) :modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -38,7 +38,7 @@ uint32_t Horncmd78::GetPeriod() const {
 void Horncmd78::UpdateData(uint8_t* data) { set_p_horn_cmd(data, horn_cmd_); }
 
 void Horncmd78::Reset() {
-  // TODO(QiL) :you should check this manually
+  // (QiL) :you should check this manually
   horn_cmd_ = Horn_cmd_78::HORN_CMD_OFF;
 }
 

@@ -105,7 +105,7 @@ class OdometryFileObject(FileObject):
         data_size = len(data)
         self._file_object.write(struct.pack('I', data_size))
         # have to pack separate, to avoid struct padding, now 8+4+7*8 = 68 bytes
-        # TODO (yuanfan / gchen-Apollo): follow protobuf across tools.
+        #  (yuanfan / gchen-Apollo): follow protobuf across tools.
 
         s0 = struct.Struct('d')
         s1 = struct.Struct('I')

@@ -30,7 +30,7 @@ const int32_t Globalcmd69::ID = 0x69;
 Globalcmd69::Globalcmd69() { Reset(); }
 
 uint32_t Globalcmd69::GetPeriod() const {
-  // TODO(QiL) :modify every protocol's period manually
+  // (QiL) :modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -42,7 +42,7 @@ void Globalcmd69::UpdateData(uint8_t* data) {
 }
 
 void Globalcmd69::Reset() {
-  // TODO(QiL) :you should check this manually
+  // (QiL) :you should check this manually
   pacmod_enable_ = Global_cmd_69::PACMOD_ENABLE_CONTROL_DISABLED;
   clear_override_ = Global_cmd_69::CLEAR_OVERRIDE_DON_T_CLEAR_ACTIVE_OVERRIDES;
   ignore_override_ = Global_cmd_69::IGNORE_OVERRIDE_DON_T_IGNORE_USER_OVERRIDES;

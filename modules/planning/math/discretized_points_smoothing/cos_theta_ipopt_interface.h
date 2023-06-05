@@ -162,7 +162,7 @@ class CosThetaIpoptInterface : public Ipopt::TNLP {
 
   std::vector<double> obj_lam_;
 
-  // TODO(Jinyun): Not changed to std::vector yet, need further debug
+  // (Jinyun): Not changed to std::vector yet, need further debug
   //** variables for sparsity exploitation
   // std::vector<unsigned int> rind_g_; /* row indices    */
   // std::vector<unsigned int> cind_g_; /* column indices */

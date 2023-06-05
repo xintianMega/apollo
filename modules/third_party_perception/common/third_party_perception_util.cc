@@ -153,7 +153,7 @@ double GetNearestLaneHeading(const PointENU& point_enu) {
 
   int status =
       hdmap->GetNearestLane(point_enu, &nearest_lane, &nearest_s, &nearest_l);
-  // TODO(lizh): make it a formal status below
+  // (lizh): make it a formal status below
   if (status != 0) {
     AERROR << "Failed to get nearest lane for point "
            << point_enu.DebugString();
@@ -212,7 +212,7 @@ double GetLateralDistanceToNearestLane(const Point& point) {
 
   int status =
       hdmap->GetNearestLane(point_enu, &nearest_lane, &nearest_s, &nearest_l);
-  // TODO(lizh): make it a formal status below
+  // (lizh): make it a formal status below
   if (status != 0) {
     AERROR << "Failed to get nearest lane for point " << point.DebugString();
     return -1.0;

@@ -36,7 +36,7 @@ struct alignas(16) Landmark {
   BBox2DF box;
 };
 
-// TODO(all): to remove
+// (all): to remove
 // typedef std::shared_ptr<Landmark> LandmarkPtr;
 // typedef std::shared_ptr<const Landmark> LandmarkConstPtr;
 

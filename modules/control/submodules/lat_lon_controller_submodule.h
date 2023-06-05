@@ -82,7 +82,7 @@ class LatLonControllerSubmodule final : public cyber::Component<Preprocessor> {
   LonController longitudinal_controller_;
 
   std::mutex mutex_;
-  // TODO(SHU): separate conf
+  // (SHU): separate conf
   ControlConf lateral_controller_conf_;
   ControlConf longitudinal_controller_conf_;
   std::shared_ptr<cyber::Writer<ControlCommand>> control_core_writer_;

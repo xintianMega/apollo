@@ -100,7 +100,7 @@ filegroup(
     ]),
 )
 
-#TODO(storypku):
+#(storypku):
 # split test_data for each vehicle
 filegroup(
     name = "test_data",

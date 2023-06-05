@@ -140,7 +140,7 @@ Stage::StageStatus BareIntersectionUnprotectedStageApproach::Process(
 bool BareIntersectionUnprotectedStageApproach::CheckClear(
     const ReferenceLineInfo& reference_line_info,
     std::vector<std::string>* wait_for_obstacle_ids) {
-  // TODO(all): move to conf
+  // (all): move to conf
   static constexpr double kConf_min_boundary_t = 6.0;        // second
   static constexpr double kConf_ignore_max_st_min_t = 0.1;   // second
   static constexpr double kConf_ignore_min_st_min_s = 15.0;  // meter

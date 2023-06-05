@@ -30,7 +30,7 @@ const int32_t Steeringcontrola2::ID = 0xA2;
 Steeringcontrola2::Steeringcontrola2() { Reset(); }
 
 uint32_t Steeringcontrola2::GetPeriod() const {
-  // TODO(ChaoM) :  modify every protocol's period manually
+  // (ChaoM) :  modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -41,7 +41,7 @@ void Steeringcontrola2::UpdateData(uint8_t* data) {
 }
 
 void Steeringcontrola2::Reset() {
-  // TODO(ChaoM) :  you should check this manually
+  // (ChaoM) :  you should check this manually
   steering_target_ = 0.0;
   steering_enable_control_ =
       Steering_control_a2::STEERING_ENABLE_CONTROL_STEERING_MANUALCONTROL;

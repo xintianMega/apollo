@@ -71,7 +71,7 @@ TEST(OSQPSolverTest, solver_test_01) {
 
   kernel->AddRegularization(0.1);
   // constraint->add_point_angle_constraint(0, -1.21);
-  // TODO(all): fix the test.
+  // (all): fix the test.
   auto start = std::chrono::system_clock::now();
   EXPECT_TRUE(spline_solver.Solve());
   auto end = std::chrono::system_clock::now();

@@ -86,7 +86,7 @@ def verify_build_defines(params):
             ".",
         )
 
-# TODO(dzc): Once these functions have been factored out of Bazel's
+# (dzc): Once these functions have been factored out of Bazel's
 # cc_configure.bzl, load them from @bazel_tools instead.
 # BEGIN cc_configure common functions.
 def find_cc(repository_ctx):
@@ -195,7 +195,7 @@ def auto_configure_fail(msg):
     no_color = "\033[0m"
     fail("\n%sCuda Configuration Error:%s %s\n" % (red, no_color, msg))
 
-# END cc_configure common functions (see TODO above).
+# END cc_configure common functions (see  above).
 
 def _cuda_include_path(repository_ctx, cuda_config):
     """Generates the Starlark string with cuda include directories.
@@ -505,7 +505,7 @@ def _exec_find_cuda_config(repository_ctx, script_path, cuda_libraries):
 
     return execute(repository_ctx, [python_bin, "-c", decompress_and_execute_cmd])
 
-# TODO(csigg): Only call once instead of from here, tensorrt_configure.bzl,
+# (csigg): Only call once instead of from here, tensorrt_configure.bzl,
 # and nccl_configure.bzl.
 def find_cuda_config(repository_ctx, script_path, cuda_libraries):
     """Returns CUDA config dictionary from running find_cuda_config.py"""
@@ -997,7 +997,7 @@ def _create_local_cuda_repository(repository_ctx):
     # However, this stops our custom clang toolchain from picking the provided
     # LLD linker, so we're only adding '-B/usr/bin' when using non-downloaded
     # toolchain.
-    # TODO: when bazel stops adding '-B/usr/bin' by default, remove this
+    # : when bazel stops adding '-B/usr/bin' by default, remove this
     #       flag from the CROSSTOOL completely (see
     #       https://github.com/bazelbuild/bazel/issues/5634)
     cuda_defines["%{linker_bin_path}"] = host_compiler_prefix

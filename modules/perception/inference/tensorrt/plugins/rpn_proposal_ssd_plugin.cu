@@ -23,7 +23,7 @@ namespace apollo {
 namespace perception {
 namespace inference {
 
-// TODO(chenjiahao): add heat_map_b as anchor_offset
+// (chenjiahao): add heat_map_b as anchor_offset
 // output anchors dims: [H, W, num_anchor_per_point, 4]
 __global__ void generate_anchors_kernel(const int height, const int width,
                                         const float anchor_stride,
@@ -236,7 +236,7 @@ int RPNProposalSSDPlugin::enqueue(int batchSize, const void *const *inputs,
       cudaMemsetAsync(filtered_count, 0, batchSize * sizeof(int), stream));
   nthreads = batchSize * num_anchor;
   block_size = (nthreads - 1) / thread_size_ + 1;
-  // TODO(chenjiahao): filter area
+  // (chenjiahao): filter area
   filter_boxes_cuda(block_size, thread_size_, 0, stream, nthreads, proposals,
                     temp_scores, nullptr, num_anchor, 1, 2, 0, 0, 1,
                     min_size_mode_, min_size_h_, min_size_w_,

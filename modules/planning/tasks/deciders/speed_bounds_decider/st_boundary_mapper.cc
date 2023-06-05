@@ -90,7 +90,7 @@ Status STBoundaryMapper::ComputeSTBoundary(PathDecision* path_decision) const {
     const auto& decision = ptr_obstacle->LongitudinalDecision();
     if (decision.has_stop()) {
       // 1. Store the closest stop fence info.
-      // TODO(all): store ref. s value in stop decision; refine the code then.
+      // (all): store ref. s value in stop decision; refine the code then.
       common::SLPoint stop_sl_point;
       reference_line_.XYToSL(decision.stop().stop_point(), &stop_sl_point);
       const double stop_s = stop_sl_point.s();
@@ -176,7 +176,7 @@ void STBoundaryMapper::ComputeSTBoundary(Obstacle* obstacle) const {
   auto boundary = STBoundary::CreateInstance(lower_points, upper_points);
   boundary.set_id(obstacle->Id());
 
-  // TODO(all): potential bug here.
+  // (all): potential bug here.
   const auto& prev_st_boundary = obstacle->path_st_boundary();
   const auto& ref_line_st_boundary = obstacle->reference_line_st_boundary();
   if (!prev_st_boundary.IsEmpty()) {
@@ -234,7 +234,7 @@ bool STBoundaryMapper::GetOverlapBoundaryPoints(
         double high_s = std::fmin(planning_max_distance_,
                                   curr_point_on_path.s() + forward_distance);
         // It is an unrotated rectangle appearing on the ST-graph.
-        // TODO(jiacheng): reconsider the backward_distance, it might be
+        // (jiacheng): reconsider the backward_distance, it might be
         // unnecessary, but forward_distance is indeed meaningful though.
         lower_points->emplace_back(low_s, 0.0);
         lower_points->emplace_back(low_s, planning_max_time_);

@@ -40,5 +40,5 @@ author = 'Apollo Baidu'
 exclude_patterns = []
 highlight_language = 'c++'
 pygments_style = 'sphinx'
-todo_include_todos = False
+_include_s = False
 htmlhelp_basename = 'CyberRTdoc'

@@ -21,7 +21,7 @@
 
 #pragma once
 
-// TODO(all): should use Angle class internally.
+// (all): should use Angle class internally.
 
 #include <cmath>
 

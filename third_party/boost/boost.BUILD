@@ -4,7 +4,7 @@ licenses(["notice"])
 
 package(default_visibility = ["//visibility:public"])
 
-# TODO(all): May use rules_boost.
+# (all): May use rules_boost.
 cc_library(
     name = "boost",
     includes = ["."],

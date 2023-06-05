@@ -82,7 +82,7 @@ class MPCControllerSubmodule final : public cyber::Component<Preprocessor> {
   MPCController mpc_controller_;
 
   std::mutex mutex_;
-  // TODO(SHU): separate conf
+  // (SHU): separate conf
   ControlConf mpc_controller_conf_;
   std::shared_ptr<cyber::Writer<ControlCommand>> control_core_writer_;
   std::shared_ptr<DependencyInjector> injector_;

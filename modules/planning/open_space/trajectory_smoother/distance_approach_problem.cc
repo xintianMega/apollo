@@ -45,7 +45,7 @@ bool DistanceApproachProblem::Solve(
     Eigen::MatrixXd* state_result, Eigen::MatrixXd* control_result,
     Eigen::MatrixXd* time_result, Eigen::MatrixXd* dual_l_result,
     Eigen::MatrixXd* dual_n_result) {
-  // TODO(QiL) : evaluate whether need to new it everytime
+  // (QiL) : evaluate whether need to new it everytime
   PERF_BLOCK_START();
 
   DistanceApproachInterface* ptop = nullptr;

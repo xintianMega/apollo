@@ -177,7 +177,7 @@ def _install_actions(
     # attribute that is a list of file artifacts. Thus this two-level loop.
     for f in file_labels:
         for a in _depset_to_list(f.files):
-            # TODO(mwoehlke-kitware) refactor this to separate computing the
+            # (mwoehlke-kitware) refactor this to separate computing the
             # original relative path and the path with prefix(es) stripped,
             # then use the original relative path for both exclusions and
             # renaming.
@@ -256,7 +256,7 @@ def _install_cc_actions(ctx, target):
 
 #------------------------------------------------------------------------------
 # Compute install actions for a py_library or py_binary.
-# TODO(jamiesnape): Install native shared libraries that the target may use.
+# (jamiesnape): Install native shared libraries that the target may use.
 def _install_py_actions(ctx, target):
     actions = _install_actions(
         ctx,
@@ -265,7 +265,7 @@ def _install_py_actions(ctx, target):
         ctx.attr.py_strip_prefix,
         rename = ctx.attr.rename,
     )
-    
+
     runfile_actions = []
     runfiles_dir = "%s.runfiles" % str(target.label).split(":")[1]
     runfiles_dest = join_paths(ctx.attr.py_dest, runfiles_dir)
@@ -285,7 +285,7 @@ def _install_py_actions(ctx, target):
         )
 
     actions += runfile_actions
-    
+
     return actions
 #------------------------------------------------------------------------------
 # Compute install actions for a script or an executable.
@@ -341,7 +341,7 @@ def _install_impl(ctx):
     )
 
     for t in ctx.attr.targets:
-        # TODO(jwnimmer-tri): Raise an error if a target has testonly=1.
+        # (jwnimmer-tri): Raise an error if a target has testonly=1.
         if CcInfo in t:
             actions += _install_cc_actions(ctx, t)
             # linker_inputs = t[CcInfo].linking_context.linker_inputs
@@ -380,7 +380,7 @@ def _install_impl(ctx):
                      "\n  dst = " + repr(a.dst))
 
     # Generate install script.
-    # TODO(mwoehlke-kitware): Figure out a better way to generate this and run
+    # (mwoehlke-kitware): Figure out a better way to generate this and run
     # it via Python than `#!/usr/bin/env python3`?
     ctx.actions.expand_template(
         template = ctx.executable.install_script_template,
@@ -401,7 +401,7 @@ def _install_impl(ctx):
         DefaultInfo(runfiles = files),
     ]
 
-# TODO(mwoehlke-kitware) default guess_data to PACKAGE when we have better
+# (mwoehlke-kitware) default guess_data to PACKAGE when we have better
 # default destinations.
 _install_rule = rule(
     # Update buildifier-tables.json when this changes.
@@ -607,7 +607,7 @@ def _install_src_files_impl(ctx):
     for a in actions:
         if not hasattr(a, "src"):
             fail("Action(dst={}) has no 'src' attribute".format(a.dst))
-        
+
         if hasattr(a, "filter"):
             script_actions.append(_install_src_code(a))
 

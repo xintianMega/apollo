@@ -41,7 +41,7 @@
     // Require initialization in variable declaration.
     "init-declarations": ["error", "always"],
     // Disallow unused variables.
-    // TODO(breakds): Re-disallow when the repo is more stable.
+    // (breakds): Re-disallow when the repo is more stable.
     // "no-unused-vars": "error",
     // Require constructor names to begin with a capital letter.
     "new-cap": ["error", {

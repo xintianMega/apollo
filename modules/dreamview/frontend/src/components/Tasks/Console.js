@@ -23,7 +23,7 @@ const LEVEL_ICON = Object.freeze({
   SUCCESS: successIcon,
   UNKNOWN: notificationIcon,
 });
-//Todo:level statement style
+//:level statement style
 
 @observer
 export class MonitorItem extends React.Component {

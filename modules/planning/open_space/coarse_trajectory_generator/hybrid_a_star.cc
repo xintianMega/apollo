@@ -436,11 +436,11 @@ bool HybridAStar::GenerateSCurveSpeedAcceleration(HybridAStartResult* result) {
   const double init_a = 0.0;
 
   // minimum time speed optimization
-  // TODO(Jinyun): move to confs
+  // (Jinyun): move to confs
 
   SpeedData speed_data;
 
-  // TODO(Jinyun): explore better time horizon heuristic
+  // (Jinyun): explore better time horizon heuristic
   const double path_length = result->accumulated_s.back();
   const double total_t =
       std::max(gear ? 1.5 *
@@ -479,7 +479,7 @@ bool HybridAStar::GenerateSCurveSpeedAcceleration(HybridAStartResult* result) {
   dx_bounds[num_of_knots - 1] = std::make_pair(0.0, 0.0);
   ddx_bounds[num_of_knots - 1] = std::make_pair(0.0, 0.0);
 
-  // TODO(Jinyun): move to confs
+  // (Jinyun): move to confs
   std::vector<double> x_ref(num_of_knots, path_length);
   piecewise_jerk_problem.set_x_ref(ref_s_weight_, std::move(x_ref));
   piecewise_jerk_problem.set_dx_ref(ref_v_weight_, max_v * 0.8);
@@ -533,7 +533,7 @@ bool HybridAStar::GenerateSCurveSpeedAcceleration(HybridAStartResult* result) {
 
   HybridAStartResult combined_result;
 
-  // TODO(Jinyun): move to confs
+  // (Jinyun): move to confs
   const double kDenseTimeResoltuion = 0.5;
   const double time_horizon =
       speed_data.TotalTime() + kDenseTimeResoltuion * 1.0e-6;

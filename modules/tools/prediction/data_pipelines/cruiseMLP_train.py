@@ -45,7 +45,7 @@ from modules.tools.prediction.data_pipelines.proto.cruise_model_pb2 import Tenso
     ClassifyParameter, RegressParameter, CruiseModelParameter
 
 
-# TODO(panjiacheng): the data-loader part needs to be modified.
+# (panjiacheng): the data-loader part needs to be modified.
 
 # Constants
 dim_input = parameters['cruise_mlp']['dim_input']
@@ -300,7 +300,7 @@ def data_preprocessing(data):
 # Data Loading and preprocessing (Data-Loader case)
 
 '''
-TODO: implement custom collate_fn to incorporate down-sampling function
+: implement custom collate_fn to incorporate down-sampling function
 for certain labels.
 '''
 

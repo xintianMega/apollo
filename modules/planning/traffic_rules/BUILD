@@ -7,7 +7,7 @@ PLANNING_COPTS = ["-DMODULE_NAME=\\\"planning\\\""]
 cc_library(
     name = "traffic_rules",
     srcs = [
-        # TODO(all): Split to separate targets to gain better building cache.
+        # (all): Split to separate targets to gain better building cache.
         "backside_vehicle.cc",
         "crosswalk.cc",
         "destination.cc",

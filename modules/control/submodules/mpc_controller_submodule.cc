@@ -45,7 +45,7 @@ std::string MPCControllerSubmodule::Name() const {
 
 bool MPCControllerSubmodule::Init() {
   injector_ = std::make_shared<DependencyInjector>();
-  // TODO(SHU): separate common_control conf from controller conf
+  // (SHU): separate common_control conf from controller conf
   ACHECK(cyber::common::GetProtoFromFile(FLAGS_mpc_controller_conf_file,
                                          &mpc_controller_conf_))
       << "Unable to load control conf file: " << FLAGS_mpc_controller_conf_file;

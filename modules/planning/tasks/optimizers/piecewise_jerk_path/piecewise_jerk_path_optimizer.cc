@@ -125,7 +125,7 @@ common::Status PiecewiseJerkPathOptimizer::Process(
       }
     }
 
-    // TODO(all): double-check this;
+    // (all): double-check this;
     // final_path_data might carry info from upper stream
     PathData path_data = *final_path_data;
 
@@ -246,7 +246,7 @@ bool PiecewiseJerkPathOptimizer::OptimizePath(
   PiecewiseJerkPathProblem piecewise_jerk_problem(kNumKnots, delta_s,
                                                   init_state.second);
 
-  // TODO(Hongyi): update end_state settings
+  // (Hongyi): update end_state settings
   piecewise_jerk_problem.set_end_state_ref({1000.0, 0.0, 0.0}, end_state);
   // pull over scenarios
   // Because path reference might also make the end_state != 0

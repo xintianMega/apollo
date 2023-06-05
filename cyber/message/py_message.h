@@ -85,7 +85,7 @@ inline bool PyMessageWrap::ParseFromArray(const void* data, int size) {
 }
 
 inline bool PyMessageWrap::ParseFromString(const std::string& msgstr) {
-  // todo : will use submsg type ywf
+  //  : will use submsg type ywf
   // std::size_t pos = msgstr.rfind(data_split_pattern);
   // if (pos != std::string::npos) {
   //   std::size_t split_count = data_split_pattern.size();
@@ -110,7 +110,7 @@ inline bool PyMessageWrap::SerializeToString(std::string* output) const {
   if (!output) {
     return false;
   }
-  // todo : will use submsg type ywf
+  //  : will use submsg type ywf
   // *output = data_ + data_split_pattern + type_name_;
   *output = data_;
   return true;

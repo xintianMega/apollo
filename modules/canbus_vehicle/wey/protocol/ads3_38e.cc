@@ -30,7 +30,7 @@ const int32_t Ads338e::ID = 0x38E;
 Ads338e::Ads338e() { Reset(); }
 
 uint32_t Ads338e::GetPeriod() const {
-  // TODO(ChaoMa) :modify every protocol's period manually
+  // (ChaoMa) :modify every protocol's period manually
   static const uint32_t PERIOD = 20 * 1000;
   return PERIOD;
 }
@@ -52,7 +52,7 @@ void Ads338e::UpdateData(uint8_t* data) {
 }
 
 void Ads338e::Reset() {
-  // TODO(ChaoMa) you should check this manually
+  // (ChaoMa) you should check this manually
   ads_bcm_worksts_ = Ads3_38e::ADS_BCM_WORKSTS_DISABLE;
   ads_bcmworkstsvalid_ = Ads3_38e::ADS_BCMWORKSTSVALID_INVALID;
   ads_reqcontrolbcm_ = Ads3_38e::ADS_REQCONTROLBCM_NO_REQUEST;

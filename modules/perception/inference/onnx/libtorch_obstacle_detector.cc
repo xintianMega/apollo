@@ -125,7 +125,7 @@ void ObstacleDetector::Infer() {
                     torch::kFloat32);
 
   std::vector<torch::jit::IValue> torch_inputs;
-  // todo(zero): need to delete, move out
+  // (zero): need to delete, move out
   // tensor_image = tensor_image.to(device);
   // tensor_image = tensor_image.permute({0, 3, 1, 2}).contiguous();
 

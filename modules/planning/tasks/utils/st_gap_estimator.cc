@@ -28,13 +28,13 @@
 namespace apollo {
 namespace planning {
 
-// TODO(Jinyun): move to configs
+// (Jinyun): move to configs
 static constexpr double kOvertakeTimeBuffer = 3.0;    // in seconds
 static constexpr double kMinOvertakeDistance = 10.0;  // in meters
 static constexpr double kDpSafetyDistance = 20.0;     // in meters
 static constexpr double kDpSafetyTimeBuffer = 3.0;    // in meters
 
-// TODO(Jinyun): unite gap calculation in dp st and speed decider
+// (Jinyun): unite gap calculation in dp st and speed decider
 double StGapEstimator::EstimateSafeOvertakingGap() { return kDpSafetyDistance; }
 
 double StGapEstimator::EstimateSafeFollowingGap(const double target_obs_speed) {
@@ -45,7 +45,7 @@ double StGapEstimator::EstimateSafeYieldingGap() {
   return FLAGS_yield_distance;
 }
 
-// TODO(Jinyun): add more variables to overtaking gap calculation
+// (Jinyun): add more variables to overtaking gap calculation
 double StGapEstimator::EstimateProperOvertakingGap(
     const double target_obs_speed, const double adc_speed) {
   const double overtake_distance_s =
@@ -54,13 +54,13 @@ double StGapEstimator::EstimateProperOvertakingGap(
   return overtake_distance_s;
 }
 
-// TODO(Jinyun): add more variables to follow gap calculation
+// (Jinyun): add more variables to follow gap calculation
 double StGapEstimator::EstimateProperFollowingGap(const double adc_speed) {
   return std::fmax(adc_speed * FLAGS_follow_time_buffer,
                    FLAGS_follow_min_distance);
 }
 
-// TODO(Jinyun): add more variables to yielding gap calculation
+// (Jinyun): add more variables to yielding gap calculation
 double StGapEstimator::EstimateProperYieldingGap() {
   return FLAGS_yield_distance;
 }

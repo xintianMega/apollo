@@ -520,7 +520,7 @@ void LonController::SetDigitalFilter(double ts, double cutoff_freq,
   digital_filter->set_coefficients(denominators, numerators);
 }
 
-// TODO(all): Refactor and simplify
+// (all): Refactor and simplify
 void LonController::GetPathRemain(SimpleLongitudinalDebug *debug) {
   int stop_index = 0;
   static constexpr double kSpeedThreshold = 1e-3;

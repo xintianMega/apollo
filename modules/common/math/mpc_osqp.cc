@@ -80,7 +80,7 @@ void MpcOsqp::CalculateKernel(std::vector<c_float> *P_data,
 
   int ind_p = 0;
   for (size_t i = 0; i < num_param_; ++i) {
-    // TODO(SHU) Check this
+    // (SHU) Check this
     P_indptr->emplace_back(ind_p);
     for (const auto &row_data_pair : columns[i]) {
       P_data->emplace_back(row_data_pair.second);    // val

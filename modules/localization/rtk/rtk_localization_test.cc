@@ -141,7 +141,7 @@ TEST_F(RTKLocalizationTest, ComposeLocalizationMsg) {
                 localization.pose().position().z(), 1.0e-7);
   }
 
-  // TODO(Qi Luo) Update test once got new imu data for euler angle.
+  // (Qi Luo) Update test once got new imu data for euler angle.
 }
 
 }  // namespace localization

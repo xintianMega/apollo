@@ -70,7 +70,7 @@ void Target::Init(const omt::TargetParam &param) {
   world_lwh.SetWindow(param.world_lhw_history());
   world_lwh_for_unmovable.SetWindow(param.world_lhw_history());
   image_wh.SetAlpha(param.image_wh_update_rate());
-  // TODO(gaohan)  should update variance when predict and update
+  // (gaohan)  should update variance when predict and update
   image_center.variance_ *= target_param_.image_center().init_variance();
   image_center.measure_noise_ *=
       target_param_.image_center().measure_variance();
@@ -210,7 +210,7 @@ void Target::Update3D(CameraFrame *frame) {
     object->velocity(2) = 0;
   } else {
     Eigen::Vector4d x = world_center.get_state();
-    // TODO(gaohan02): refactor
+    // (gaohan02): refactor
     if (tracked_objects.size() > 10) {
       auto pose1 = get_object(-2)->object->center;
       auto pose2 = get_object(-10)->object->center;
@@ -308,7 +308,7 @@ void Target::Update3D(CameraFrame *frame) {
 void Target::Update(CameraFrame *frame) {
   auto object = latest_object->object;
   if (!isLost()) {
-    // todo(zero): need to fix alpha
+    // (zero): need to fix alpha
     float alpha = 0.01f;
 
     Eigen::Vector4d size_measurement;

@@ -129,7 +129,7 @@ bool LaneBasedCalibrator::Process(const EgoLane &lane, const float &velocity,
 
   // distance_traveled_in_meter = 0.5f;  // hardcode for debug
 
-  // TODO(Xun): Change cout or cerr to log.
+  // (Xun): Change cout or cerr to log.
 
   // Check for driving straight
   if (!IsTravelingStraight(vehicle_yaw_changed)) {

@@ -106,7 +106,7 @@ void GuardianComponent::TriggerSafetyMode() {
              "stop!";
     sensor_malfunction = true;
   } else {
-    // TODO(QiL) : Load for config
+    // (QiL) : Load for config
     for (int i = 0; i < chassis_.surround().sonar_range_size(); ++i) {
       if ((chassis_.surround().sonar_range(i) > 0.0 &&
            chassis_.surround().sonar_range(i) < 2.5) ||
@@ -123,7 +123,7 @@ void GuardianComponent::TriggerSafetyMode() {
   guardian_cmd_.mutable_control_command()->set_steering_rate(25.0);
   guardian_cmd_.mutable_control_command()->set_is_in_safe_mode(true);
 
-  // TODO(QiL) : Remove this one once hardware re-alignment is done.
+  // (QiL) : Remove this one once hardware re-alignment is done.
   sensor_malfunction = false;
   obstacle_detected = false;
   AINFO << "Temporarily ignore the ultrasonic sensor output during hardware "

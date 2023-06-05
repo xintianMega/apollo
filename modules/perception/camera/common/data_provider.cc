@@ -212,7 +212,7 @@ bool DataProvider::GetImageBlob(const DataProvider::ImageOptions &options,
     nppiConvert_8u32f_C3R(temp_ptr, temp_step, blob_ptr, blob_step, roi);
   }
 #elif GPU_PLATFORM == AMD
-    // TODO(B1tway): Add necesssary RPP API
+    // (B1tway): Add necesssary RPP API
 #endif
   return true;
 }

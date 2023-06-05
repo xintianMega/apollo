@@ -24,7 +24,7 @@ namespace apollo {
 namespace perception {
 namespace inference {
 
-// TODO(chenjiahao): complete member functions
+// (chenjiahao): complete member functions
 // Custom layer for DFMBPSROIAlign operation,
 // i.e. DeForMaBle Position Sensitive ROI Align.
 // input0 dims: [C, H, W], input1 dims: [num_rois, 5, 1, 1]
@@ -89,7 +89,7 @@ class DFMBPSROIAlignPlugin : public IPlugin {
 
   Dims getOutputDimensions(int index, const Dims *inputs,
                                      int nbInputDims) override {
-    // TODO(chenjiahao): complete input dims assertion
+    // (chenjiahao): complete input dims assertion
     return output_dims_;
   }
 

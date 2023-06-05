@@ -24,7 +24,7 @@ namespace apollo {
 namespace perception {
 namespace inference {
 
-// TODO(chenjiahao): complete member functions
+// (chenjiahao): complete member functions
 class RCNNProposalPlugin : public nvinfer1::IPlugin {
  public:
   RCNNProposalPlugin(
@@ -71,8 +71,8 @@ class RCNNProposalPlugin : public nvinfer1::IPlugin {
 
   nvinfer1::Dims getOutputDimensions(int index, const nvinfer1::Dims *inputs,
                                      int nbInputDims) override {
-    // TODO(chenjiahao): complete input dims assertion
-    // TODO(chenjiahao): batch size is hard coded to 1 here
+    // (chenjiahao): complete input dims assertion
+    // (chenjiahao): batch size is hard coded to 1 here
     return nvinfer1::Dims4(top_n_ * 1, out_channel_, 1, 1);
   }
 
@@ -96,7 +96,7 @@ class RCNNProposalPlugin : public nvinfer1::IPlugin {
  private:
   const int thread_size_ = 512;
   bool refine_out_of_map_bbox_ = true;
-  // TODO(chenjiahao): implement class-agnostic regression option
+  // (chenjiahao): implement class-agnostic regression option
   bool regress_agnostic_ = false;
   bool rpn_proposal_output_score_ = true;
 

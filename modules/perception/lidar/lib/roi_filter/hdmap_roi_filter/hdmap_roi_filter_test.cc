@@ -117,7 +117,7 @@ TEST(hdmap_roi_filter_bitmap2d_test, test_polygon_scan_cvter) {
   IntervalIn valid_range(beg, end);
   scans_intervals.clear();
   /*
-   * TODO(perception): add back the test.
+   * (perception): add back the test.
   poly_scan_cvter.ScansCvt(valid_range, PolyDirMajor::YMAJOR, step,
                            &(scans_intervals));
   for (size_t i = 0; i < scans_intervals.size(); ++i) {
@@ -297,7 +297,7 @@ TEST_F(HdmapROIFilterTest, filter_with_parallel) {
 }
 
 TEST_F(HdmapROIFilterTest, filter_with_simple_case) {
-  // TODO(perception): fix the test.
+  // (perception): fix the test.
   // HdmapROIFilterTest::SimpleCaseFilter();
 }
 
