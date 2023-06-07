@@ -49,6 +49,7 @@ class Scenario {
   Scenario(const ScenarioConfig& config, const ScenarioContext* context,
            const std::shared_ptr<DependencyInjector>& injector);
 
+  // 读取配置文件
   static bool LoadConfig(const std::string& config_file,
                          ScenarioConfig* config);
 
@@ -94,9 +95,7 @@ class Scenario {
   ScenarioStatus scenario_status_ = STATUS_UNKNOWN;
   std::unique_ptr<Stage> current_stage_;
   ScenarioConfig config_;
-  std::unordered_map<StageType,
-                     const ScenarioConfig::StageConfig*, std::hash<int>>
-      stage_config_map_;
+  std::unordered_map<StageType, const ScenarioConfig::StageConfig*, std::hash<int>> stage_config_map_;
   const ScenarioContext* scenario_context_ = nullptr;
   std::string name_;
   std::string msg_;  // debug msg

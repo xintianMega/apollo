@@ -266,6 +266,7 @@ void OnLanePlanning::RunOnce(const LocalView& local_view,
   // chassis
   ADEBUG << "Get chassis:" << local_view_.chassis->DebugString();
 
+  //对齐与定位消息的时间戳
   Status status = injector_->vehicle_state()->Update(
       *local_view_.localization_estimate, *local_view_.chassis);
 
@@ -326,8 +327,7 @@ void OnLanePlanning::RunOnce(const LocalView& local_view,
     return;
   }
 
-  // planning is triggered by prediction data, but we can still use an estimated
-  // cycle time for stitching
+  // planning is triggered by prediction data, but we can still use an estimated cycle time for stitching
   const double planning_cycle_time =
       1.0 / static_cast<double>(FLAGS_planning_loop_rate);
 
@@ -414,6 +414,7 @@ void OnLanePlanning::RunOnce(const LocalView& local_view,
   ADEBUG << "Planning latency: "
          << ptr_trajectory_pb->latency_stats().DebugString();
 
+  //Estop
   if (!status.ok()) {
     status.Save(ptr_trajectory_pb->mutable_header()->mutable_status());
     AERROR << "Planning failed:" << status.ToString();
@@ -433,6 +434,7 @@ void OnLanePlanning::RunOnce(const LocalView& local_view,
     ptr_trajectory_pb->set_replan_reason(replan_reason);
   }
 
+  // fillPlanningPb
   if (frame_->open_space_info().is_on_open_space_trajectory()) {
     FillPlanningPb(start_timestamp, ptr_trajectory_pb);
     ADEBUG << "Planning pb:" << ptr_trajectory_pb->header().DebugString();
@@ -544,11 +546,9 @@ Status OnLanePlanning::Plan(
   }
 
   //TODO: 调用具体的(PUBLIC_ROAD)Planner执行
-  auto status = planner_->Plan(stitching_trajectory.back(), frame_.get(),
-                               ptr_trajectory_pb);
+  auto status = planner_->Plan(stitching_trajectory.back(), frame_.get(), ptr_trajectory_pb);
 
-  ptr_debug->mutable_planning_data()->set_front_clear_distance(
-      injector_->ego_info()->front_clear_distance());
+  ptr_debug->mutable_planning_data()->set_front_clear_distance(injector_->ego_info()->front_clear_distance());
 
   if (frame_->open_space_info().is_on_open_space_trajectory()) {
     frame_->mutable_open_space_info()->sync_debug_instance();
@@ -598,8 +598,8 @@ Status OnLanePlanning::Plan(
       }
       return Status(ErrorCode::PLANNING_ERROR, msg);
     }
-    // Store current frame stitched path for possible speed fallback in next
-    // frames
+
+    // Store current frame stitched path for possible speed fallback in next frames
     DiscretizedPath current_frame_planned_path;
     for (const auto& trajectory_point : stitching_trajectory) {
       current_frame_planned_path.push_back(trajectory_point.path_point());

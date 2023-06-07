@@ -26,6 +26,7 @@
 namespace apollo {
 namespace planning {
 
+//主要功能是接收车辆的传感器数据和控制指令
 class DependencyInjector {
  public:
   DependencyInjector() = default;

@@ -51,23 +51,16 @@
 namespace apollo {
 namespace planning {
 
-apollo::common::util::Factory<
-    TaskConfig::TaskType, Task,
-    Task* (*)(const TaskConfig& config,
-              const std::shared_ptr<DependencyInjector>& injector),
-    std::unordered_map<
-        TaskConfig::TaskType,
-        Task* (*)(const TaskConfig& config,
-                  const std::shared_ptr<DependencyInjector>& injector),
-        std::hash<int>>>
-    TaskFactory::task_factory_;
+apollo::common::util::Factory<TaskConfig::TaskType, Task,
+Task* (*)(const TaskConfig& config, const std::shared_ptr<DependencyInjector>& injector),
+std::unordered_map< TaskConfig::TaskType,
+Task* (*)(const TaskConfig& config, const std::shared_ptr<DependencyInjector>& injector),
+std::hash<int>>> TaskFactory::task_factory_;
 
 std::unordered_map<TaskConfig::TaskType, TaskConfig, std::hash<int>>
     TaskFactory::default_task_configs_;
 
-void TaskFactory::Init(const PlanningConfig& config,
-                       const std::shared_ptr<DependencyInjector>& injector) {
-  ///////////////////////////
+void TaskFactory::Init(const PlanningConfig& config, const std::shared_ptr<DependencyInjector>& injector) {
   // deciders
   task_factory_.Register(
       TaskConfig::CREEP_DECIDER,

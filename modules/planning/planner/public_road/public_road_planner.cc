@@ -31,10 +31,12 @@ Status PublicRoadPlanner::Init(const PlanningConfig& config) {
 }
 
 Status PublicRoadPlanner::Plan(const TrajectoryPoint& planning_start_point,
-                               Frame* frame,
-                               ADCTrajectory* ptr_computed_trajectory) {
+Frame* frame, ADCTrajectory* ptr_computed_trajectory) {
+  // 决策当前应该执行哪个场景
   scenario_manager_.Update(planning_start_point, *frame);
+  // 获取当前场景
   scenario_ = scenario_manager_.mutable_scenario();
+  // 处理当前场景
   auto result = scenario_->Process(planning_start_point, frame);
 
   if (FLAGS_enable_record_debug) {

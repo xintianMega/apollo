@@ -57,6 +57,7 @@ ScenarioManager::ScenarioManager(
 
 bool ScenarioManager::Init(const PlanningConfig& planning_config) {
   planning_config_.CopyFrom(planning_config);
+  // 注册场景
   RegisterScenarios();
   default_scenario_type_ = ScenarioType::LANE_FOLLOW;
   current_scenario_ = CreateScenario(default_scenario_type_);
@@ -325,6 +326,7 @@ ScenarioType ScenarioManager::SelectPullOverScenario(const Frame& frame) {
   return default_scenario_type_;
 }
 
+//巡航
 ScenarioType ScenarioManager::SelectPadMsgScenario(const Frame& frame) {
   const auto& pad_msg_driving_action = frame.GetPadMsgDrivingAction();
 
@@ -727,8 +729,7 @@ ScenarioType ScenarioManager::SelectValetParkingScenario(const Frame& frame) {
 
 ScenarioType ScenarioManager::SelectParkAndGoScenario(const Frame& frame) {
   bool park_and_go = false;
-  const auto& scenario_config =
-      config_map_[ScenarioType::PARK_AND_GO].park_and_go_config();
+  const auto& scenario_config =config_map_[ScenarioType::PARK_AND_GO].park_and_go_config();
   const auto vehicle_state_provider = injector_->vehicle_state();
   common::VehicleState vehicle_state = vehicle_state_provider->vehicle_state();
   auto adc_point = common::util::PointFactory::ToPointENU(vehicle_state);
@@ -814,12 +815,14 @@ void ScenarioManager::ScenarioDispatch(const Frame& frame) {
       history_points_len >= FLAGS_min_past_history_points_len) {
     scenario_type = ScenarioDispatchLearning();
   } else {
+    //scenario 判断
     scenario_type = ScenarioDispatchNonLearning(frame);
   }
 
   ADEBUG << "select scenario: " << ScenarioType_Name(scenario_type);
 
   // update PlanningContext
+  //更新场景有关信息，包括信息重置
   UpdatePlanningContext(frame, scenario_type);
 
   if (current_scenario_->scenario_type() != scenario_type) {
@@ -828,18 +831,15 @@ void ScenarioManager::ScenarioDispatch(const Frame& frame) {
 }
 
 ScenarioType ScenarioManager::ScenarioDispatchLearning() {
-  ////////////////////////////////////////
   // learning model scenario
   ScenarioType scenario_type = ScenarioType::LEARNING_MODEL_SAMPLE;
   return scenario_type;
 }
 
 ScenarioType ScenarioManager::ScenarioDispatchNonLearning(const Frame& frame) {
-  ////////////////////////////////////////
   // default: LANE_FOLLOW
   ScenarioType scenario_type = default_scenario_type_;
 
-  ////////////////////////////////////////
   // Pad Msg scenario
   scenario_type = SelectPadMsgScenario(frame);
 
@@ -870,7 +870,6 @@ ScenarioType ScenarioManager::ScenarioDispatchNonLearning(const Frame& frame) {
     }
   }
 
-  ////////////////////////////////////////
   // ParkAndGo / starting scenario
   if (scenario_type == default_scenario_type_) {
     if (FLAGS_enable_scenario_park_and_go) {
@@ -878,13 +877,11 @@ ScenarioType ScenarioManager::ScenarioDispatchNonLearning(const Frame& frame) {
     }
   }
 
-  ////////////////////////////////////////
   // intersection scenarios
   if (scenario_type == default_scenario_type_) {
     scenario_type = SelectInterceptionScenario(frame);
   }
 
-  ////////////////////////////////////////
   // pull-over scenario
   if (scenario_type == default_scenario_type_) {
     if (FLAGS_enable_scenario_pull_over) {
@@ -892,7 +889,6 @@ ScenarioType ScenarioManager::ScenarioDispatchNonLearning(const Frame& frame) {
     }
   }
 
-  ////////////////////////////////////////
   // VALET_PARKING scenario
   if (scenario_type == default_scenario_type_) {
     scenario_type = SelectValetParkingScenario(frame);

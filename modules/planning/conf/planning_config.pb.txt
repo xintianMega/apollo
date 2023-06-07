@@ -17,6 +17,14 @@ learning_mode: NO_LEARNING
 standard_planning_config {
   planner_type: PUBLIC_ROAD
   planner_public_road_config {
+    // 支持的场景
+    //scenario_type: LANE_FOLLOW  // 车道线保持
+    //scenario_type: SIDE_PASS    // 超车
+    //scenario_type: STOP_SIGN_UNPROTECTED  // 停止
+    //scenario_type: TRAFFIC_LIGHT_PROTECTED    // 红绿灯
+    //scenario_type: TRAFFIC_LIGHT_UNPROTECTED_LEFT_TURN  // 红绿灯左转
+    //scenario_type: TRAFFIC_LIGHT_UNPROTECTED_RIGHT_TURN // 红绿灯右转
+    //scenario_type: VALET_PARKING  // 代客泊车
   }
 }
 default_task_config: {

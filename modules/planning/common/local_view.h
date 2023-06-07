@@ -40,6 +40,7 @@ struct LocalView {
   std::shared_ptr<canbus::Chassis> chassis;
   std::shared_ptr<localization::LocalizationEstimate> localization_estimate;
   std::shared_ptr<perception::TrafficLightDetection> traffic_light;
+  // 导航信息
   std::shared_ptr<routing::RoutingResponse> routing;
   std::shared_ptr<relative_map::MapMsg> relative_map;
   std::shared_ptr<PadMessage> pad_msg;

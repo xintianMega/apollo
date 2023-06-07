@@ -90,15 +90,16 @@ void LaneFollowStage::RecordObstacleDebugInfo(
   }
 }
 
+//TODO:
 Stage::StageStatus LaneFollowStage::Process(
     const TrajectoryPoint& planning_start_point, Frame* frame) {
   bool has_drivable_reference_line = false;
 
-  ADEBUG << "Number of reference lines:\t"
-         << frame->mutable_reference_line_info()->size();
+  ADEBUG << "Number of reference lines:\t" << frame->mutable_reference_line_info()->size();
 
   unsigned int count = 0;
 
+  // 遍历所有的参考线，直到找到可用来规划的参考线后退出
   for (auto& reference_line_info : *frame->mutable_reference_line_info()) {
     // (SHU): need refactor
     if (count++ == frame->mutable_reference_line_info()->size()) {
@@ -107,15 +108,17 @@ Stage::StageStatus LaneFollowStage::Process(
     ADEBUG << "No: [" << count << "] Reference Line.";
     ADEBUG << "IsChangeLanePath: " << reference_line_info.IsChangeLanePath();
 
+    // 找到可用来规划的参考线，退出循环
     if (has_drivable_reference_line) {
       reference_line_info.SetDrivable(false);
       break;
     }
 
-    auto cur_status =
-        PlanOnReferenceLine(planning_start_point, frame, &reference_line_info);
+    //TODO: 执行具体规划任务
+    auto cur_status = PlanOnReferenceLine(planning_start_point, frame, &reference_line_info);
 
     if (cur_status.ok()) {
+      // 如果发生lanechange，判断reference_line的cost
       if (reference_line_info.IsChangeLanePath()) {
         ADEBUG << "reference line is lane change ref.";
         ADEBUG << "FLAGS_enable_smarter_lane_change: "
@@ -130,7 +133,9 @@ Stage::StageStatus LaneFollowStage::Process(
           LaneChangeDecider::UpdatePreparationDistance(
               true, frame, &reference_line_info, injector_->planning_context());
           ADEBUG << "\tclear for lane change";
-        } else {
+        }
+        // 如果没有lanechange，stage执行结果为OK，则has_drivable_reference_line置位true
+        else {
           LaneChangeDecider::UpdatePreparationDistance(
               false, frame, &reference_line_info,
               injector_->planning_context());
@@ -153,6 +158,7 @@ Stage::StageStatus LaneFollowStage::Process(
 Status LaneFollowStage::PlanOnReferenceLine(
     const TrajectoryPoint& planning_start_point, Frame* frame,
     ReferenceLineInfo* reference_line_info) {
+  // 判断是否有lanechange意图，如果有计算cost
   if (!reference_line_info->IsChangeLanePath()) {
     reference_line_info->AddCost(kStraightForwardLineCost);
   }
@@ -160,10 +166,12 @@ Status LaneFollowStage::PlanOnReferenceLine(
   ADEBUG << "Current reference_line_info is IsChangeLanePath: "
          << reference_line_info->IsChangeLanePath();
 
+  // 遍历每个task，即把注册的task运行一遍
   auto ret = Status::OK();
   for (auto* task : task_list_) {
     const double start_timestamp = Clock::NowInSeconds();
 
+    //TODO:
     ret = task->Execute(frame, reference_line_info);
 
     const double end_timestamp = Clock::NowInSeconds();
@@ -192,9 +200,11 @@ Status LaneFollowStage::PlanOnReferenceLine(
   // check path and speed results for path or speed fallback
   reference_line_info->set_trajectory_type(ADCTrajectory::NORMAL);
   if (!ret.ok()) {
+    // TODO:如果task执行失败，则使用备用的规划轨迹
     PlanFallbackTrajectory(planning_start_point, frame, reference_line_info);
   }
 
+  // TODO:对规划的轨迹进行合成，如果合成失败，返回失败状态
   DiscretizedTrajectory trajectory;
   if (!reference_line_info->CombinePathAndSpeedProfile(
           planning_start_point.relative_time(),
@@ -204,7 +214,7 @@ Status LaneFollowStage::PlanOnReferenceLine(
     return Status(ErrorCode::PLANNING_ERROR, msg);
   }
 
-  // determine if there is a destination on reference line.
+  // TODO: determine if there is a destination on reference line. 对目的终点进行处理
   double dest_stop_s = -1.0;
   for (const auto* obstacle :
        reference_line_info->path_decision()->obstacles().Items()) {
@@ -243,6 +253,7 @@ Status LaneFollowStage::PlanOnReferenceLine(
     }
   }
 
+  // 对规划的轨迹进行检查，如果检查失败，返回失败状态
   if (FLAGS_enable_trajectory_check) {
     if (ConstraintChecker::ValidTrajectory(trajectory) !=
         ConstraintChecker::Result::VALID) {
@@ -252,6 +263,7 @@ Status LaneFollowStage::PlanOnReferenceLine(
     }
   }
 
+  // 存放规划的结果
   reference_line_info->SetTrajectory(trajectory);
   reference_line_info->SetDrivable(true);
   return Status::OK();

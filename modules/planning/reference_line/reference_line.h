@@ -225,7 +225,9 @@ class ReferenceLine {
    * This speed limit overrides the lane speed limit
    **/
   std::vector<SpeedLimit> speed_limit_;
+  //优化后的基准参考点
   std::vector<ReferencePoint> reference_points_;
+  //地图提供原始中心线
   hdmap::Path map_path_;
   uint32_t priority_ = 0;
 };

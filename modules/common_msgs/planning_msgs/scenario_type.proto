@@ -6,29 +6,40 @@ package apollo.planning;
 enum ScenarioType {
     LANE_FOLLOW = 0;  // default scenario
 
-    // intersection involved
+    // intersection involved 交叉路口情况
+    //无保护交叉路口
     BARE_INTERSECTION_UNPROTECTED = 2;
+    //有停止标志停车让行交叉路口
     STOP_SIGN_PROTECTED = 3;
+    //无停止标志停车让行路口
     STOP_SIGN_UNPROTECTED = 4;
+    //交通灯保护路口
     TRAFFIC_LIGHT_PROTECTED = 5;
+    //无左转交通灯交叉路口
     TRAFFIC_LIGHT_UNPROTECTED_LEFT_TURN = 6;
+    //无右转交通灯交叉路口
     TRAFFIC_LIGHT_UNPROTECTED_RIGHT_TURN = 7;
+    //让行会车场景
     YIELD_SIGN = 8;
 
     // parking
+    //靠边停车
     PULL_OVER = 9;
+    //停车场内 停车
     VALET_PARKING = 10;
 
+    //TODO: 区别？
     EMERGENCY_PULL_OVER = 11;
     EMERGENCY_STOP = 12;
 
     // misc
+    //狭窄路径掉头
     NARROW_STREET_U_TURN = 13;
     PARK_AND_GO = 14;
 
     // learning model sample
     LEARNING_MODEL_SAMPLE = 15;
-    // turn around
+    // turn around 死路掉头
     DEADEND_TURNAROUND = 16;
 }
 

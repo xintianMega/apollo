@@ -59,6 +59,8 @@ void Scenario::Init() {
   }
   ADEBUG << "init stage "
          << StageType_Name(config_.stage_type(0));
+
+  //初始化后分配默认stage
   current_stage_ =
       CreateStage(*stage_config_map_[config_.stage_type(0)], injector_);
 }

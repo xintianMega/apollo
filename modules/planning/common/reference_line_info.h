@@ -224,9 +224,13 @@ class ReferenceLineInfo {
     CLEAR_AREA = 1,
     CROSSWALK = 2,
     OBSTACLE = 3,
+    //explanation:专用于规划模块的交叉路口概念，使用交通标志作为路口边界
     PNC_JUNCTION = 4,
+    //信号灯
     SIGNAL = 5,
+    //停止标志
     STOP_SIGN = 6,
+    //让行标志
     YIELD_SIGN = 7,
   };
 
@@ -282,6 +286,7 @@ class ReferenceLineInfo {
   static std::unordered_map<std::string, bool> junction_right_of_way_map_;
   const common::VehicleState vehicle_state_;
   const common::TrajectoryPoint adc_planning_point_;
+  //参考线
   ReferenceLine reference_line_;
 
   /**
@@ -294,15 +299,18 @@ class ReferenceLineInfo {
 
   PathDecision path_decision_;
 
+  //障碍物
   Obstacle* blocking_obstacle_;
 
   std::vector<PathBoundary> candidate_path_boundaries_;
   std::vector<PathData> candidate_path_data_;
 
+  //规划路径
   PathData path_data_;
   PathData fallback_path_data_;
   SpeedData speed_data_;
 
+  //融合后轨迹
   DiscretizedTrajectory discretized_trajectory_;
 
   RSSInfo rss_info_;
