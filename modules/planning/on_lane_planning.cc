@@ -163,11 +163,11 @@ Status OnLanePlanning::Init(const PlanningConfig& config) {
   return planner_->Init(config_);
 }
 
-Status OnLanePlanning::InitFrame(const uint32_t sequence_num,
-                                 const TrajectoryPoint& planning_start_point,
-                                 const VehicleState& vehicle_state) {
+Status OnLanePlanning::InitFrame(const uint32_t sequence_num, const TrajectoryPoint& planning_start_point,
+const VehicleState& vehicle_state) {
+  //reset frame
   frame_.reset(new Frame(sequence_num, local_view_, planning_start_point,
-                         vehicle_state, reference_line_provider_.get()));
+  vehicle_state, reference_line_provider_.get()));
 
   if (frame_ == nullptr) {
     return Status(ErrorCode::PLANNING_ERROR, "Fail to init frame: nullptr.");
@@ -183,39 +183,36 @@ Status OnLanePlanning::InitFrame(const uint32_t sequence_num,
     ADEBUG << "No parking space id from routing";
   }
 
+  // 取出reference_line_provider里计算好的reference_lines及segments信息
   std::list<ReferenceLine> reference_lines;
   std::list<hdmap::RouteSegments> segments;
-  if (!reference_line_provider_->GetReferenceLines(&reference_lines,
-                                                   &segments)) {
+  if (!reference_line_provider_->GetReferenceLines(&reference_lines, &segments)) {
     const std::string msg = "Failed to create reference line";
     AERROR << msg;
     return Status(ErrorCode::PLANNING_ERROR, msg);
   }
   DCHECK_EQ(reference_lines.size(), segments.size());
 
-  auto forward_limit =
-      hdmap::PncMap::LookForwardDistance(vehicle_state.linear_velocity());
+  auto forward_limit = hdmap::PncMap::LookForwardDistance(vehicle_state.linear_velocity());
 
   for (auto& ref_line : reference_lines) {
-    if (!ref_line.Segment(Vec2d(vehicle_state.x(), vehicle_state.y()),
-                          FLAGS_look_backward_distance, forward_limit)) {
+    if (!ref_line.Segment(Vec2d(vehicle_state.x(), vehicle_state.y()), FLAGS_look_backward_distance, forward_limit)) {
       const std::string msg = "Fail to shrink reference line.";
       AERROR << msg;
       return Status(ErrorCode::PLANNING_ERROR, msg);
     }
   }
   for (auto& seg : segments) {
-    if (!seg.Shrink(Vec2d(vehicle_state.x(), vehicle_state.y()),
-                    FLAGS_look_backward_distance, forward_limit)) {
+    if (!seg.Shrink(Vec2d(vehicle_state.x(), vehicle_state.y()), FLAGS_look_backward_distance, forward_limit)) {
       const std::string msg = "Fail to shrink routing segments.";
       AERROR << msg;
       return Status(ErrorCode::PLANNING_ERROR, msg);
     }
   }
 
-  auto status = frame_->Init(
-      injector_->vehicle_state(), reference_lines, segments,
-      reference_line_provider_->FutureRouteWaypoints(), injector_->ego_info());
+  //frame 类内初始化
+  auto status = frame_->Init(injector_->vehicle_state(), reference_lines, segments,
+  reference_line_provider_->FutureRouteWaypoints(), injector_->ego_info());
   if (!status.ok()) {
     AERROR << "failed to init frame:" << status.ToString();
     return status;

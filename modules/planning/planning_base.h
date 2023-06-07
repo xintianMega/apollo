@@ -64,19 +64,17 @@ class PlanningBase {
   virtual std::string Name() const = 0;
 
   virtual void RunOnce(const LocalView& local_view,
-                       ADCTrajectory* const adc_trajectory) = 0;
+  ADCTrajectory* const adc_trajectory) = 0;
 
   /**
    * @brief Plan the trajectory given current vehicle state
    */
-  virtual apollo::common::Status Plan(
-      const double current_time_stamp,
-      const std::vector<common::TrajectoryPoint>& stitching_trajectory,
-      ADCTrajectory* const trajectory) = 0;
+  virtual apollo::common::Status Plan(const double current_time_stamp,
+  const std::vector<common::TrajectoryPoint>& stitching_trajectory,
+  ADCTrajectory* const trajectory) = 0;
 
  protected:
-  virtual void FillPlanningPb(const double timestamp,
-                              ADCTrajectory* const trajectory_pb);
+  virtual void FillPlanningPb(const double timestamp, ADCTrajectory* const trajectory_pb);
 
   LocalView local_view_;
   const hdmap::HDMap* hdmap_ = nullptr;

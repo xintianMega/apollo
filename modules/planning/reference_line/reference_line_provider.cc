@@ -198,11 +198,13 @@ void ReferenceLineProvider::GenerateThread() {
     }
     std::list<ReferenceLine> reference_lines;
     std::list<hdmap::RouteSegments> segments;
+    //创建 reference_line
     if (!CreateReferenceLine(&reference_lines, &segments)) {
       is_reference_line_updated_ = false;
       AERROR << "Fail to get reference line";
       continue;
     }
+    //更新 reference_line
     UpdateReferenceLine(reference_lines, segments);
     const double end_time = Clock::NowInSeconds();
     std::lock_guard<std::mutex> lock(reference_lines_mutex_);
@@ -221,9 +223,8 @@ double ReferenceLineProvider::LastTimeDelay() {
   }
 }
 
-bool ReferenceLineProvider::GetReferenceLines(
-    std::list<ReferenceLine> *reference_lines,
-    std::list<hdmap::RouteSegments> *segments) {
+bool ReferenceLineProvider::GetReferenceLines(std::list<ReferenceLine> *reference_lines,
+std::list<hdmap::RouteSegments> *segments) {
   CHECK_NOTNULL(reference_lines);
   CHECK_NOTNULL(segments);
 
@@ -261,16 +262,13 @@ bool ReferenceLineProvider::GetReferenceLines(
     return false;
   }
 
-  reference_lines->assign(reference_line_history_.back().begin(),
-                          reference_line_history_.back().end());
-  segments->assign(route_segments_history_.back().begin(),
-                   route_segments_history_.back().end());
+  reference_lines->assign(reference_line_history_.back().begin(),reference_line_history_.back().end());
+  segments->assign(route_segments_history_.back().begin(), route_segments_history_.back().end());
   AWARN << "Use reference line from history!";
   return true;
 }
 
-void ReferenceLineProvider::PrioritzeChangeLane(
-    std::list<hdmap::RouteSegments> *route_segments) {
+void ReferenceLineProvider::PrioritzeChangeLane(std::list<hdmap::RouteSegments> *route_segments) {
   CHECK_NOTNULL(route_segments);
   auto iter = route_segments->begin();
   while (iter != route_segments->end()) {
@@ -282,9 +280,8 @@ void ReferenceLineProvider::PrioritzeChangeLane(
   }
 }
 
-bool ReferenceLineProvider::GetReferenceLinesFromRelativeMap(
-    std::list<ReferenceLine> *reference_lines,
-    std::list<hdmap::RouteSegments> *segments) {
+bool ReferenceLineProvider::GetReferenceLinesFromRelativeMap(std::list<ReferenceLine> *reference_lines,
+std::list<hdmap::RouteSegments> *segments) {
   CHECK_GE(relative_map_->navigation_path_size(), 0);
   CHECK_NOTNULL(reference_lines);
   CHECK_NOTNULL(segments);
@@ -313,13 +310,11 @@ bool ReferenceLineProvider::GetReferenceLinesFromRelativeMap(
   // get current adc lane info by vehicle state
   common::VehicleState vehicle_state = vehicle_state_provider_->vehicle_state();
   hdmap::LaneWaypoint adc_lane_way_point;
-  if (!GetNearestWayPointFromNavigationPath(vehicle_state, navigation_lane_ids,
-                                            &adc_lane_way_point)) {
+  if (!GetNearestWayPointFromNavigationPath(vehicle_state, navigation_lane_ids, &adc_lane_way_point)) {
     return false;
   }
   const std::string adc_lane_id = adc_lane_way_point.lane->id().id();
-  auto *adc_navigation_path = apollo::common::util::FindOrNull(
-      relative_map_->navigation_path(), adc_lane_id);
+  auto *adc_navigation_path = apollo::common::util::FindOrNull( relative_map_->navigation_path(), adc_lane_id);
   if (adc_navigation_path == nullptr) {
     AERROR << "adc lane cannot be found in relative_map_->navigation_path";
     return false;
@@ -328,30 +323,24 @@ bool ReferenceLineProvider::GetReferenceLinesFromRelativeMap(
   // get adc left neighbor lanes
   std::vector<std::string> left_neighbor_lane_ids;
   auto left_lane_ptr = adc_lane_way_point.lane;
-  while (left_lane_ptr != nullptr &&
-         left_lane_ptr->lane().left_neighbor_forward_lane_id_size() > 0) {
-    auto neighbor_lane_id =
-        left_lane_ptr->lane().left_neighbor_forward_lane_id(0);
+  while (left_lane_ptr != nullptr && left_lane_ptr->lane().left_neighbor_forward_lane_id_size() > 0) {
+    auto neighbor_lane_id = left_lane_ptr->lane().left_neighbor_forward_lane_id(0);
     left_neighbor_lane_ids.emplace_back(neighbor_lane_id.id());
     left_lane_ptr = hdmap->GetLaneById(neighbor_lane_id);
   }
-  ADEBUG << adc_lane_id
-         << " left neighbor size : " << left_neighbor_lane_ids.size();
+  ADEBUG << adc_lane_id << " left neighbor size : " << left_neighbor_lane_ids.size();
   for (const auto &neighbor : left_neighbor_lane_ids) {
     ADEBUG << adc_lane_id << " left neighbor : " << neighbor;
   }
   // get adc right neighbor lanes
   std::vector<std::string> right_neighbor_lane_ids;
   auto right_lane_ptr = adc_lane_way_point.lane;
-  while (right_lane_ptr != nullptr &&
-         right_lane_ptr->lane().right_neighbor_forward_lane_id_size() > 0) {
-    auto neighbor_lane_id =
-        right_lane_ptr->lane().right_neighbor_forward_lane_id(0);
+  while (right_lane_ptr != nullptr && right_lane_ptr->lane().right_neighbor_forward_lane_id_size() > 0) {
+    auto neighbor_lane_id = right_lane_ptr->lane().right_neighbor_forward_lane_id(0);
     right_neighbor_lane_ids.emplace_back(neighbor_lane_id.id());
     right_lane_ptr = hdmap->GetLaneById(neighbor_lane_id);
   }
-  ADEBUG << adc_lane_id
-         << " right neighbor size : " << right_neighbor_lane_ids.size();
+  ADEBUG << adc_lane_id << " right neighbor size : " << right_neighbor_lane_ids.size();
   for (const auto &neighbor : right_neighbor_lane_ids) {
     ADEBUG << adc_lane_id << " right neighbor : " << neighbor;
   }
@@ -553,12 +542,14 @@ bool ReferenceLineProvider::CreateReferenceLine(
   CHECK_NOTNULL(reference_lines);
   CHECK_NOTNULL(segments);
 
+  //vehicle_state
   common::VehicleState vehicle_state;
   {
     std::lock_guard<std::mutex> lock(vehicle_state_mutex_);
     vehicle_state = vehicle_state_;
   }
 
+  //routing response
   routing::RoutingResponse routing;
   {
     std::lock_guard<std::mutex> lock(routing_mutex_);
@@ -570,6 +561,7 @@ bool ReferenceLineProvider::CreateReferenceLine(
     std::lock_guard<std::mutex> lock(pnc_map_mutex_);
     if (pnc_map_->IsNewRouting(routing)) {
       is_new_routing = true;
+      //if routing_response update, pnc_map_ update
       if (!pnc_map_->UpdateRoutingResponse(routing)) {
         AERROR << "Failed to update routing in pnc map";
         return false;
@@ -577,10 +569,12 @@ bool ReferenceLineProvider::CreateReferenceLine(
     }
   }
 
+  //TODO:
   if (!CreateRouteSegments(vehicle_state, segments)) {
     AERROR << "Failed to create reference line from routing";
     return false;
   }
+  //new_routing 或者不启用参考线拼接功能
   if (is_new_routing || !FLAGS_enable_reference_line_stitching) {
     for (auto iter = segments->begin(); iter != segments->end();) {
       reference_lines->emplace_back();
@@ -599,7 +593,9 @@ bool ReferenceLineProvider::CreateReferenceLine(
       }
     }
     return true;
-  } else {  // stitching reference line
+  }
+  //参考线拼接
+  else {  // stitching reference line
     for (auto iter = segments->begin(); iter != segments->end();) {
       reference_lines->emplace_back();
       if (!ExtendReferenceLine(vehicle_state, &(*iter),
@@ -622,6 +618,8 @@ bool ReferenceLineProvider::ExtendReferenceLine(const VehicleState &state,
   segment_properties.SetProperties(*segments);
   auto prev_segment = route_segments_.begin();
   auto prev_ref = reference_lines_.begin();
+
+  //判断新的route_segments 和上一帧的route_segments 是否包含共同点
   while (prev_segment != route_segments_.end()) {
     if (prev_segment->IsConnectedSegment(*segments)) {
       break;
@@ -639,11 +637,15 @@ bool ReferenceLineProvider::ExtendReferenceLine(const VehicleState &state,
   common::SLPoint sl_point;
   Vec2d vec2d(state.x(), state.y());
   LaneWaypoint waypoint;
+
+  // 用当前位置在上一帧route_segments中查询投影点，若未查到则平滑后返回
   if (!prev_segment->GetProjection(vec2d, &sl_point, &waypoint)) {
     AWARN << "Vehicle current point: " << vec2d.DebugString()
           << " not on previous reference line";
     return SmoothRouteSegment(*segments, reference_line);
   }
+
+  // 查看上一帧route_segments的长度是否满足需求，若满足则无需extend，平滑后返回
   const double prev_segment_length = RouteSegments::Length(*prev_segment);
   const double remain_s = prev_segment_length - sl_point.s();
   const double look_forward_required_distance =
@@ -657,6 +659,8 @@ bool ReferenceLineProvider::ExtendReferenceLine(const VehicleState &state,
            << " and no need to extend";
     return true;
   }
+
+  //调用pnc_map下的ExtendSegments()函数，对route_segments查找前继及后继车道，从而实现道路段拓展
   double future_start_s =
       std::max(sl_point.s(), prev_segment_length -
                                  FLAGS_reference_line_stitch_overlap_distance);
@@ -671,6 +675,8 @@ bool ReferenceLineProvider::ExtendReferenceLine(const VehicleState &state,
     return SmoothRouteSegment(*segments, reference_line);
   }
   lock.unlock();
+
+  // 如果扩展后的route_segments的最后一个点还在上一帧的route_segments上，则直接将上一帧的route_segments返回，此时已无法再扩展道路段
   if (prev_segment->IsWaypointOnSegment(shifted_segments.LastWaypoint())) {
     *segments = *prev_segment;
     segments->SetProperties(segment_properties);
@@ -680,14 +686,17 @@ bool ReferenceLineProvider::ExtendReferenceLine(const VehicleState &state,
   }
   hdmap::Path path(shifted_segments);
   ReferenceLine new_ref(path);
+  //SmoothPrefixedReferenceLine()，平滑前置被强制锁定的reference_line，即上一帧重复的点无需再重复平滑了
   if (!SmoothPrefixedReferenceLine(*prev_ref, new_ref, reference_line)) {
     AWARN << "Failed to smooth forward shifted reference line";
     return SmoothRouteSegment(*segments, reference_line);
   }
+  //对reference_line进行拼接
   if (!reference_line->Stitch(*prev_ref)) {
     AWARN << "Failed to stitch reference line";
     return SmoothRouteSegment(*segments, reference_line);
   }
+  //对这一帧的route_segments进行拼接
   if (!shifted_segments.Stitch(*prev_segment)) {
     AWARN << "Failed to stitch route segments";
     return SmoothRouteSegment(*segments, reference_line);
