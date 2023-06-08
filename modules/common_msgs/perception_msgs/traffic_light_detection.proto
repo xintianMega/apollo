@@ -60,6 +60,7 @@ message TrafficLightDetection {
   optional apollo.common.Header header = 2;
   repeated TrafficLight traffic_light = 1;
   optional TrafficLightDebug traffic_light_debug = 3;
+  //是否有红绿灯
   optional bool contain_lights = 4;
   enum CameraID {
     CAMERA_FRONT_LONG = 0;
@@ -67,5 +68,6 @@ message TrafficLightDetection {
     CAMERA_FRONT_SHORT = 2;
     CAMERA_FRONT_WIDE = 3;
   };
+  //摄像头信息
   optional CameraID camera_id = 5;
 }

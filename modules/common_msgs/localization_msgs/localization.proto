@@ -47,18 +47,20 @@ message Uncertainty {
 
 message LocalizationEstimate {
   optional apollo.common.Header header = 1;
+  //位姿
   optional apollo.localization.Pose pose = 2;
+  //不确定度
   optional Uncertainty uncertainty = 3;
 
-  // The time of pose measurement, seconds since 1970-1-1 (UNIX time).
+  // The time of pose measurement, seconds since 1970-1-1 (UNIX time).  测量时间
   optional double measurement_time = 4;  // In seconds.
 
-  // Future trajectory actually driven by the drivers
+  // Future trajectory actually driven by the drivers 轨迹点
   repeated apollo.common.TrajectoryPoint trajectory_point = 5;
 
-  // msf status
+  // msf status 融合定位状态
   optional MsfStatus msf_status = 6;
-  // msf quality
+  // msf quality 传感器状态
   optional MsfSensorMsgStatus sensor_status = 7;
 }
 

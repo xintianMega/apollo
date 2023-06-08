@@ -110,9 +110,11 @@ message PerceptionObstacle {
 
   // a stable obstacle point in the world coordinate system
   // position defined above is the obstacle bounding box ground center
+  //障碍物稳定点的世界坐标值
   optional apollo.common.Point3D anchor_point = 17;
   optional BBox2D bbox2d = 18;
 
+  //障碍物详细子类别（交通锥桶等）
   enum SubType {
     ST_UNKNOWN = 0;
     ST_UNKNOWN_MOVABLE = 1;
@@ -129,6 +131,7 @@ message PerceptionObstacle {
   };
   optional SubType sub_type = 19;  // obstacle sub_type
 
+  //融合的各传感器检测该障碍物详细数据
   repeated SensorMeasurement measurements = 20;  // sensor measurements
 
   // orthogonal distance between obstacle lowest point and ground plane
