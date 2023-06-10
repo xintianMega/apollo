@@ -60,6 +60,7 @@ bool ScenarioManager::Init(const PlanningConfig& planning_config) {
   // 注册场景
   RegisterScenarios();
   default_scenario_type_ = ScenarioType::LANE_FOLLOW;
+  //TODO:Init need default_scenario_type?
   current_scenario_ = CreateScenario(default_scenario_type_);
   return true;
 }
@@ -134,6 +135,7 @@ std::unique_ptr<Scenario> ScenarioManager::CreateScenario(
   return ptr;
 }
 
+//register scenario config
 void ScenarioManager::RegisterScenarios() {
   // lane_follow
   if (planning_config_.learning_mode() == PlanningConfig::HYBRID ||
