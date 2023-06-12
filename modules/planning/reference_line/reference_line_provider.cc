@@ -569,7 +569,6 @@ bool ReferenceLineProvider::CreateReferenceLine(
     }
   }
 
-  //TODO:
   if (!CreateRouteSegments(vehicle_state, segments)) {
     AERROR << "Failed to create reference line from routing";
     return false;
@@ -586,7 +585,7 @@ bool ReferenceLineProvider::CreateReferenceLine(
         common::SLPoint sl;
         if (!reference_lines->back().XYToSL(vehicle_state, &sl)) {
           AWARN << "Failed to project point: {" << vehicle_state.x() << ","
-                << vehicle_state.y() << "} to stitched reference line";
+          << vehicle_state.y() << "} to stitched reference line";
         }
         Shrink(sl, &reference_lines->back(), &(*iter));
         ++iter;
@@ -598,8 +597,7 @@ bool ReferenceLineProvider::CreateReferenceLine(
   else {  // stitching reference line
     for (auto iter = segments->begin(); iter != segments->end();) {
       reference_lines->emplace_back();
-      if (!ExtendReferenceLine(vehicle_state, &(*iter),
-                               &reference_lines->back())) {
+      if (!ExtendReferenceLine(vehicle_state, &(*iter), &reference_lines->back())) {
         AERROR << "Failed to extend reference line";
         reference_lines->pop_back();
         iter = segments->erase(iter);
@@ -612,8 +610,7 @@ bool ReferenceLineProvider::CreateReferenceLine(
 }
 
 bool ReferenceLineProvider::ExtendReferenceLine(const VehicleState &state,
-                                                RouteSegments *segments,
-                                                ReferenceLine *reference_line) {
+RouteSegments *segments, ReferenceLine *reference_line) {
   RouteSegments segment_properties;
   segment_properties.SetProperties(*segments);
   auto prev_segment = route_segments_.begin();
@@ -629,8 +626,7 @@ bool ReferenceLineProvider::ExtendReferenceLine(const VehicleState &state,
   }
   if (prev_segment == route_segments_.end()) {
     if (!route_segments_.empty() && segments->IsOnSegment()) {
-      AWARN << "Current route segment is not connected with previous route "
-               "segment";
+      AWARN << "Current route segment is not connected with previous route segment";
     }
     return SmoothRouteSegment(*segments, reference_line);
   }
@@ -641,7 +637,7 @@ bool ReferenceLineProvider::ExtendReferenceLine(const VehicleState &state,
   // 用当前位置在上一帧route_segments中查询投影点，若未查到则平滑后返回
   if (!prev_segment->GetProjection(vec2d, &sl_point, &waypoint)) {
     AWARN << "Vehicle current point: " << vec2d.DebugString()
-          << " not on previous reference line";
+    << " not on previous reference line";
     return SmoothRouteSegment(*segments, reference_line);
   }
 
@@ -661,15 +657,11 @@ bool ReferenceLineProvider::ExtendReferenceLine(const VehicleState &state,
   }
 
   //调用pnc_map下的ExtendSegments()函数，对route_segments查找前继及后继车道，从而实现道路段拓展
-  double future_start_s =
-      std::max(sl_point.s(), prev_segment_length -
-                                 FLAGS_reference_line_stitch_overlap_distance);
-  double future_end_s =
-      prev_segment_length + FLAGS_look_forward_extend_distance;
+  double future_start_s = std::max(sl_point.s(), prev_segment_length - FLAGS_reference_line_stitch_overlap_distance);
+  double future_end_s = prev_segment_length + FLAGS_look_forward_extend_distance;
   RouteSegments shifted_segments;
   std::unique_lock<std::mutex> lock(pnc_map_mutex_);
-  if (!pnc_map_->ExtendSegments(*prev_segment, future_start_s, future_end_s,
-                                &shifted_segments)) {
+  if (!pnc_map_->ExtendSegments(*prev_segment, future_start_s, future_end_s, &shifted_segments)) {
     lock.unlock();
     AERROR << "Failed to shift route segments forward";
     return SmoothRouteSegment(*segments, reference_line);
@@ -706,14 +698,13 @@ bool ReferenceLineProvider::ExtendReferenceLine(const VehicleState &state,
   common::SLPoint sl;
   if (!reference_line->XYToSL(vec2d, &sl)) {
     AWARN << "Failed to project point: " << vec2d.DebugString()
-          << " to stitched reference line";
+    << " to stitched reference line";
   }
   return Shrink(sl, reference_line, segments);
 }
 
 bool ReferenceLineProvider::Shrink(const common::SLPoint &sl,
-                                   ReferenceLine *reference_line,
-                                   RouteSegments *segments) {
+ReferenceLine *reference_line, RouteSegments *segments) {
   static constexpr double kMaxHeadingDiff = M_PI * 5.0 / 6.0;
   // shrink reference line
   double new_backward_distance = sl.s();
@@ -745,11 +736,11 @@ bool ReferenceLineProvider::Shrink(const common::SLPoint &sl,
   }
   if (need_shrink) {
     if (!reference_line->Segment(sl.s(), new_backward_distance,
-                                 new_forward_distance)) {
+    new_forward_distance)) {
       AWARN << "Failed to shrink reference line";
     }
     if (!segments->Shrink(sl.s(), new_backward_distance,
-                          new_forward_distance)) {
+    new_forward_distance)) {
       AWARN << "Failed to shrink route segment";
     }
   }

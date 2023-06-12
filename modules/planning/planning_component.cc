@@ -160,7 +160,7 @@ bool PlanningComponent::Proc(
     local_view_.stories = std::make_shared<Stories>(stories_);
   }
 
-  if (!CheckInput()) {
+  if (!CheckInpONut()) {
     AERROR << "Input check failed";
     return false;
   }
