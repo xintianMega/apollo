@@ -870,7 +870,7 @@ void ReferenceLineProvider::GetAnchorPoints(
 }
 
 bool ReferenceLineProvider::SmoothRouteSegment(const RouteSegments &segments,
-                                               ReferenceLine *reference_line) {
+ ReferenceLine *reference_line) {
   hdmap::Path path(segments);
   return SmoothReferenceLine(ReferenceLine(path), reference_line);
 }
