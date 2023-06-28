@@ -90,15 +90,11 @@ void LaneFollowStage::RecordObstacleDebugInfo(
   }
 }
 
-//TODO:
-Stage::StageStatus LaneFollowStage::Process(
-    const TrajectoryPoint& planning_start_point, Frame* frame) {
+Stage::StageStatus LaneFollowStage::Process(const TrajectoryPoint& planning_start_point, Frame* frame) {
   bool has_drivable_reference_line = false;
-
   ADEBUG << "Number of reference lines:\t" << frame->mutable_reference_line_info()->size();
 
   unsigned int count = 0;
-
   // 遍历所有的参考线，直到找到可用来规划的参考线后退出
   for (auto& reference_line_info : *frame->mutable_reference_line_info()) {
     // (SHU): need refactor
@@ -114,7 +110,7 @@ Stage::StageStatus LaneFollowStage::Process(
       break;
     }
 
-    //TODO: 执行具体规划任务
+    //执行具体规划任务
     auto cur_status = PlanOnReferenceLine(planning_start_point, frame, &reference_line_info);
 
     if (cur_status.ok()) {
@@ -134,7 +130,6 @@ Stage::StageStatus LaneFollowStage::Process(
               true, frame, &reference_line_info, injector_->planning_context());
           ADEBUG << "\tclear for lane change";
         }
-        // 如果没有lanechange，stage执行结果为OK，则has_drivable_reference_line置位true
         else {
           LaneChangeDecider::UpdatePreparationDistance(
               false, frame, &reference_line_info,
@@ -142,7 +137,9 @@ Stage::StageStatus LaneFollowStage::Process(
           reference_line_info.SetDrivable(false);
           ADEBUG << "\tlane change failed";
         }
-      } else {
+      }
+      // 如果没有lanechange，stage执行结果为OK，则has_drivable_reference_line置位true
+      else {
         ADEBUG << "reference line is NOT lane change ref.";
         has_drivable_reference_line = true;
       }
@@ -151,8 +148,7 @@ Stage::StageStatus LaneFollowStage::Process(
     }
   }
 
-  return has_drivable_reference_line ? StageStatus::RUNNING
-                                     : StageStatus::ERROR;
+  return has_drivable_reference_line ? StageStatus::RUNNING : StageStatus::ERROR;
 }
 
 Status LaneFollowStage::PlanOnReferenceLine(
@@ -171,7 +167,6 @@ Status LaneFollowStage::PlanOnReferenceLine(
   for (auto* task : task_list_) {
     const double start_timestamp = Clock::NowInSeconds();
 
-    //TODO:
     ret = task->Execute(frame, reference_line_info);
 
     const double end_timestamp = Clock::NowInSeconds();
@@ -199,8 +194,8 @@ Status LaneFollowStage::PlanOnReferenceLine(
 
   // check path and speed results for path or speed fallback
   reference_line_info->set_trajectory_type(ADCTrajectory::NORMAL);
+  // TODO:如果task执行失败，则使用备用的规划轨迹
   if (!ret.ok()) {
-    // TODO:如果task执行失败，则使用备用的规划轨迹
     PlanFallbackTrajectory(planning_start_point, frame, reference_line_info);
   }
 

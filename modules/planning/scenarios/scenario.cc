@@ -66,15 +66,18 @@ void Scenario::Init() {
 }
 
 Scenario::ScenarioStatus Scenario::Process(
-    const common::TrajectoryPoint& planning_init_point, Frame* frame) {
+  const common::TrajectoryPoint& planning_init_point, Frame* frame) {
+  // stage类型unknow
   if (current_stage_ == nullptr) {
     AWARN << "Current stage is a null pointer.";
     return STATUS_UNKNOWN;
   }
+  // stage全部执行完成
   if (current_stage_->stage_type() == StageType::NO_STAGE) {
     scenario_status_ = STATUS_DONE;
     return scenario_status_;
   }
+  // 当前处于某一stage，调用这个stage的Process()函数，处理具体规划逻辑
   auto ret = current_stage_->Process(planning_init_point, frame);
   switch (ret) {
     case Stage::ERROR: {

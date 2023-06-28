@@ -55,9 +55,9 @@ ScenarioManager::ScenarioManager(
     const std::shared_ptr<DependencyInjector>& injector)
     : injector_(injector) {}
 
+// 注册场景
 bool ScenarioManager::Init(const PlanningConfig& planning_config) {
   planning_config_.CopyFrom(planning_config);
-  // 注册场景
   RegisterScenarios();
   default_scenario_type_ = ScenarioType::LANE_FOLLOW;
   //TODO:Init need default_scenario_type?
@@ -760,6 +760,9 @@ ScenarioType ScenarioManager::SelectParkAndGoScenario(const Frame& frame) {
   ADEBUG << "adc_distance_to_dest:" << adc_distance_to_dest;
   // if vehicle is static, far enough to destination and (off-lane or not on
   // city_driving lane)
+  //车辆是否静止
+  //距离终点10m以上
+  //当前车辆已经off_lane或者不在城市道路上
   if (std::fabs(adc_speed) < max_abs_speed_when_stopped &&
       adc_distance_to_dest > scenario_config.min_dist_to_dest() &&
       (HDMapUtil::BaseMap().GetNearestLaneWithHeading(
@@ -792,8 +795,7 @@ void ScenarioManager::Observe(const Frame& frame) {
   }
 }
 
-void ScenarioManager::Update(const common::TrajectoryPoint& ego_point,
-                             const Frame& frame) {
+void ScenarioManager::Update(const common::TrajectoryPoint& ego_point, const Frame& frame) {
   ACHECK(!frame.reference_line_info().empty());
 
   Observe(frame);

@@ -235,11 +235,9 @@ std::vector<TrajectoryPoint> TrajectoryStitcher::ComputeStitchingTrajectory(
   for (auto& tp : stitching_trajectory) {
     if (!tp.has_path_point()) {
       *replan_reason = "replan for previous trajectory missed path point";
-      return ComputeReinitStitchingTrajectory(planning_cycle_time,
-                                              vehicle_state);
+      return ComputeReinitStitchingTrajectory(planning_cycle_time, vehicle_state);
     }
-    tp.set_relative_time(tp.relative_time() + prev_trajectory->header_time() -
-                         current_timestamp);
+    tp.set_relative_time(tp.relative_time() + prev_trajectory->header_time() - current_timestamp);
     tp.mutable_path_point()->set_s(tp.path_point().s() - zero_s);
   }
   return stitching_trajectory;

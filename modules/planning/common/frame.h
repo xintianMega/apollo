@@ -128,6 +128,7 @@ class Frame {
     current_frame_planned_trajectory_ = std::move(current_frame_planned_trajectory);
   }
 
+  //replan judge & stiching_trajectory
   const ADCTrajectory &current_frame_planned_trajectory() const {
     return current_frame_planned_trajectory_;
   }

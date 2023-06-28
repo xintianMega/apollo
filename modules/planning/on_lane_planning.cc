@@ -328,6 +328,7 @@ void OnLanePlanning::RunOnce(const LocalView& local_view,
   const double planning_cycle_time =
       1.0 / static_cast<double>(FLAGS_planning_loop_rate);
 
+  //replan judge & stiching_trajectory
   std::string replan_reason;
   std::vector<TrajectoryPoint> stitching_trajectory =
       TrajectoryStitcher::ComputeStitchingTrajectory(
