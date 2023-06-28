@@ -28,7 +28,8 @@ namespace planning {
 
 using apollo::common::ErrorCode;
 using apollo::common::SLPoint;
-using apollo::common::Status;
+using apollo::common::Status;// 需要同时打开配置enable_prioritize_change_lane，才可以调整reference line
+  // 默认配置中reckless_change_lane 是关闭的，所以不会执行这个逻辑
 using apollo::cyber::Clock;
 
 LaneChangeDecider::LaneChangeDecider(
@@ -39,50 +40,56 @@ LaneChangeDecider::LaneChangeDecider(
 }
 
 // added a dummy parameter to enable this task in ExecuteTaskOnReferenceLine
-Status LaneChangeDecider::Process(
-    Frame* frame, ReferenceLineInfo* const current_reference_line_info) {
+Status LaneChangeDecider::Process(Frame* frame, ReferenceLineInfo* const current_reference_line_info) {
   // Sanity checks.
   CHECK_NOTNULL(frame);
 
+  // 读取配置文件
   const auto& lane_change_decider_config = config_.lane_change_decider_config();
 
-  std::list<ReferenceLineInfo>* reference_line_info =
-      frame->mutable_reference_line_info();
+  // 从frame 中读取reference_line_info，并检查
+  std::list<ReferenceLineInfo>* reference_line_info = frame->mutable_reference_line_info();
   if (reference_line_info->empty()) {
     const std::string msg = "Reference lines empty.";
     AERROR << msg;
     return Status(ErrorCode::PLANNING_ERROR, msg);
   }
 
+  // 如果配置reckless_change_lane为TRUE，则将变道的目标车道放置为reference line的首位，并返回OK；
+  // 需要同时打开配置enable_prioritize_change_lane，才可以调整reference line
+  // 默认配置中reckless_change_lane 是关闭的，所以不会执行这个逻辑
   if (lane_change_decider_config.reckless_change_lane()) {
     PrioritizeChangeLane(true, reference_line_info);
     return Status::OK();
   }
 
-  auto* prev_status = injector_->planning_context()
-                          ->mutable_planning_status()
-                          ->mutable_change_lane();
+  // 将变道的状态存储在lane_change_status 这个变量中
+  // IsClearToChangeLane() 判断当前的参考线是否变道安全，并将结果写入lane_change_status 这个变量中
+  auto* prev_status = injector_->planning_context()->mutable_planning_status()->mutable_change_lane();
   double now = Clock::NowInSeconds();
-
   prev_status->set_is_clear_to_change_lane(false);
   if (current_reference_line_info->IsChangeLanePath()) {
-    prev_status->set_is_clear_to_change_lane(
-        IsClearToChangeLane(current_reference_line_info));
+    prev_status->set_is_clear_to_change_lane(IsClearToChangeLane(current_reference_line_info));
   }
-
   if (!prev_status->has_status()) {
-    UpdateStatus(now, ChangeLaneStatus::CHANGE_LANE_FINISHED,
-                 GetCurrentPathId(*reference_line_info));
+    UpdateStatus(now, ChangeLaneStatus::CHANGE_LANE_FINISHED, GetCurrentPathId(*reference_line_info));
     prev_status->set_last_succeed_timestamp(now);
     return Status::OK();
   }
 
+  // 根据reference line的数量判断是否处于变道场景中，size() > 1则处于变道过程中，需要判断变道的状态
   bool has_change_lane = reference_line_info->size() > 1;
   ADEBUG << "has_change_lane: " << has_change_lane;
+  // 只有一条reference line，没有进行变道
   if (!has_change_lane) {
+    // 根据当前唯一的reference line，获得当前道路lane的ID
     const auto& path_id = reference_line_info->front().Lanes().Id();
     if (prev_status->status() == ChangeLaneStatus::CHANGE_LANE_FINISHED) {
-    } else if (prev_status->status() == ChangeLaneStatus::IN_CHANGE_LANE) {
+    }
+    // 上一时刻在变道中，这一时刻只有一条reference line，说明变道成功
+    else if (prev_status->status() == ChangeLaneStatus::IN_CHANGE_LANE) {
+      // 将变道的状态存储在lane_change_status 这个变量中，
+      // 存入当前时刻，变道完成状态，以及当前道路的ID
       UpdateStatus(now, ChangeLaneStatus::CHANGE_LANE_FINISHED, path_id);
     } else if (prev_status->status() == ChangeLaneStatus::CHANGE_LANE_FAILED) {
     } else {
@@ -91,19 +98,29 @@ Status LaneChangeDecider::Process(
       AERROR << msg;
       return Status(ErrorCode::PLANNING_ERROR, msg);
     }
+    // 返回LaneChangeDecider::Process 的状态为OK
     return Status::OK();
-  } else {  // has change lane in reference lines.
+  }
+  // 有多条reference line，说明处在变道中
+  else {  // has change lane in reference lines.
+    // 获取自车当前所在车道的ID
     auto current_path_id = GetCurrentPathId(*reference_line_info);
+    // 如果当前所在车道为空，则返回error状态
     if (current_path_id.empty()) {
       const std::string msg = "The vehicle is not on any reference line";
       AERROR << msg;
       return Status(ErrorCode::PLANNING_ERROR, msg);
     }
+    // 如果上一时刻处在变道中，根据上一时刻自车所处道路ID与当前时刻所处道路ID对比，来确认变道状态
     if (prev_status->status() == ChangeLaneStatus::IN_CHANGE_LANE) {
+      // ID相同则说明变道还在进行中，
+      // 同时调用PrioritizeChangeLane(),将目标车道的reference line放在首位
       if (prev_status->path_id() == current_path_id) {
         PrioritizeChangeLane(true, reference_line_info);
       } else {
         // RemoveChangeLane(reference_line_info);
+        // ID不同则说明变道已经成功，
+        // 则调用PrioritizeChangeLane(),将变道前所在车道的reference line 删掉
         PrioritizeChangeLane(false, reference_line_info);
         ADEBUG << "removed change lane.";
         UpdateStatus(now, ChangeLaneStatus::CHANGE_LANE_FINISHED,
@@ -204,17 +221,15 @@ void LaneChangeDecider::UpdateStatus(double timestamp,
   lane_change_status->set_status(status_code);
 }
 
-void LaneChangeDecider::PrioritizeChangeLane(
-    const bool is_prioritize_change_lane,
-    std::list<ReferenceLineInfo>* reference_line_info) const {
+void LaneChangeDecider::PrioritizeChangeLane(const bool is_prioritize_change_lane,
+  std::list<ReferenceLineInfo>* reference_line_info) const {
   if (reference_line_info->empty()) {
     AERROR << "Reference line info empty";
     return;
   }
 
   const auto& lane_change_decider_config = config_.lane_change_decider_config();
-
-  // (SHU): disable the reference line order change for now
+  // 如果没有配置变道优先，则退出该函数
   if (!lane_change_decider_config.enable_prioritize_change_lane()) {
     return;
   }
@@ -222,8 +237,15 @@ void LaneChangeDecider::PrioritizeChangeLane(
   while (iter != reference_line_info->end()) {
     ADEBUG << "iter->IsChangeLanePath(): " << iter->IsChangeLanePath();
     /* is_prioritize_change_lane == true: prioritize change_lane_reference_line
-       is_prioritize_change_lane == false: prioritize
-       non_change_lane_reference_line */
+    is_prioritize_change_lane == false: prioritize
+    non_change_lane_reference_line */
+    /* 0、is_prioritize_change_lane 根据参考线数量置位True 或 False
+     1、如果is_prioritize_change_lane为True
+     首先获取第一条参考线的迭代器，然后遍历所有的参考线，
+     如果当前的参考线为允许变道参考线，则将第一条参考线更换为当前迭代器所指向的参考线,
+     注意，可变车道为按迭代器的顺序求取，一旦发现可变车道，即推出循环。
+     2、如果is_prioritize_change_lane 为False，
+     找到第一条不可变道的参考线，将第一条参考线更新为当前不可变道的参考线 */
     if ((is_prioritize_change_lane && iter->IsChangeLanePath()) ||
         (!is_prioritize_change_lane && !iter->IsChangeLanePath())) {
       ADEBUG << "is_prioritize_change_lane: " << is_prioritize_change_lane;
@@ -232,10 +254,8 @@ void LaneChangeDecider::PrioritizeChangeLane(
     }
     ++iter;
   }
-  reference_line_info->splice(reference_line_info->begin(),
-                              *reference_line_info, iter);
-  ADEBUG << "reference_line_info->IsChangeLanePath(): "
-         << reference_line_info->begin()->IsChangeLanePath();
+  reference_line_info->splice(reference_line_info->begin(),*reference_line_info, iter);
+  ADEBUG << "reference_line_info->IsChangeLanePath(): " << reference_line_info->begin()->IsChangeLanePath();
 }
 
 // disabled for now
