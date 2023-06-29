@@ -73,8 +73,7 @@ LaneBoundaryType::Type LeftBoundaryType(const LaneWaypoint& waypoint) {
   if (!waypoint.lane) {
     return LaneBoundaryType::UNKNOWN;
   }
-  for (const auto& type :
-       waypoint.lane->lane().left_boundary().boundary_type()) {
+  for (const auto& type : waypoint.lane->lane().left_boundary().boundary_type()) {
     if (type.s() <= waypoint.s) {
       if (type.types_size() > 0) {
         return type.types(0);

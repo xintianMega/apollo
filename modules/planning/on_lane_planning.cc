@@ -531,14 +531,11 @@ void OnLanePlanning::ExportReferenceLineDebug(planning_internal::Debug* debug) {
   }
 }
 
-Status OnLanePlanning::Plan(
-    const double current_time_stamp,
-    const std::vector<TrajectoryPoint>& stitching_trajectory,
-    ADCTrajectory* const ptr_trajectory_pb) {
+Status OnLanePlanning::Plan(const double current_time_stamp,
+const std::vector<TrajectoryPoint>& stitching_trajectory, ADCTrajectory* const ptr_trajectory_pb) {
   auto* ptr_debug = ptr_trajectory_pb->mutable_debug();
   if (FLAGS_enable_record_debug) {
-    ptr_debug->mutable_planning_data()->mutable_init_point()->CopyFrom(
-        stitching_trajectory.back());
+    ptr_debug->mutable_planning_data()->mutable_init_point()->CopyFrom(stitching_trajectory.back());
     frame_->mutable_open_space_info()->set_debug(ptr_debug);
     frame_->mutable_open_space_info()->sync_debug_instance();
   }
@@ -550,10 +547,8 @@ Status OnLanePlanning::Plan(
 
   if (frame_->open_space_info().is_on_open_space_trajectory()) {
     frame_->mutable_open_space_info()->sync_debug_instance();
-    const auto& publishable_trajectory =
-        frame_->open_space_info().publishable_trajectory_data().first;
-    const auto& publishable_trajectory_gear =
-        frame_->open_space_info().publishable_trajectory_data().second;
+    const auto& publishable_trajectory = frame_->open_space_info().publishable_trajectory_data().first;
+    const auto& publishable_trajectory_gear = frame_->open_space_info().publishable_trajectory_data().second;
     publishable_trajectory.PopulateTrajectoryProtobuf(ptr_trajectory_pb);
     ptr_trajectory_pb->set_gear(publishable_trajectory_gear);
 

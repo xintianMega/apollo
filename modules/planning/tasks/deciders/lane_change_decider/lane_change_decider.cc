@@ -93,8 +93,7 @@ Status LaneChangeDecider::Process(Frame* frame, ReferenceLineInfo* const current
       UpdateStatus(now, ChangeLaneStatus::CHANGE_LANE_FINISHED, path_id);
     } else if (prev_status->status() == ChangeLaneStatus::CHANGE_LANE_FAILED) {
     } else {
-      const std::string msg =
-          absl::StrCat("Unknown state: ", prev_status->ShortDebugString());
+      const std::string msg = absl::StrCat("Unknown state: ", prev_status->ShortDebugString());
       AERROR << msg;
       return Status(ErrorCode::PLANNING_ERROR, msg);
     }
@@ -123,15 +122,13 @@ Status LaneChangeDecider::Process(Frame* frame, ReferenceLineInfo* const current
         // 则调用PrioritizeChangeLane(),将变道前所在车道的reference line 删掉
         PrioritizeChangeLane(false, reference_line_info);
         ADEBUG << "removed change lane.";
-        UpdateStatus(now, ChangeLaneStatus::CHANGE_LANE_FINISHED,
-                     current_path_id);
+        UpdateStatus(now, ChangeLaneStatus::CHANGE_LANE_FINISHED, current_path_id);
       }
       return Status::OK();
     } else if (prev_status->status() == ChangeLaneStatus::CHANGE_LANE_FAILED) {
       // (SHU): add an optimization_failure counter to enter
       // change_lane_failed status
-      if (now - prev_status->timestamp() <
-          lane_change_decider_config.change_lane_fail_freeze_time()) {
+      if (now - prev_status->timestamp() < lane_change_decider_config.change_lane_fail_freeze_time()) {
         // RemoveChangeLane(reference_line_info);
         PrioritizeChangeLane(false, reference_line_info);
         ADEBUG << "freezed after failed";
@@ -140,10 +137,8 @@ Status LaneChangeDecider::Process(Frame* frame, ReferenceLineInfo* const current
         ADEBUG << "change lane again after failed";
       }
       return Status::OK();
-    } else if (prev_status->status() ==
-               ChangeLaneStatus::CHANGE_LANE_FINISHED) {
-      if (now - prev_status->timestamp() <
-          lane_change_decider_config.change_lane_success_freeze_time()) {
+    } else if (prev_status->status() == ChangeLaneStatus::CHANGE_LANE_FINISHED) {
+      if (now - prev_status->timestamp() < lane_change_decider_config.change_lane_success_freeze_time()) {
         // RemoveChangeLane(reference_line_info);
         PrioritizeChangeLane(false, reference_line_info);
         ADEBUG << "freezed after completed lane change";
@@ -153,8 +148,7 @@ Status LaneChangeDecider::Process(Frame* frame, ReferenceLineInfo* const current
         ADEBUG << "change lane again after success";
       }
     } else {
-      const std::string msg =
-          absl::StrCat("Unknown state: ", prev_status->ShortDebugString());
+      const std::string msg = absl::StrCat("Unknown state: ", prev_status->ShortDebugString());
       AERROR << msg;
       return Status(ErrorCode::PLANNING_ERROR, msg);
     }
