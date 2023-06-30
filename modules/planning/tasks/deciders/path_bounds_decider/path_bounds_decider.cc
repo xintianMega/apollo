@@ -50,13 +50,10 @@ using PathBound = std::vector<PathBoundPoint>;
 using ObstacleEdge = std::tuple<int, double, double, double, std::string>;
 }  // namespace
 
-PathBoundsDecider::PathBoundsDecider(
-    const TaskConfig& config,
-    const std::shared_ptr<DependencyInjector>& injector)
-    : Decider(config, injector) {}
+PathBoundsDecider::PathBoundsDecider(const TaskConfig& config,
+const std::shared_ptr<DependencyInjector>& injector) : Decider(config, injector) {}
 
-Status PathBoundsDecider::Process(
-    Frame* const frame, ReferenceLineInfo* const reference_line_info) {
+Status PathBoundsDecider::Process(Frame* const frame, ReferenceLineInfo* const reference_line_info) {
   // Sanity checks.
   CHECK_NOTNULL(frame);
   CHECK_NOTNULL(reference_line_info);
@@ -70,12 +67,19 @@ Status PathBoundsDecider::Process(
   // const TaskConfig& config = Decider::config_;
 
   // Initialization.
+  /* 用规划起始点自车道的lane width去初始化 path boundary
+   如果无法获取规划起始点的道路宽度，则用默认值目前是5m，来初始化*/
   InitPathBoundsDecider(*frame, *reference_line_info);
 
   // Generate the fallback path boundary.
+  /* 生成fallback_path_bound，无论何种场景都会生成fallback_path_bound
+   生成fallback_path_bound时，会考虑借道场景，向哪个方向借道，对应方向的path_bound会叠加这个方向相邻车道宽度*/
   PathBound fallback_path_bound;
-  Status ret =
-      GenerateFallbackPathBound(*reference_line_info, &fallback_path_bound);
+  /*生成fallback_path_bound，
+   首先计算当前位置到本车道两侧车道线的距离；
+   然后判断是否借道，并根据借道方向叠加相邻车道的车道宽度
+   带有adc的变量表示与自车相关的信息*/
+  Status ret = GenerateFallbackPathBound(*reference_line_info, &fallback_path_bound);
   if (!ret.ok()) {
     ADEBUG << "Cannot generate a fallback path bound.";
     return Status(ErrorCode::PLANNING_ERROR, ret.error_message());
@@ -93,22 +97,21 @@ Status PathBoundsDecider::Process(
   std::vector<std::pair<double, double>> fallback_path_bound_pair;
   for (size_t i = 0; i < fallback_path_bound.size(); ++i) {
     fallback_path_bound_pair.emplace_back(std::get<1>(fallback_path_bound[i]),
-                                          std::get<2>(fallback_path_bound[i]));
+    std::get<2>(fallback_path_bound[i]));
   }
   candidate_path_boundaries.emplace_back(std::get<0>(fallback_path_bound[0]),
-                                         kPathBoundsDeciderResolution,
-                                         fallback_path_bound_pair);
+  kPathBoundsDeciderResolution, fallback_path_bound_pair);
   candidate_path_boundaries.back().set_label("fallback");
 
+  /* 根据场景生成另外一条path_bound
+   依次判断是否处于pull_over、lane_change、regular；当处于其中一个场景，计算对应的path_bound并返回结果；
+   即以上3种场景，只会选一种生成对应的根据场景生成另外一条path_bound */
   // If pull-over is requested, generate pull-over path boundary.
-  auto* pull_over_status = injector_->planning_context()
-                               ->mutable_planning_status()
-                               ->mutable_pull_over();
+  auto* pull_over_status = injector_->planning_context() ->mutable_planning_status() ->mutable_pull_over();
   const bool plan_pull_over_path = pull_over_status->plan_pull_over_path();
   if (plan_pull_over_path) {
     PathBound pull_over_path_bound;
-    Status ret = GeneratePullOverPathBound(*frame, *reference_line_info,
-                                           &pull_over_path_bound);
+    Status ret = GeneratePullOverPathBound(*frame, *reference_line_info, &pull_over_path_bound);
     if (!ret.ok()) {
       AWARN << "Cannot generate a pullover path bound, do regular planning.";
     } else {
@@ -119,25 +122,20 @@ Status PathBoundsDecider::Process(
       // Update the fallback path boundary into the reference_line_info.
       std::vector<std::pair<double, double>> pull_over_path_bound_pair;
       for (size_t i = 0; i < pull_over_path_bound.size(); ++i) {
-        pull_over_path_bound_pair.emplace_back(
-            std::get<1>(pull_over_path_bound[i]),
-            std::get<2>(pull_over_path_bound[i]));
+        pull_over_path_bound_pair.emplace_back(std::get<1>(pull_over_path_bound[i]),
+        std::get<2>(pull_over_path_bound[i]));
       }
-      candidate_path_boundaries.emplace_back(
-          std::get<0>(pull_over_path_bound[0]), kPathBoundsDeciderResolution,
-          pull_over_path_bound_pair);
+      candidate_path_boundaries.emplace_back(std::get<0>(pull_over_path_bound[0]),
+      kPathBoundsDeciderResolution, pull_over_path_bound_pair);
       candidate_path_boundaries.back().set_label("regular/pullover");
 
-      reference_line_info->SetCandidatePathBoundaries(
-          std::move(candidate_path_boundaries));
+      reference_line_info->SetCandidatePathBoundaries(std::move(candidate_path_boundaries));
       ADEBUG << "Completed pullover and fallback path boundaries generation.";
 
       // set debug info in planning_data
-      auto* pull_over_debug = reference_line_info->mutable_debug()
-                                  ->mutable_planning_data()
-                                  ->mutable_pull_over();
-      pull_over_debug->mutable_position()->CopyFrom(
-          pull_over_status->position());
+      auto* pull_over_debug = reference_line_info->mutable_debug() ->mutable_planning_data()
+      ->mutable_pull_over();
+      pull_over_debug->mutable_position()->CopyFrom(pull_over_status->position());
       pull_over_debug->set_theta(pull_over_status->theta());
       pull_over_debug->set_length_front(pull_over_status->length_front());
       pull_over_debug->set_length_back(pull_over_status->length_back());
@@ -148,12 +146,18 @@ Status PathBoundsDecider::Process(
     }
   }
 
+  /* 判断是否满足lane_change场景
+   首先FLAGS_enable_smarter_lane_change 要置位
+   通过判断当前reference_line 是否为目标车道，来进行判断*/
   // If it's a lane-change reference-line, generate lane-change path boundary.
-  if (FLAGS_enable_smarter_lane_change &&
-      reference_line_info->IsChangeLanePath()) {
+  if (FLAGS_enable_smarter_lane_change && reference_line_info->IsChangeLanePath()) {
     PathBound lanechange_path_bound;
-    Status ret = GenerateLaneChangePathBound(*reference_line_info,
-                                             &lanechange_path_bound);
+    /* 当前reference_line 如果是目标path，则计算lanechange_path_bound
+     首先根据借道与否，用道路宽度来生成基本的path bound
+     然后遍历path上的每个点，并且判断这个点上的障碍物，利用障碍物的边界来修正path bound
+     如果目标在左边将left_bound 设置为目标右边界
+     如果目标在右边，将right_bound设置为目标的左边界*/
+    Status ret = GenerateLaneChangePathBound(*reference_line_info, &lanechange_path_bound);
     if (!ret.ok()) {
       ADEBUG << "Cannot generate a lane-change path bound.";
       return Status(ErrorCode::PLANNING_ERROR, ret.error_message());
@@ -165,25 +169,21 @@ Status PathBoundsDecider::Process(
     }
 
     // disable this change when not extending lane bounds to include adc
-    if (config_.path_bounds_decider_config()
-            .is_extend_lane_bounds_to_include_adc()) {
+    if (config_.path_bounds_decider_config().is_extend_lane_bounds_to_include_adc()) {
       CHECK_LE(adc_frenet_l_, std::get<2>(lanechange_path_bound[0]));
       CHECK_GE(adc_frenet_l_, std::get<1>(lanechange_path_bound[0]));
     }
     // Update the fallback path boundary into the reference_line_info.
     std::vector<std::pair<double, double>> lanechange_path_bound_pair;
     for (size_t i = 0; i < lanechange_path_bound.size(); ++i) {
-      lanechange_path_bound_pair.emplace_back(
-          std::get<1>(lanechange_path_bound[i]),
-          std::get<2>(lanechange_path_bound[i]));
+      lanechange_path_bound_pair.emplace_back(std::get<1>(lanechange_path_bound[i]),
+      std::get<2>(lanechange_path_bound[i]));
     }
-    candidate_path_boundaries.emplace_back(
-        std::get<0>(lanechange_path_bound[0]), kPathBoundsDeciderResolution,
-        lanechange_path_bound_pair);
+    candidate_path_boundaries.emplace_back(std::get<0>(lanechange_path_bound[0]),
+    kPathBoundsDeciderResolution, lanechange_path_bound_pair);
     candidate_path_boundaries.back().set_label("regular/lanechange");
     RecordDebugInfo(lanechange_path_bound, "", reference_line_info);
-    reference_line_info->SetCandidatePathBoundaries(
-        std::move(candidate_path_boundaries));
+    reference_line_info->SetCandidatePathBoundaries( std::move(candidate_path_boundaries));
     ADEBUG << "Completed lanechange and fallback path boundaries generation.";
     return Status::OK();
   }
@@ -193,10 +193,8 @@ Status PathBoundsDecider::Process(
   lane_borrow_info_list.push_back(LaneBorrowInfo::NO_BORROW);
 
   if (reference_line_info->is_path_lane_borrow()) {
-    const auto& path_decider_status =
-        injector_->planning_context()->planning_status().path_decider();
-    for (const auto& lane_borrow_direction :
-         path_decider_status.decided_side_pass_direction()) {
+    const auto& path_decider_status = injector_->planning_context()->planning_status().path_decider();
+    for (const auto& lane_borrow_direction : path_decider_status.decided_side_pass_direction()) {
       if (lane_borrow_direction == PathDeciderStatus::LEFT_BORROW) {
         lane_borrow_info_list.push_back(LaneBorrowInfo::LEFT_BORROW);
       } else if (lane_borrow_direction == PathDeciderStatus::RIGHT_BORROW) {
@@ -212,9 +210,13 @@ Status PathBoundsDecider::Process(
     PathBound regular_path_bound;
     std::string blocking_obstacle_id = "";
     std::string borrow_lane_type = "";
-    Status ret = GenerateRegularPathBound(
-        *reference_line_info, lane_borrow_info, &regular_path_bound,
-        &blocking_obstacle_id, &borrow_lane_type);
+    /* 根据借道信息，以及path上障碍物来生成path bound
+     首先根据借道与否，用道路宽度来生成基本的path bound
+     然后遍历path上的每个点，并且判断这个点上的障碍物，利用障碍物的边界来修正path bound
+     如果目标在左边将left_bound 设置为目标右边界
+     如果目标在右边，将right_bound设置为目标的左边界*/
+    Status ret = GenerateRegularPathBound(*reference_line_info, lane_borrow_info,
+    &regular_path_bound, &blocking_obstacle_id, &borrow_lane_type);
     if (!ret.ok()) {
       continue;
     }
@@ -222,8 +224,7 @@ Status PathBoundsDecider::Process(
       continue;
     }
     // disable this change when not extending lane bounds to include adc
-    if (config_.path_bounds_decider_config()
-            .is_extend_lane_bounds_to_include_adc()) {
+    if (config_.path_bounds_decider_config().is_extend_lane_bounds_to_include_adc()) {
       CHECK_LE(adc_frenet_l_, std::get<2>(regular_path_bound[0]));
       CHECK_GE(adc_frenet_l_, std::get<1>(regular_path_bound[0]));
     }
@@ -232,11 +233,10 @@ Status PathBoundsDecider::Process(
     std::vector<std::pair<double, double>> regular_path_bound_pair;
     for (size_t i = 0; i < regular_path_bound.size(); ++i) {
       regular_path_bound_pair.emplace_back(std::get<1>(regular_path_bound[i]),
-                                           std::get<2>(regular_path_bound[i]));
+      std::get<2>(regular_path_bound[i]));
     }
     candidate_path_boundaries.emplace_back(std::get<0>(regular_path_bound[0]),
-                                           kPathBoundsDeciderResolution,
-                                           regular_path_bound_pair);
+    kPathBoundsDeciderResolution, regular_path_bound_pair);
     std::string path_label = "";
     switch (lane_borrow_info) {
       case LaneBorrowInfo::LEFT_BORROW:
@@ -252,34 +252,29 @@ Status PathBoundsDecider::Process(
         break;
     }
     // RecordDebugInfo(regular_path_bound, "", reference_line_info);
-    candidate_path_boundaries.back().set_label(
-        absl::StrCat("regular/", path_label, "/", borrow_lane_type));
-    candidate_path_boundaries.back().set_blocking_obstacle_id(
-        blocking_obstacle_id);
+    candidate_path_boundaries.back().set_label(absl::StrCat("regular/", path_label, "/", borrow_lane_type));
+    candidate_path_boundaries.back().set_blocking_obstacle_id(blocking_obstacle_id);
   }
 
   // Remove redundant boundaries.
   // RemoveRedundantPathBoundaries(&candidate_path_boundaries);
 
   // Success
-  reference_line_info->SetCandidatePathBoundaries(
-      std::move(candidate_path_boundaries));
+  reference_line_info->SetCandidatePathBoundaries(std::move(candidate_path_boundaries));
   ADEBUG << "Completed regular and fallback path boundaries generation.";
   return Status::OK();
 }
 
-void PathBoundsDecider::InitPathBoundsDecider(
-    const Frame& frame, const ReferenceLineInfo& reference_line_info) {
+void PathBoundsDecider::InitPathBoundsDecider(const Frame& frame,
+const ReferenceLineInfo& reference_line_info) {
   const ReferenceLine& reference_line = reference_line_info.reference_line();
   common::TrajectoryPoint planning_start_point = frame.PlanningStartPoint();
   if (FLAGS_use_front_axe_center_in_path_planning) {
-    planning_start_point =
-        InferFrontAxeCenterFromRearAxeCenter(planning_start_point);
+    planning_start_point = InferFrontAxeCenterFromRearAxeCenter(planning_start_point);
   }
-  ADEBUG << "Plan at the starting point: x = "
-         << planning_start_point.path_point().x()
-         << ", y = " << planning_start_point.path_point().y()
-         << ", and angle = " << planning_start_point.path_point().theta();
+  ADEBUG << "Plan at the starting point: x = "<< planning_start_point.path_point().x()
+  << ", y = " << planning_start_point.path_point().y() << ", and angle = "
+  << planning_start_point.path_point().theta();
 
   // Initialize some private variables.
   // ADC s/l info.
@@ -295,8 +290,7 @@ void PathBoundsDecider::InitPathBoundsDecider(
   // ADC's lane width.
   double lane_left_width = 0.0;
   double lane_right_width = 0.0;
-  if (!reference_line.GetLaneWidth(adc_frenet_s_, &lane_left_width,
-                                   &lane_right_width)) {
+  if (!reference_line.GetLaneWidth(adc_frenet_s_, &lane_left_width, &lane_right_width)) {
     AWARN << "Failed to get lane width at planning start point.";
     adc_lane_width_ = kDefaultLaneWidth;
   } else {
@@ -304,25 +298,19 @@ void PathBoundsDecider::InitPathBoundsDecider(
   }
 }
 
-common::TrajectoryPoint PathBoundsDecider::InferFrontAxeCenterFromRearAxeCenter(
-    const common::TrajectoryPoint& traj_point) {
-  double front_to_rear_axe_distance =
-      VehicleConfigHelper::GetConfig().vehicle_param().wheel_base();
+common::TrajectoryPoint PathBoundsDecider::InferFrontAxeCenterFromRearAxeCenter(const common::TrajectoryPoint& traj_point) {
+  double front_to_rear_axe_distance = VehicleConfigHelper::GetConfig().vehicle_param().wheel_base();
   common::TrajectoryPoint ret = traj_point;
-  ret.mutable_path_point()->set_x(
-      traj_point.path_point().x() +
-      front_to_rear_axe_distance * std::cos(traj_point.path_point().theta()));
-  ret.mutable_path_point()->set_y(
-      traj_point.path_point().y() +
-      front_to_rear_axe_distance * std::sin(traj_point.path_point().theta()));
+  ret.mutable_path_point()->set_x(traj_point.path_point().x() +
+  front_to_rear_axe_distance * std::cos(traj_point.path_point().theta()));
+  ret.mutable_path_point()->set_y(traj_point.path_point().y() +
+  front_to_rear_axe_distance * std::sin(traj_point.path_point().theta()));
   return ret;
 }
 
-Status PathBoundsDecider::GenerateRegularPathBound(
-    const ReferenceLineInfo& reference_line_info,
-    const LaneBorrowInfo& lane_borrow_info, PathBound* const path_bound,
-    std::string* const blocking_obstacle_id,
-    std::string* const borrow_lane_type) {
+Status PathBoundsDecider::GenerateRegularPathBound( const ReferenceLineInfo& reference_line_info,
+const LaneBorrowInfo& lane_borrow_info, PathBound* const path_bound,
+std::string* const blocking_obstacle_id, std::string* const borrow_lane_type) {
   // 1. Initialize the path boundaries to be an indefinitely large area.
   if (!InitPathBoundary(reference_line_info, path_bound)) {
     const std::string msg = "Failed to initialize path boundaries.";
@@ -333,10 +321,8 @@ Status PathBoundsDecider::GenerateRegularPathBound(
 
   // 2. Decide a rough boundary based on lane info and ADC's position
   if (!GetBoundaryFromLanesAndADC(reference_line_info, lane_borrow_info, 0.1,
-                                  path_bound, borrow_lane_type)) {
-    const std::string msg =
-        "Failed to decide a rough boundary based on "
-        "road information.";
+  path_bound, borrow_lane_type)) {
+    const std::string msg ="Failed to decide a rough boundary based on road information.";
     AERROR << msg;
     return Status(ErrorCode::PLANNING_ERROR, msg);
   }
@@ -347,34 +333,26 @@ Status PathBoundsDecider::GenerateRegularPathBound(
 
   // 3. Fine-tune the boundary based on static obstacles
   PathBound temp_path_bound = *path_bound;
-  if (!GetBoundaryFromStaticObstacles(reference_line_info.path_decision(),
-                                      path_bound, blocking_obstacle_id)) {
+  if (!GetBoundaryFromStaticObstacles(reference_line_info.path_decision(), path_bound, blocking_obstacle_id)) {
     const std::string msg =
-        "Failed to decide fine tune the boundaries after "
-        "taking into consideration all static obstacles.";
+    "Failed to decide fine tune the boundaries after taking into consideration all static obstacles.";
     AERROR << msg;
     return Status(ErrorCode::PLANNING_ERROR, msg);
   }
   // Append some extra path bound points to avoid zero-length path data.
   int counter = 0;
-  while (!blocking_obstacle_id->empty() &&
-         path_bound->size() < temp_path_bound.size() &&
-         counter < kNumExtraTailBoundPoint) {
+  while (!blocking_obstacle_id->empty() && path_bound->size() < temp_path_bound.size() &&
+  counter < kNumExtraTailBoundPoint) {
     path_bound->push_back(temp_path_bound[path_bound->size()]);
     counter++;
   }
-  // PathBoundsDebugString(*path_bound);
-
-  // 4. Adjust the boundary considering dynamic obstacles
-  // (all): may need to implement this in the future.
 
   ADEBUG << "Completed generating path boundaries.";
   return Status::OK();
 }
 
-Status PathBoundsDecider::GenerateLaneChangePathBound(
-    const ReferenceLineInfo& reference_line_info,
-    std::vector<std::tuple<double, double, double>>* const path_bound) {
+Status PathBoundsDecider::GenerateLaneChangePathBound(const ReferenceLineInfo& reference_line_info,
+std::vector<std::tuple<double, double, double>>* const path_bound) {
   // 1. Initialize the path boundaries to be an indefinitely large area.
   if (!InitPathBoundary(reference_line_info, path_bound)) {
     const std::string msg = "Failed to initialize path boundaries.";
@@ -385,12 +363,9 @@ Status PathBoundsDecider::GenerateLaneChangePathBound(
 
   // 2. Decide a rough boundary based on lane info and ADC's position
   std::string dummy_borrow_lane_type;
-  if (!GetBoundaryFromLanesAndADC(reference_line_info,
-                                  LaneBorrowInfo::NO_BORROW, 0.1, path_bound,
-                                  &dummy_borrow_lane_type, true)) {
-    const std::string msg =
-        "Failed to decide a rough boundary based on "
-        "road information.";
+  if (!GetBoundaryFromLanesAndADC(reference_line_info, LaneBorrowInfo::NO_BORROW, 0.1, path_bound,
+  &dummy_borrow_lane_type, true)) {
+    const std::string msg ="Failed to decide a rough boundary based on road information.";
     AERROR << msg;
     return Status(ErrorCode::PLANNING_ERROR, msg);
   }
@@ -401,19 +376,15 @@ Status PathBoundsDecider::GenerateLaneChangePathBound(
 
   PathBound temp_path_bound = *path_bound;
   std::string blocking_obstacle_id;
-  if (!GetBoundaryFromStaticObstacles(reference_line_info.path_decision(),
-                                      path_bound, &blocking_obstacle_id)) {
-    const std::string msg =
-        "Failed to decide fine tune the boundaries after "
-        "taking into consideration all static obstacles.";
+  if (!GetBoundaryFromStaticObstacles(reference_line_info.path_decision(), path_bound, &blocking_obstacle_id)) {
+    const std::string msg ="Failed to decide fine tune the boundaries after taking into consideration all static obstacles.";
     AERROR << msg;
     return Status(ErrorCode::PLANNING_ERROR, msg);
   }
   // Append some extra path bound points to avoid zero-length path data.
   int counter = 0;
-  while (!blocking_obstacle_id.empty() &&
-         path_bound->size() < temp_path_bound.size() &&
-         counter < kNumExtraTailBoundPoint) {
+  while (!blocking_obstacle_id.empty() &&path_bound->size() < temp_path_bound.size() &&
+  counter < kNumExtraTailBoundPoint) {
     path_bound->push_back(temp_path_bound[path_bound->size()]);
     counter++;
   }
@@ -422,9 +393,8 @@ Status PathBoundsDecider::GenerateLaneChangePathBound(
   return Status::OK();
 }
 
-Status PathBoundsDecider::GeneratePullOverPathBound(
-    const Frame& frame, const ReferenceLineInfo& reference_line_info,
-    PathBound* const path_bound) {
+Status PathBoundsDecider::GeneratePullOverPathBound(const Frame& frame,
+const ReferenceLineInfo& reference_line_info, PathBound* const path_bound) {
   // 1. Initialize the path boundaries to be an indefinitely large area.
   if (!InitPathBoundary(reference_line_info, path_bound)) {
     const std::string msg = "Failed to initialize path boundaries.";
@@ -435,18 +405,15 @@ Status PathBoundsDecider::GeneratePullOverPathBound(
 
   // 2. Decide a rough boundary based on road boundary
   if (!GetBoundaryFromRoads(reference_line_info, path_bound)) {
-    const std::string msg =
-        "Failed to decide a rough boundary based on road boundary.";
+    const std::string msg = "Failed to decide a rough boundary based on road boundary.";
     AERROR << msg;
     return Status(ErrorCode::PLANNING_ERROR, msg);
   }
   // PathBoundsDebugString(*path_bound);
 
   ConvertBoundarySAxisFromLaneCenterToRefLine(reference_line_info, path_bound);
-  if (adc_frenet_l_ < std::get<1>(path_bound->front()) ||
-      adc_frenet_l_ > std::get<2>(path_bound->front())) {
-    const std::string msg =
-        "ADC is outside road boundary already. Cannot generate pull-over path";
+  if (adc_frenet_l_ < std::get<1>(path_bound->front()) || adc_frenet_l_ > std::get<2>(path_bound->front())) {
+    const std::string msg = "ADC is outside road boundary already. Cannot generate pull-over path";
     AERROR << msg;
     return Status(ErrorCode::PLANNING_ERROR, msg);
   }
@@ -459,24 +426,19 @@ Status PathBoundsDecider::GeneratePullOverPathBound(
   PathBound temp_path_bound = *path_bound;
   std::string blocking_obstacle_id;
   if (!GetBoundaryFromStaticObstacles(reference_line_info.path_decision(),
-                                      path_bound, &blocking_obstacle_id)) {
-    const std::string msg =
-        "Failed to decide fine tune the boundaries after "
-        "taking into consideration all static obstacles.";
+  path_bound, &blocking_obstacle_id)) {
+    const std::string msg = "Failed to decide fine tune the boundaries after taking into consideration all static obstacles.";
     AERROR << msg;
     return Status(ErrorCode::PLANNING_ERROR, msg);
   }
   // PathBoundsDebugString(*path_bound);
 
-  auto* pull_over_status = injector_->planning_context()
-                               ->mutable_planning_status()
-                               ->mutable_pull_over();
+  auto* pull_over_status = injector_->planning_context() ->mutable_planning_status() ->mutable_pull_over();
   // If already found a pull-over position, simply check if it's valid.
   int curr_idx = -1;
   if (pull_over_status->has_position()) {
-    curr_idx = IsPointWithinPathBound(
-        reference_line_info, pull_over_status->position().x(),
-        pull_over_status->position().y(), *path_bound);
+    curr_idx = IsPointWithinPathBound(reference_line_info, pull_over_status->position().x(),
+    pull_over_status->position().y(), *path_bound);
   }
 
   // If haven't found a pull-over position, search for one.
@@ -487,8 +449,7 @@ Status PathBoundsDecider::GeneratePullOverPathBound(
     pull_over_status->set_plan_pull_over_path(true);
 
     std::tuple<double, double, double, int> pull_over_configuration;
-    if (!SearchPullOverPosition(frame, reference_line_info, *path_bound,
-                                &pull_over_configuration)) {
+    if (!SearchPullOverPosition(frame, reference_line_info, *path_bound, &pull_over_configuration)) {
       const std::string msg = "Failed to find a proper pull-over position.";
       AERROR << msg;
       return Status(ErrorCode::PLANNING_ERROR, msg);
@@ -497,27 +458,21 @@ Status PathBoundsDecider::GeneratePullOverPathBound(
     curr_idx = std::get<3>(pull_over_configuration);
 
     // If have found a pull-over position, update planning-context
-    pull_over_status->mutable_position()->set_x(
-        std::get<0>(pull_over_configuration));
-    pull_over_status->mutable_position()->set_y(
-        std::get<1>(pull_over_configuration));
+    pull_over_status->mutable_position()->set_x(std::get<0>(pull_over_configuration));
+    pull_over_status->mutable_position()->set_y(std::get<1>(pull_over_configuration));
     pull_over_status->mutable_position()->set_z(0.0);
     pull_over_status->set_theta(std::get<2>(pull_over_configuration));
     pull_over_status->set_length_front(FLAGS_obstacle_lon_start_buffer);
     pull_over_status->set_length_back(FLAGS_obstacle_lon_end_buffer);
-    pull_over_status->set_width_left(
-        VehicleConfigHelper::GetConfig().vehicle_param().width() / 2.0);
-    pull_over_status->set_width_right(
-        VehicleConfigHelper::GetConfig().vehicle_param().width() / 2.0);
+    pull_over_status->set_width_left(VehicleConfigHelper::GetConfig().vehicle_param().width() / 2.0);
+    pull_over_status->set_width_right(VehicleConfigHelper::GetConfig().vehicle_param().width() / 2.0);
 
     ADEBUG << "Pull Over: x[" << pull_over_status->position().x() << "] y["
-           << pull_over_status->position().y() << "] theta["
-           << pull_over_status->theta() << "]";
+    << pull_over_status->position().y() << "] theta[" << pull_over_status->theta() << "]";
   }
 
   // Trim path-bound properly
-  while (static_cast<int>(path_bound->size()) - 1 >
-         curr_idx + kNumExtraTailBoundPoint) {
+  while (static_cast<int>(path_bound->size()) - 1 > curr_idx + kNumExtraTailBoundPoint) {
     path_bound->pop_back();
   }
   for (size_t idx = curr_idx + 1; idx < path_bound->size(); ++idx) {
@@ -528,8 +483,8 @@ Status PathBoundsDecider::GeneratePullOverPathBound(
   return Status::OK();
 }
 
-Status PathBoundsDecider::GenerateFallbackPathBound(
-    const ReferenceLineInfo& reference_line_info, PathBound* const path_bound) {
+Status PathBoundsDecider::GenerateFallbackPathBound(const ReferenceLineInfo& reference_line_info,
+PathBound* const path_bound) {
   // 1. Initialize the path boundaries to be an indefinitely large area.
   if (!InitPathBoundary(reference_line_info, path_bound)) {
     const std::string msg = "Failed to initialize fallback path boundaries.";
@@ -540,12 +495,9 @@ Status PathBoundsDecider::GenerateFallbackPathBound(
 
   // 2. Decide a rough boundary based on lane info and ADC's position
   std::string dummy_borrow_lane_type;
-  if (!GetBoundaryFromLanesAndADC(reference_line_info,
-                                  LaneBorrowInfo::NO_BORROW, 0.5, path_bound,
-                                  &dummy_borrow_lane_type, true)) {
-    const std::string msg =
-        "Failed to decide a rough fallback boundary based on "
-        "road information.";
+  if (!GetBoundaryFromLanesAndADC(reference_line_info, LaneBorrowInfo::NO_BORROW, 0.5, path_bound,
+  &dummy_borrow_lane_type, true)) {
+    const std::string msg = "Failed to decide a rough fallback boundary based on road information.";
     AERROR << msg;
     return Status(ErrorCode::PLANNING_ERROR, msg);
   }
