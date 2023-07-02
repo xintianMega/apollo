@@ -458,8 +458,7 @@ void Path::InitWidth() {
 
       double road_left_width = 0.0;
       double road_right_width = 0.0;
-      waypoint.lane->GetRoadWidth(waypoint.s, &road_left_width,
-                                  &road_right_width);
+      waypoint.lane->GetRoadWidth(waypoint.s, &road_left_width, &road_right_width);
       road_left_width_.push_back(road_left_width - waypoint.l);
       road_right_width_.push_back(road_right_width + waypoint.l);
     }
@@ -853,8 +852,7 @@ double Path::GetLaneRightWidth(const double s) const {
   return GetSample(lane_right_width_, s);
 }
 
-bool Path::GetLaneWidth(const double s, double* lane_left_width,
-                        double* lane_right_width) const {
+bool Path::GetLaneWidth(const double s, double* lane_left_width, double* lane_right_width) const {
   CHECK_NOTNULL(lane_left_width);
   CHECK_NOTNULL(lane_right_width);
 
@@ -888,8 +886,7 @@ bool Path::GetRoadWidth(const double s, double* road_left_width,
   return true;
 }
 
-double Path::GetSample(const std::vector<double>& samples,
-                       const double s) const {
+double Path::GetSample(const std::vector<double>& samples, const double s) const {
   if (samples.empty()) {
     return 0.0;
   }

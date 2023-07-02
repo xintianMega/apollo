@@ -45,7 +45,7 @@ class PlanningContext {
   PlanningStatus* mutable_planning_status() { return &planning_status_; }
 
  private:
-  PlanningStatus planning_status_;
+   planning_status_;
 };
 
 }  // namespace planning

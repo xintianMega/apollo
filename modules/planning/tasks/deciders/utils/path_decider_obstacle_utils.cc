@@ -32,12 +32,12 @@ bool IsWithinPathDeciderScopeObstacle(const Obstacle& obstacle) {
   }
   // Obstacle should not have ignore decision.
   if (obstacle.HasLongitudinalDecision() && obstacle.HasLateralDecision() &&
-      obstacle.IsIgnore()) {
+  obstacle.IsIgnore()) {
     return false;
   }
   // Obstacle should not be moving obstacle.
   if (!obstacle.IsStatic() ||
-      obstacle.speed() > FLAGS_static_obstacle_speed_threshold) {
+  obstacle.speed() > FLAGS_static_obstacle_speed_threshold) {
     return false;
   }
   // (jiacheng):
@@ -49,9 +49,8 @@ bool IsWithinPathDeciderScopeObstacle(const Obstacle& obstacle) {
   return true;
 }
 
-bool ComputeSLBoundaryIntersection(const SLBoundary& sl_boundary,
-                                   const double s, double* ptr_l_min,
-                                   double* ptr_l_max) {
+bool ComputeSLBoundaryIntersection(const SLBoundary& sl_boundary const double s, double* ptr_l_min,
+double* ptr_l_max) {
   *ptr_l_min = std::numeric_limits<double>::max();
   *ptr_l_max = -std::numeric_limits<double>::max();
 

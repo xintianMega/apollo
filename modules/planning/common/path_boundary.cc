@@ -24,10 +24,8 @@ namespace apollo {
 namespace planning {
 
 PathBoundary::PathBoundary(const double start_s, const double delta_s,
-                           std::vector<std::pair<double, double>> path_boundary)
-    : start_s_(start_s),
-      delta_s_(delta_s),
-      boundary_(std::move(path_boundary)) {}
+std::vector<std::pair<double, double>> path_boundary) : start_s_(start_s),
+delta_s_(delta_s), boundary_(std::move(path_boundary)) {}
 
 double PathBoundary::start_s() const { return start_s_; }
 

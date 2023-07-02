@@ -241,18 +241,15 @@ ReferencePoint ReferenceLine::GetNearestReferencePoint(const double s) const {
     return reference_points_.front();
   }
   if (s > accumulated_s.back() + 1e-2) {
-    AWARN << "The requested s: " << s
-          << " > reference line length: " << accumulated_s.back();
+    AWARN << "The requested s: " << s << " > reference line length: " << accumulated_s.back();
     return reference_points_.back();
   }
-  auto it_lower =
-      std::lower_bound(accumulated_s.begin(), accumulated_s.end(), s);
+  auto it_lower = std::lower_bound(accumulated_s.begin(), accumulated_s.end(), s);
   if (it_lower == accumulated_s.begin()) {
     return reference_points_.front();
   }
   auto index = std::distance(accumulated_s.begin(), it_lower);
-  if (std::fabs(accumulated_s[index - 1] - s) <
-      std::fabs(accumulated_s[index] - s)) {
+  if (std::fabs(accumulated_s[index - 1] - s) < std::fabs(accumulated_s[index] - s)) {
     return reference_points_[index - 1];
   }
   return reference_points_[index];
@@ -465,8 +462,7 @@ const std::vector<ReferencePoint>& ReferenceLine::reference_points() const {
 
 const MapPath& ReferenceLine::map_path() const { return map_path_; }
 
-bool ReferenceLine::GetLaneWidth(const double s, double* const lane_left_width,
-                                 double* const lane_right_width) const {
+bool ReferenceLine::GetLaneWidth(const double s, double* const lane_left_width, double* const lane_right_width) const {
   if (map_path_.path_points().empty()) {
     return false;
   }
@@ -490,8 +486,7 @@ bool ReferenceLine::GetOffsetToMap(const double s, double* l_offset) const {
   return true;
 }
 
-bool ReferenceLine::GetRoadWidth(const double s, double* const road_left_width,
-                                 double* const road_right_width) const {
+bool ReferenceLine::GetRoadWidth(const double s, double* const road_left_width, double* const road_right_width) const {
   if (map_path_.path_points().empty()) {
     return false;
   }

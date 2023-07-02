@@ -102,17 +102,14 @@ class MapPathPoint : public common::math::Vec2d {
  public:
   MapPathPoint() = default;
   MapPathPoint(const common::math::Vec2d& point, double heading)
-      : Vec2d(point.x(), point.y()), heading_(heading) {}
+  : Vec2d(point.x(), point.y()), heading_(heading) {}
   MapPathPoint(const common::math::Vec2d& point, double heading,
-               LaneWaypoint lane_waypoint)
-      : Vec2d(point.x(), point.y()), heading_(heading) {
+  LaneWaypoint lane_waypoint) : Vec2d(point.x(), point.y()), heading_(heading) {
     lane_waypoints_.emplace_back(std::move(lane_waypoint));
   }
   MapPathPoint(const common::math::Vec2d& point, double heading,
-               std::vector<LaneWaypoint> lane_waypoints)
-      : Vec2d(point.x(), point.y()),
-        heading_(heading),
-        lane_waypoints_(std::move(lane_waypoints)) {}
+  std::vector<LaneWaypoint> lane_waypoints) : Vec2d(point.x(), point.y()),
+  heading_(heading), lane_waypoints_(std::move(lane_waypoints)) {}
 
   double heading() const { return heading_; }
   void set_heading(const double heading) { heading_ = heading; }
@@ -125,8 +122,7 @@ class MapPathPoint : public common::math::Vec2d {
     lane_waypoints_.emplace_back(std::move(lane_waypoint));
   }
   void add_lane_waypoints(const std::vector<LaneWaypoint>& lane_waypoints) {
-    lane_waypoints_.insert(lane_waypoints_.end(), lane_waypoints.begin(),
-                           lane_waypoints.end());
+    lane_waypoints_.insert(lane_waypoints_.end(), lane_waypoints.begin(), lane_waypoints.end());
   }
 
   void clear_lane_waypoints() { lane_waypoints_.clear(); }
@@ -137,8 +133,7 @@ class MapPathPoint : public common::math::Vec2d {
       const LaneSegment& segment);
 
   static std::vector<MapPathPoint> GetPointsFromLane(LaneInfoConstPtr lane,
-                                                     const double start_s,
-                                                     const double end_s);
+  const double start_s, const double end_s);
 
   std::string DebugString() const;
 
