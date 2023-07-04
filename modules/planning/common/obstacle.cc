@@ -289,22 +289,19 @@ void Obstacle::SetPerceptionSlBoundary(const SLBoundary& sl_boundary) {
   sl_boundary_ = sl_boundary;
 }
 
-double Obstacle::MinRadiusStopDistance(
-    const common::VehicleParam& vehicle_param) const {
+double Obstacle::MinRadiusStopDistance(const common::VehicleParam& vehicle_param) const {
   if (min_radius_stop_distance_ > 0) {
     return min_radius_stop_distance_;
   }
   static constexpr double stop_distance_buffer = 0.5;
   const double min_turn_radius = VehicleConfigHelper::MinSafeTurnRadius();
   double lateral_diff =
-      vehicle_param.width() / 2.0 + std::max(std::fabs(sl_boundary_.start_l()),
-                                             std::fabs(sl_boundary_.end_l()));
+      vehicle_param.width() / 2.0 + std::max(std::fabs(sl_boundary_.start_l()),std::fabs(sl_boundary_.end_l()));
   const double kEpison = 1e-5;
   lateral_diff = std::min(lateral_diff, min_turn_radius - kEpison);
   double stop_distance =
-      std::sqrt(std::fabs(min_turn_radius * min_turn_radius -
-                          (min_turn_radius - lateral_diff) *
-                              (min_turn_radius - lateral_diff))) +
+      std::sqrt(std::fabs(min_turn_radius * min_turn_radius - (min_turn_radius - lateral_diff) *
+      (min_turn_radius - lateral_diff))) +
       stop_distance_buffer;
   stop_distance -= vehicle_param.front_edge_to_center();
   stop_distance = std::min(stop_distance, FLAGS_max_stop_distance_obstacle);
@@ -312,8 +309,7 @@ double Obstacle::MinRadiusStopDistance(
   return stop_distance;
 }
 
-void Obstacle::BuildReferenceLineStBoundary(const ReferenceLine& reference_line,
-                                            const double adc_start_s) {
+void Obstacle::BuildReferenceLineStBoundary(const ReferenceLine& reference_line, const double adc_start_s) {
   const auto& adc_param =
       VehicleConfigHelper::Instance()->GetConfig().vehicle_param();
   const double half_adc_width = adc_param.width() / 2;

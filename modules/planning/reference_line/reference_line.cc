@@ -225,11 +225,11 @@ ReferenceLine::ToFrenetFrame(const common::TrajectoryPoint& traj_point) const {
   std::array<double, 3> l_condition;
   ReferencePoint ref_point = GetReferencePoint(sl_point.s());
   CartesianFrenetConverter::cartesian_to_frenet(
-      sl_point.s(), ref_point.x(), ref_point.y(), ref_point.heading(),
-      ref_point.kappa(), ref_point.dkappa(), traj_point.path_point().x(),
-      traj_point.path_point().y(), traj_point.v(), traj_point.a(),
-      traj_point.path_point().theta(), traj_point.path_point().kappa(),
-      &s_condition, &l_condition);
+  sl_point.s(), ref_point.x(), ref_point.y(), ref_point.heading(),
+  ref_point.kappa(), ref_point.dkappa(), traj_point.path_point().x(),
+  traj_point.path_point().y(), traj_point.v(), traj_point.a(),
+  traj_point.path_point().theta(), traj_point.path_point().kappa(),
+  &s_condition, &l_condition);
 
   return std::make_pair(s_condition, l_condition);
 }

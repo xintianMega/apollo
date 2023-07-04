@@ -48,15 +48,12 @@ namespace planning {
 
 class PiecewiseJerkPathProblem : public PiecewiseJerkProblem {
  public:
-  PiecewiseJerkPathProblem(const size_t num_of_knots, const double delta_s,
-                           const std::array<double, 3>& x_init);
+  PiecewiseJerkPathProblem(const size_t num_of_knots, const double delta_s, const std::array<double, 3>& x_init);
 
   virtual ~PiecewiseJerkPathProblem() = default;
 
  protected:
-  void CalculateKernel(std::vector<c_float>* P_data,
-                       std::vector<c_int>* P_indices,
-                       std::vector<c_int>* P_indptr) override;
+  void CalculateKernel(std::vector<c_float>* P_data, std::vector<c_int>* P_indices, std::vector<c_int>* P_indptr) override;
 
   void CalculateOffset(std::vector<c_float>* q) override;
 };

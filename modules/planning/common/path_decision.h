@@ -43,8 +43,7 @@ class PathDecision {
 
   const IndexedList<std::string, Obstacle> &obstacles() const;
 
-  bool AddLateralDecision(const std::string &tag, const std::string &object_id,
-                          const ObjectDecisionType &decision);
+  bool AddLateralDecision(const std::string &tag, const std::string &object_id, const ObjectDecisionType &decision);
   bool AddLongitudinalDecision(const std::string &tag,
                                const std::string &object_id,
                                const ObjectDecisionType &decision);

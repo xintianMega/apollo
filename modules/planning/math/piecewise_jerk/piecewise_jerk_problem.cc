@@ -122,8 +122,7 @@ bool PiecewiseJerkProblem::Optimize(const int max_iter) {
   for (size_t i = 0; i < num_of_knots_; ++i) {
     x_.at(i) = osqp_work->solution->x[i] / scale_factor_[0];
     dx_.at(i) = osqp_work->solution->x[i + num_of_knots_] / scale_factor_[1];
-    ddx_.at(i) =
-        osqp_work->solution->x[i + 2 * num_of_knots_] / scale_factor_[2];
+    ddx_.at(i) =  osqp_work->solution->x[i + 2 * num_of_knots_] / scale_factor_[2];
   }
 
   // Cleanup
