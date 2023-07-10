@@ -729,12 +729,10 @@ void PathAssessmentDecider::RecordDebugInfo(
       {path_points.begin(), path_points.end()});
 }
 
-int ContainsOutOnReverseLane(
-    const std::vector<PathPointDecision>& path_point_decision) {
+int ContainsOutOnReverseLane(const std::vector<PathPointDecision>& path_point_decision) {
   int ret = 0;
   for (const auto& curr_decision : path_point_decision) {
-    if (std::get<1>(curr_decision) ==
-        PathData::PathPointType::OUT_ON_REVERSE_LANE) {
+    if (std::get<1>(curr_decision) == PathData::PathPointType::OUT_ON_REVERSE_LANE) {
       ++ret;
     }
   }

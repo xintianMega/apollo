@@ -702,14 +702,12 @@ std::vector<hdmap::LaneSegment> Path::GetLaneSegments(
   return lanes;
 }
 
-bool Path::GetNearestPoint(const Vec2d& point, double* accumulate_s,
-                           double* lateral) const {
+bool Path::GetNearestPoint(const Vec2d& point, double* accumulate_s, double* lateral) const {
   double distance = 0.0;
   return GetNearestPoint(point, accumulate_s, lateral, &distance);
 }
 
-bool Path::GetNearestPoint(const Vec2d& point, double* accumulate_s,
-                           double* lateral, double* min_distance) const {
+bool Path::GetNearestPoint(const Vec2d& point, double* accumulate_s, double* lateral, double* min_distance) const {
   if (!GetProjection(point, accumulate_s, lateral, min_distance)) {
     return false;
   }
@@ -723,18 +721,13 @@ bool Path::GetNearestPoint(const Vec2d& point, double* accumulate_s,
   return true;
 }
 
-bool Path::GetProjection(const common::math::Vec2d& point, double* accumulate_s,
-                         double* lateral) const {
+bool Path::GetProjection(const common::math::Vec2d& point, double* accumulate_s, double* lateral) const {
   double distance = 0.0;
   return GetProjection(point, accumulate_s, lateral, &distance);
 }
 
-bool Path::GetProjectionWithHueristicParams(const Vec2d& point,
-                                            const double hueristic_start_s,
-                                            const double hueristic_end_s,
-                                            double* accumulate_s,
-                                            double* lateral,
-                                            double* min_distance) const {
+bool Path::GetProjectionWithHueristicParams(const Vec2d& point, const double hueristic_start_s, const double hueristic_end_s,
+double* accumulate_s, double* lateral, double* min_distance) const {
   if (segments_.empty()) {
     return false;
   }
@@ -782,8 +775,7 @@ bool Path::GetProjectionWithHueristicParams(const Vec2d& point,
   return true;
 }
 
-bool Path::GetProjection(const Vec2d& point, double* accumulate_s,
-                         double* lateral, double* min_distance) const {
+bool Path::GetProjection(const Vec2d& point, double* accumulate_s, double* lateral, double* min_distance) const {
   if (segments_.empty()) {
     return false;
   }
@@ -792,8 +784,7 @@ bool Path::GetProjection(const Vec2d& point, double* accumulate_s,
     return false;
   }
   if (use_path_approximation_) {
-    return approximation_.GetProjection(*this, point, accumulate_s, lateral,
-                                        min_distance);
+    return approximation_.GetProjection(*this, point, accumulate_s, lateral, min_distance);
   }
   CHECK_GE(num_points_, 2);
   *min_distance = std::numeric_limits<double>::infinity();
@@ -824,8 +815,7 @@ bool Path::GetProjection(const Vec2d& point, double* accumulate_s,
       *lateral = (prod > 0.0 ? 1 : -1) * *min_distance;
     }
   } else {
-    *accumulate_s = accumulated_s_[min_index] +
-                    std::max(0.0, std::min(proj, nearest_seg.length()));
+    *accumulate_s = accumulated_s_[min_index] + std::max(0.0, std::min(proj, nearest_seg.length()));
     *lateral = (prod > 0.0 ? 1 : -1) * *min_distance;
   }
   return true;
@@ -872,8 +862,7 @@ double Path::GetRoadRightWidth(const double s) const {
   return GetSample(road_right_width_, s);
 }
 
-bool Path::GetRoadWidth(const double s, double* road_left_width,
-                        double* road_right_width) const {
+bool Path::GetRoadWidth(const double s, double* road_left_width, double* road_right_width) const {
   CHECK_NOTNULL(road_left_width);
   CHECK_NOTNULL(road_right_width);
 
@@ -935,8 +924,7 @@ bool Path::OverlapWith(const common::math::Box2d& box, double width) const {
   return false;
 }
 
-double PathApproximation::compute_max_error(const Path& path, const int s,
-                                            const int t) {
+double PathApproximation::compute_max_error(const Path& path, const int s, const int t) {
   if (s + 1 >= t) {
     return 0.0;
   }
@@ -950,8 +938,7 @@ double PathApproximation::compute_max_error(const Path& path, const int s,
   return sqrt(max_distance_sqr);
 }
 
-bool PathApproximation::is_within_max_error(const Path& path, const int s,
-                                            const int t) {
+bool PathApproximation::is_within_max_error(const Path& path, const int s, const int t) {
   if (s + 1 >= t) {
     return true;
   }
@@ -1001,8 +988,7 @@ void PathApproximation::InitDilute(const Path& path) {
   segments_.clear();
   segments_.reserve(num_points_ - 1);
   for (int i = 0; i < num_points_ - 1; ++i) {
-    segments_.emplace_back(path.path_points()[original_ids_[i]],
-                           path.path_points()[original_ids_[i + 1]]);
+    segments_.emplace_back(path.path_points()[original_ids_[i]], path.path_points()[original_ids_[i + 1]]);
   }
   max_error_per_segment_.clear();
   max_error_per_segment_.reserve(num_points_ - 1);
@@ -1084,10 +1070,8 @@ void PathApproximation::InitProjections(const Path& path) {
            static_cast<size_t>(num_projection_samples_));
 }
 
-bool PathApproximation::GetProjection(const Path& path,
-                                      const common::math::Vec2d& point,
-                                      double* accumulate_s, double* lateral,
-                                      double* min_distance) const {
+bool PathApproximation::GetProjection(const Path& path, const common::math::Vec2d& point,
+double* accumulate_s, double* lateral, double* min_distance) const {
   if (num_points_ == 0) {
     return false;
   }
@@ -1113,9 +1097,8 @@ bool PathApproximation::GetProjection(const Path& path,
   const auto& original_segments = path.segments();
   const int num_original_segments = static_cast<int>(original_segments.size());
   const auto& original_accumulated_s = path.accumulated_s();
-  double min_distance_sqr_with_error =
-      Sqr(sqrt(min_distance_sqr) +
-          max_error_per_segment_[estimate_nearest_segment_idx] + max_error_);
+  double min_distance_sqr_with_error = Sqr(sqrt(min_distance_sqr) +
+  max_error_per_segment_[estimate_nearest_segment_idx] + max_error_);
   *min_distance = std::numeric_limits<double>::infinity();
   int nearest_segment_idx = -1;
   for (size_t i = 0; i < segments_.size(); ++i) {
@@ -1137,20 +1120,16 @@ bool PathApproximation::GetProjection(const Path& path,
       max_original_projection = projections_[i] + projection + scan_distance;
       if (min_projection > 0.0) {
         const double limit = projections_[i] + min_projection;
-        const int sample_index =
-            std::max(0, static_cast<int>(limit / kSampleDistance));
+        const int sample_index = std::max(0, static_cast<int>(limit / kSampleDistance));
         if (sample_index >= num_projection_samples_) {
           first_segment_idx = last_segment_idx;
         } else {
           first_segment_idx =
-              std::max(first_segment_idx,
-                       sampled_max_original_projections_to_left_[sample_index]);
+              std::max(first_segment_idx, sampled_max_original_projections_to_left_[sample_index]);
           if (first_segment_idx >= last_segment_idx) {
             first_segment_idx = last_segment_idx;
           } else {
-            while (first_segment_idx < last_segment_idx &&
-                   max_original_projections_to_left_[first_segment_idx + 1] <
-                       limit) {
+            while (first_segment_idx < last_segment_idx && max_original_projections_to_left_[first_segment_idx + 1] < limit) {
               ++first_segment_idx;
             }
           }
@@ -1219,8 +1198,7 @@ bool PathApproximation::GetProjection(const Path& path,
   return false;
 }
 
-bool PathApproximation::OverlapWith(const Path& path, const Box2d& box,
-                                    double width) const {
+bool PathApproximation::OverlapWith(const Path& path, const Box2d& box, double width) const {
   if (num_points_ == 0) {
     return false;
   }
@@ -1256,14 +1234,12 @@ bool PathApproximation::OverlapWith(const Path& path, const Box2d& box,
           first_segment_idx = last_segment_idx;
         } else {
           first_segment_idx =
-              std::max(first_segment_idx,
-                       sampled_max_original_projections_to_left_[sample_index]);
+              std::max(first_segment_idx, sampled_max_original_projections_to_left_[sample_index]);
           if (first_segment_idx >= last_segment_idx) {
             first_segment_idx = last_segment_idx;
           } else {
             while (first_segment_idx < last_segment_idx &&
-                   max_original_projections_to_left_[first_segment_idx + 1] <
-                       limit) {
+                   max_original_projections_to_left_[first_segment_idx + 1] < limit) {
               ++first_segment_idx;
             }
           }

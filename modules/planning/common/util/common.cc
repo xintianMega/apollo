@@ -25,12 +25,9 @@ using apollo::common::util::WithinBound;
 /*
  * @brief: build virtual obstacle of stop wall, and add STOP decision
  */
-int BuildStopDecision(const std::string& stop_wall_id, const double stop_line_s,
-                      const double stop_distance,
-                      const StopReasonCode& stop_reason_code,
-                      const std::vector<std::string>& wait_for_obstacles,
-                      const std::string& decision_tag, Frame* const frame,
-                      ReferenceLineInfo* const reference_line_info) {
+int BuildStopDecision(const std::string& stop_wall_id, const double stop_line_s, const double stop_distance,
+const StopReasonCode& stop_reason_code, const std::vector<std::string>& wait_for_obstacles,
+const std::string& decision_tag, Frame* const frame, ReferenceLineInfo* const reference_line_info) {
   CHECK_NOTNULL(frame);
   CHECK_NOTNULL(reference_line_info);
 
@@ -42,8 +39,7 @@ int BuildStopDecision(const std::string& stop_wall_id, const double stop_line_s,
   }
 
   // create virtual stop wall
-  const auto* obstacle =
-      frame->CreateStopObstacle(reference_line_info, stop_wall_id, stop_line_s);
+  const auto* obstacle = frame->CreateStopObstacle(reference_line_info, stop_wall_id, stop_line_s);
   if (!obstacle) {
     AERROR << "Failed to create obstacle [" << stop_wall_id << "]";
     return -1;
@@ -57,8 +53,7 @@ int BuildStopDecision(const std::string& stop_wall_id, const double stop_line_s,
   // build stop decision
   const double stop_s = stop_line_s - stop_distance;
   const auto& stop_point = reference_line.GetReferencePoint(stop_s);
-  const double stop_heading =
-      reference_line.GetReferencePoint(stop_s).heading();
+  const double stop_heading = reference_line.GetReferencePoint(stop_s).heading();
 
   ObjectDecisionType stop;
   auto* stop_decision = stop.mutable_stop();
@@ -79,21 +74,16 @@ int BuildStopDecision(const std::string& stop_wall_id, const double stop_line_s,
   return 0;
 }
 
-int BuildStopDecision(const std::string& stop_wall_id,
-                      const std::string& lane_id, const double lane_s,
-                      const double stop_distance,
-                      const StopReasonCode& stop_reason_code,
-                      const std::vector<std::string>& wait_for_obstacles,
-                      const std::string& decision_tag, Frame* const frame,
-                      ReferenceLineInfo* const reference_line_info) {
+int BuildStopDecision(const std::string& stop_wall_id, const std::string& lane_id, const double lane_s,
+const double stop_distance, const StopReasonCode& stop_reason_code, const std::vector<std::string>& wait_for_obstacles,
+const std::string& decision_tag, Frame* const frame, ReferenceLineInfo* const reference_line_info) {
   CHECK_NOTNULL(frame);
   CHECK_NOTNULL(reference_line_info);
 
   const auto& reference_line = reference_line_info->reference_line();
 
   // create virtual stop wall
-  const auto* obstacle =
-      frame->CreateStopObstacle(stop_wall_id, lane_id, lane_s);
+  const auto* obstacle = frame->CreateStopObstacle(stop_wall_id, lane_id, lane_s);
   if (!obstacle) {
     AERROR << "Failed to create obstacle [" << stop_wall_id << "]";
     return -1;
@@ -112,8 +102,7 @@ int BuildStopDecision(const std::string& stop_wall_id,
   }
 
   // build stop decision
-  auto stop_point = reference_line.GetReferencePoint(
-      stop_wall->PerceptionSLBoundary().start_s() - stop_distance);
+  auto stop_point = reference_line.GetReferencePoint(stop_wall->PerceptionSLBoundary().start_s() - stop_distance);
 
   ObjectDecisionType stop;
   auto* stop_decision = stop.mutable_stop();
