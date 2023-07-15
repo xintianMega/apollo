@@ -65,11 +65,9 @@ Status STBoundaryMapper::ComputeSTBoundary(PathDecision* path_decision) const {
   // Sanity checks.
   CHECK_GT(planning_max_time_, 0.0);
   if (path_data_.discretized_path().size() < 2) {
-    AERROR << "Fail to get params because of too few path points. path points "
-              "size: "
-           << path_data_.discretized_path().size() << ".";
-    return Status(ErrorCode::PLANNING_ERROR,
-                  "Fail to get params because of too few path points");
+    AERROR << "Fail to get params because of too few path points. path points size: "
+    << path_data_.discretized_path().size() << ".";
+    return Status(ErrorCode::PLANNING_ERROR, "Fail to get params because of too few path points");
   }
 
   // Go through every obstacle.
@@ -100,8 +98,7 @@ Status STBoundaryMapper::ComputeSTBoundary(PathDecision* path_decision) const {
         min_stop_s = stop_s;
         stop_decision = decision;
       }
-    } else if (decision.has_follow() || decision.has_overtake() ||
-               decision.has_yield()) {
+    } else if (decision.has_follow() || decision.has_overtake() || decision.has_yield()) {
       // 2. Depending on the longitudinal overtake/yield decision,
       //    fine-tune the upper/lower st-boundary of related obstacles.
       ComputeSTBoundaryWithDecision(ptr_obstacle, decision);

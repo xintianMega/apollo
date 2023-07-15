@@ -40,16 +40,13 @@ using apollo::common::TrajectoryPoint;
 using apollo::planning_internal::StGraphBoundaryDebug;
 using apollo::planning_internal::STGraphDebug;
 
-SpeedBoundsDecider::SpeedBoundsDecider(
-    const TaskConfig &config,
-    const std::shared_ptr<DependencyInjector> &injector)
-    : Decider(config, injector) {
+SpeedBoundsDecider::SpeedBoundsDecider(const TaskConfig &config,
+const std::shared_ptr<DependencyInjector> &injector) : Decider(config, injector) {
   ACHECK(config.has_speed_bounds_decider_config());
   speed_bounds_config_ = config.speed_bounds_decider_config();
 }
 
-Status SpeedBoundsDecider::Process(
-    Frame *const frame, ReferenceLineInfo *const reference_line_info) {
+Status SpeedBoundsDecider::Process(Frame *const frame, ReferenceLineInfo *const reference_line_info) {
   // retrieve data from frame and reference_line_info
   const PathData &path_data = reference_line_info->path_data();
   const TrajectoryPoint &init_point = frame->PlanningStartPoint();
@@ -58,27 +55,25 @@ Status SpeedBoundsDecider::Process(
 
   // 1. Map obstacles into st graph
   auto time1 = std::chrono::system_clock::now();
-  STBoundaryMapper boundary_mapper(
-      speed_bounds_config_, reference_line, path_data,
-      path_data.discretized_path().Length(), speed_bounds_config_.total_time(),
-      injector_);
+  // 使用path、reference line以及config 生成 boundary_mapper
+  STBoundaryMapper boundary_mapper(speed_bounds_config_, reference_line, path_data,
+  path_data.discretized_path().Length(), speed_bounds_config_.total_time(), injector_);
 
   if (!FLAGS_use_st_drivable_boundary) {
     path_decision->EraseStBoundaries();
   }
 
-  if (boundary_mapper.ComputeSTBoundary(path_decision).code() ==
-      ErrorCode::PLANNING_ERROR) {
+  if (boundary_mapper.ComputeSTBoundary(path_decision).code() == ErrorCode::PLANNING_ERROR) {
     const std::string msg = "Mapping obstacle failed.";
     AERROR << msg;
     return Status(ErrorCode::PLANNING_ERROR, msg);
   }
   auto time2 = std::chrono::system_clock::now();
   std::chrono::duration<double> diff = time2 - time1;
-  ADEBUG << "Time for ST Boundary Mapping = " << diff.count() * 1000
-         << " msec.";
+  ADEBUG << "Time for ST Boundary Mapping = " << diff.count() * 1000 << " msec.";
 
   std::vector<const STBoundary *> boundaries;
+  //  遍历path_decision 决策之后的每个目标，并且读取他们的st boundary，存入boundaries 中
   for (auto *obstacle : path_decision->obstacles().Items()) {
     const auto &id = obstacle->Id();
     const auto &st_boundary = obstacle->path_st_boundary();
@@ -95,13 +90,11 @@ Status SpeedBoundsDecider::Process(
   const double min_s_on_st_boundaries = SetSpeedFallbackDistance(path_decision);
 
   // 2. Create speed limit along path
-  SpeedLimitDecider speed_limit_decider(speed_bounds_config_, reference_line,
-                                        path_data);
+  // 生成路径上的速度限制 speed limit
+  SpeedLimitDecider speed_limit_decider(speed_bounds_config_, reference_line, path_data);
 
   SpeedLimit speed_limit;
-  if (!speed_limit_decider
-           .GetSpeedLimits(path_decision->obstacles(), &speed_limit)
-           .ok()) {
+  if (!speed_limit_decider.GetSpeedLimits(path_decision->obstacles(), &speed_limit).ok()) {
     const std::string msg = "Getting speed limits failed!";
     AERROR << msg;
     return Status(ErrorCode::PLANNING_ERROR, msg);
@@ -114,6 +107,7 @@ Status SpeedBoundsDecider::Process(
   const double total_time_by_conf = speed_bounds_config_.total_time();
 
   // Load generated st graph data back to frame
+  //将数据存入到frame 当中
   StGraphData *st_graph_data = reference_line_info_->mutable_st_graph_data();
 
   // Add a st_graph debug info and save the pointer to st_graph_data for
@@ -122,8 +116,7 @@ Status SpeedBoundsDecider::Process(
   STGraphDebug *st_graph_debug = debug->mutable_planning_data()->add_st_graph();
 
   st_graph_data->LoadData(boundaries, min_s_on_st_boundaries, init_point,
-                          speed_limit, reference_line_info->GetCruiseSpeed(),
-                          path_data_length, total_time_by_conf, st_graph_debug);
+  speed_limit, reference_line_info->GetCruiseSpeed(), path_data_length, total_time_by_conf, st_graph_debug);
 
   // Create and record st_graph debug info
   RecordSTGraphDebug(*st_graph_data, st_graph_debug);
@@ -164,8 +157,7 @@ double SpeedBoundsDecider::SetSpeedFallbackDistance(
   return min_s_non_reverse > min_s_reverse ? 0.0 : min_s_non_reverse;
 }
 
-void SpeedBoundsDecider::RecordSTGraphDebug(
-    const StGraphData &st_graph_data, STGraphDebug *st_graph_debug) const {
+void SpeedBoundsDecider::RecordSTGraphDebug(const StGraphData &st_graph_data, STGraphDebug *st_graph_debug) const {
   if (!FLAGS_enable_record_debug || !st_graph_debug) {
     ADEBUG << "Skip record debug info";
     return;
@@ -179,22 +171,19 @@ void SpeedBoundsDecider::RecordSTGraphDebug(
         boundary_debug->set_type(StGraphBoundaryDebug::ST_BOUNDARY_TYPE_FOLLOW);
         break;
       case STBoundary::BoundaryType::OVERTAKE:
-        boundary_debug->set_type(
-            StGraphBoundaryDebug::ST_BOUNDARY_TYPE_OVERTAKE);
+        boundary_debug->set_type(StGraphBoundaryDebug::ST_BOUNDARY_TYPE_OVERTAKE);
         break;
       case STBoundary::BoundaryType::STOP:
         boundary_debug->set_type(StGraphBoundaryDebug::ST_BOUNDARY_TYPE_STOP);
         break;
       case STBoundary::BoundaryType::UNKNOWN:
-        boundary_debug->set_type(
-            StGraphBoundaryDebug::ST_BOUNDARY_TYPE_UNKNOWN);
+        boundary_debug->set_type(StGraphBoundaryDebug::ST_BOUNDARY_TYPE_UNKNOWN);
         break;
       case STBoundary::BoundaryType::YIELD:
         boundary_debug->set_type(StGraphBoundaryDebug::ST_BOUNDARY_TYPE_YIELD);
         break;
       case STBoundary::BoundaryType::KEEP_CLEAR:
-        boundary_debug->set_type(
-            StGraphBoundaryDebug::ST_BOUNDARY_TYPE_KEEP_CLEAR);
+        boundary_debug->set_type(StGraphBoundaryDebug::ST_BOUNDARY_TYPE_KEEP_CLEAR);
         break;
     }
 
