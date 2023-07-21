@@ -141,9 +141,7 @@ ReferencePoint ReferenceLine::GetNearestReferencePoint(
   return reference_points_[min_index];
 }
 
-bool ReferenceLine::Segment(const common::math::Vec2d& point,
-                            const double look_backward,
-                            const double look_forward) {
+bool ReferenceLine::Segment(const common::math::Vec2d& point, const double look_backward, const double look_forward) {
   common::SLPoint sl;
   if (!XYToSL(point, &sl)) {
     AERROR << "Failed to project point: " << point.DebugString();
@@ -152,33 +150,22 @@ bool ReferenceLine::Segment(const common::math::Vec2d& point,
   return Segment(sl.s(), look_backward, look_forward);
 }
 
-bool ReferenceLine::Segment(const double s, const double look_backward,
-                            const double look_forward) {
+bool ReferenceLine::Segment(const double s, const double look_backward, const double look_forward) {
   const auto& accumulated_s = map_path_.accumulated_s();
 
   // inclusive
-  auto start_index =
-      std::distance(accumulated_s.begin(),
-                    std::lower_bound(accumulated_s.begin(), accumulated_s.end(),
-                                     s - look_backward));
+  auto start_index = std::distance(accumulated_s.begin(),std::lower_bound(accumulated_s.begin(), accumulated_s.end(), s - look_backward));
 
   // exclusive
-  auto end_index =
-      std::distance(accumulated_s.begin(),
-                    std::upper_bound(accumulated_s.begin(), accumulated_s.end(),
-                                     s + look_forward));
+  auto end_index =std::distance(accumulated_s.begin(),std::upper_bound(accumulated_s.begin(), accumulated_s.end(), s + look_forward));
 
   if (end_index - start_index < 2) {
     AERROR << "Too few reference points after shrinking.";
     return false;
   }
 
-  reference_points_ =
-      std::vector<ReferencePoint>(reference_points_.begin() + start_index,
-                                  reference_points_.begin() + end_index);
-
-  map_path_ = MapPath(std::vector<hdmap::MapPathPoint>(
-      reference_points_.begin(), reference_points_.end()));
+  reference_points_ = std::vector<ReferencePoint>(reference_points_.begin() + start_index,reference_points_.begin() + end_index);
+  map_path_ = MapPath(std::vector<hdmap::MapPathPoint>(reference_points_.begin(), reference_points_.end()));
   return true;
 }
 

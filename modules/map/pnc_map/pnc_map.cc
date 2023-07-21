@@ -618,18 +618,15 @@ LaneInfoConstPtr PncMap::GetRoutePredecessor(LaneInfoConstPtr lane) const {
   return hdmap_->GetLaneById(preferred_id);
 }
 
-bool PncMap::ExtendSegments(const RouteSegments &segments,
-                            const common::PointENU &point, double look_backward,
-                            double look_forward,
-                            RouteSegments *extended_segments) {
+bool PncMap::ExtendSegments(const RouteSegments &segments, const common::PointENU &point, double look_backward,
+ double look_forward, RouteSegments *extended_segments) {
   common::SLPoint sl;
   LaneWaypoint waypoint;
   if (!segments.GetProjection(point, &sl, &waypoint)) {
     AERROR << "point: " << point.ShortDebugString() << " is not on segment";
     return false;
   }
-  return ExtendSegments(segments, sl.s() - look_backward, sl.s() + look_forward,
-                        extended_segments);
+  return ExtendSegments(segments, sl.s() - look_backward, sl.s() + look_forward, extended_segments);
 }
 
 bool PncMap::ExtendSegments(const RouteSegments &segments, double start_s,
@@ -670,26 +667,19 @@ double end_s, RouteSegments *const truncated_segments) const {
         unique_lanes.insert(lane->id().id());
       }
     }
-    truncated_segments->insert(truncated_segments->begin(),
-                               extended_lane_segments.rbegin(),
-                               extended_lane_segments.rend());
+    truncated_segments->insert(truncated_segments->begin(), extended_lane_segments.rbegin(), extended_lane_segments.rend());
   }
   bool found_loop = false;
   double router_s = 0;
   for (const auto &lane_segment : segments) {
-    const double adjusted_start_s = std::max(
-        start_s - router_s + lane_segment.start_s, lane_segment.start_s);
-    const double adjusted_end_s =
-        std::min(end_s - router_s + lane_segment.start_s, lane_segment.end_s);
+    const double adjusted_start_s = std::max(start_s - router_s + lane_segment.start_s, lane_segment.start_s);
+    const double adjusted_end_s = std::min(end_s - router_s + lane_segment.start_s, lane_segment.end_s);
     if (adjusted_start_s < adjusted_end_s) {
       if (!truncated_segments->empty() &&
-          truncated_segments->back().lane->id().id() ==
-              lane_segment.lane->id().id()) {
+          truncated_segments->back().lane->id().id() == lane_segment.lane->id().id()) {
         truncated_segments->back().end_s = adjusted_end_s;
-      } else if (unique_lanes.find(lane_segment.lane->id().id()) ==
-                 unique_lanes.end()) {
-        truncated_segments->emplace_back(lane_segment.lane, adjusted_start_s,
-                                         adjusted_end_s);
+      } else if (unique_lanes.find(lane_segment.lane->id().id()) == unique_lanes.end()) {
+        truncated_segments->emplace_back(lane_segment.lane, adjusted_start_s, adjusted_end_s);
         unique_lanes.insert(lane_segment.lane->id().id());
       } else {
         found_loop = true;

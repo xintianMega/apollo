@@ -86,21 +86,16 @@ class PncMap {
    */
   int GetWaypointIndex(const LaneWaypoint &waypoint) const;
 
-  bool GetNearestPointFromRouting(const common::VehicleState &point,
-                                  LaneWaypoint *waypoint) const;
+  bool GetNearestPointFromRouting(const common::VehicleState &point, LaneWaypoint *waypoint) const;
 
-  bool PassageToSegments(routing::Passage passage,
-                         RouteSegments *segments) const;
+  bool PassageToSegments(routing::Passage passage,  RouteSegments *segments) const;
 
-  bool ProjectToSegments(const common::PointENU &point_enu,
-                         const RouteSegments &segments,
-                         LaneWaypoint *waypoint) const;
+  bool ProjectToSegments(const common::PointENU &point_enu, const RouteSegments &segments, LaneWaypoint *waypoint) const;
 
   static bool ValidateRouting(const routing::RoutingResponse &routing);
 
-  static void AppendLaneToPoints(LaneInfoConstPtr lane, const double start_s,
-                                 const double end_s,
-                                 std::vector<MapPathPoint> *const points);
+  static void AppendLaneToPoints(LaneInfoConstPtr lane, const double start_s, const double end_s,
+  std::vector<MapPathPoint> *const points);
 
   LaneInfoConstPtr GetRoutePredecessor(LaneInfoConstPtr lane) const;
   LaneInfoConstPtr GetRouteSuccessor(LaneInfoConstPtr lane) const;

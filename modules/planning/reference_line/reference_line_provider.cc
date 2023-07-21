@@ -134,42 +134,32 @@ void ReferenceLineProvider::Stop() {
   }
 }
 
-void ReferenceLineProvider::UpdateReferenceLine(
-    const std::list<ReferenceLine> &reference_lines,
-    const std::list<hdmap::RouteSegments> &route_segments) {
+void ReferenceLineProvider::UpdateReferenceLine(const std::list<ReferenceLine> &reference_lines,
+const std::list<hdmap::RouteSegments> &route_segments) {
   if (reference_lines.size() != route_segments.size()) {
-    AERROR << "The calculated reference line size(" << reference_lines.size()
-           << ") and route_segments size(" << route_segments.size()
-           << ") are different";
+    AERROR << "The calculated reference line size(" << reference_lines.size() << ") and route_segments size("
+    << route_segments.size() << ") are different";
     return;
   }
   std::lock_guard<std::mutex> lock(reference_lines_mutex_);
   if (reference_lines_.size() != reference_lines.size()) {
     reference_lines_ = reference_lines;
     route_segments_ = route_segments;
-
   } else {
     auto segment_iter = route_segments.begin();
     auto internal_iter = reference_lines_.begin();
     auto internal_segment_iter = route_segments_.begin();
-    for (auto iter = reference_lines.begin();
-         iter != reference_lines.end() &&
-         segment_iter != route_segments.end() &&
-         internal_iter != reference_lines_.end() &&
-         internal_segment_iter != route_segments_.end();
-         ++iter, ++segment_iter, ++internal_iter, ++internal_segment_iter) {
+    for (auto iter = reference_lines.begin(); iter != reference_lines.end() && segment_iter != route_segments.end() &&
+    internal_iter != reference_lines_.end() && internal_segment_iter != route_segments_.end();
+    ++iter, ++segment_iter, ++internal_iter, ++internal_segment_iter) {
       if (iter->reference_points().empty()) {
         *internal_iter = *iter;
         *internal_segment_iter = *segment_iter;
         continue;
       }
-      if (common::util::SamePointXY(
-              iter->reference_points().front(),
-              internal_iter->reference_points().front()) &&
-          common::util::SamePointXY(iter->reference_points().back(),
-                                    internal_iter->reference_points().back()) &&
-          std::fabs(iter->Length() - internal_iter->Length()) <
-              common::math::kMathEpsilon) {
+      if (common::util::SamePointXY(iter->reference_points().front(), internal_iter->reference_points().front()) &&
+      common::util::SamePointXY(iter->reference_points().back(), internal_iter->reference_points().back()) &&
+      std::fabs(iter->Length() - internal_iter->Length()) < common::math::kMathEpsilon) {
         continue;
       }
       *internal_iter = *iter;
@@ -536,9 +526,8 @@ bool ReferenceLineProvider::CreateRouteSegments(
   return !segments->empty();
 }
 
-bool ReferenceLineProvider::CreateReferenceLine(
-    std::list<ReferenceLine> *reference_lines,
-    std::list<hdmap::RouteSegments> *segments) {
+bool ReferenceLineProvider::CreateReferenceLine(std::list<ReferenceLine> *reference_lines,
+std::list<hdmap::RouteSegments> *segments) {
   CHECK_NOTNULL(reference_lines);
   CHECK_NOTNULL(segments);
 
@@ -703,6 +692,7 @@ RouteSegments *segments, ReferenceLine *reference_line) {
   return Shrink(sl, reference_line, segments);
 }
 
+//cutout referenceLine
 bool ReferenceLineProvider::Shrink(const common::SLPoint &sl,
 ReferenceLine *reference_line, RouteSegments *segments) {
   static constexpr double kMaxHeadingDiff = M_PI * 5.0 / 6.0;
@@ -711,9 +701,7 @@ ReferenceLine *reference_line, RouteSegments *segments) {
   double new_forward_distance = reference_line->Length() - sl.s();
   bool need_shrink = false;
   if (sl.s() > FLAGS_look_backward_distance * 1.5) {
-    ADEBUG << "reference line back side is " << sl.s()
-           << ", shrink reference line: origin length: "
-           << reference_line->Length();
+    ADEBUG << "reference line back side is " << sl.s() << ", shrink reference line: origin length: " << reference_line->Length();
     new_backward_distance = FLAGS_look_backward_distance;
     need_shrink = true;
   }
@@ -722,9 +710,7 @@ ReferenceLine *reference_line, RouteSegments *segments) {
   const auto &ref_points = reference_line->reference_points();
   const double cur_heading = ref_points[index].heading();
   auto last_index = index;
-  while (last_index < ref_points.size() &&
-         AngleDiff(cur_heading, ref_points[last_index].heading()) <
-             kMaxHeadingDiff) {
+  while (last_index < ref_points.size() && AngleDiff(cur_heading, ref_points[last_index].heading()) < kMaxHeadingDiff) {
     ++last_index;
   }
   --last_index;
@@ -735,12 +721,10 @@ ReferenceLine *reference_line, RouteSegments *segments) {
     new_forward_distance = forward_sl.s() - sl.s();
   }
   if (need_shrink) {
-    if (!reference_line->Segment(sl.s(), new_backward_distance,
-    new_forward_distance)) {
+    if (!reference_line->Segment(sl.s(), new_backward_distance,new_forward_distance)) {
       AWARN << "Failed to shrink reference line";
     }
-    if (!segments->Shrink(sl.s(), new_backward_distance,
-    new_forward_distance)) {
+    if (!segments->Shrink(sl.s(), new_backward_distance,new_forward_distance)) {
       AWARN << "Failed to shrink route segment";
     }
   }

@@ -148,9 +148,7 @@ double RouteSegments::Length(const RouteSegments &segments) {
   return s;
 }
 
-bool RouteSegments::GetProjection(const common::PointENU &point_enu,
-                                  common::SLPoint *sl_point,
-                                  LaneWaypoint *waypoint) const {
+bool RouteSegments::GetProjection(const common::PointENU &point_enu, common::SLPoint *sl_point, LaneWaypoint *waypoint) const {
   return GetProjection({point_enu.x(), point_enu.y()}, sl_point, waypoint);
 }
 
@@ -173,9 +171,7 @@ bool RouteSegments::IsConnectedSegment(const RouteSegments &other) const {
   return false;
 }
 
-bool RouteSegments::Shrink(const common::math::Vec2d &point,
-                           const double look_backward,
-                           const double look_forward) {
+bool RouteSegments::Shrink(const common::math::Vec2d &point, const double look_backward, const double look_forward) {
   common::SLPoint sl_point;
   LaneWaypoint waypoint;
   if (!GetProjection(point, &sl_point, &waypoint)) {
@@ -185,8 +181,7 @@ bool RouteSegments::Shrink(const common::math::Vec2d &point,
   return Shrink(sl_point.s(), look_backward, look_forward);
 }
 
-bool RouteSegments::Shrink(const double s, const double look_backward,
-                           const double look_forward) {
+bool RouteSegments::Shrink(const double s, const double look_backward, const double look_forward) {
   LaneWaypoint waypoint;
   if (!GetWaypoint(s, &waypoint)) {
     return false;
@@ -194,9 +189,7 @@ bool RouteSegments::Shrink(const double s, const double look_backward,
   return Shrink(s, waypoint, look_backward, look_forward);
 }
 
-bool RouteSegments::Shrink(const double s, const LaneWaypoint &waypoint,
-                           const double look_backward,
-                           const double look_forward) {
+bool RouteSegments::Shrink(const double s, const LaneWaypoint &waypoint, const double look_backward, const double look_forward) {
   double acc_s = 0.0;
   auto iter = begin();
   while (iter != end() && acc_s + iter->Length() < s - look_backward) {
@@ -206,8 +199,7 @@ bool RouteSegments::Shrink(const double s, const LaneWaypoint &waypoint,
   if (iter == end()) {
     return true;
   }
-  iter->start_s =
-      std::max(iter->start_s, s - look_backward - acc_s + iter->start_s);
+  iter->start_s = std::max(iter->start_s, s - look_backward - acc_s + iter->start_s);
   if (iter->Length() < kSegmentationEpsilon) {
     ++iter;
   }
@@ -263,9 +255,7 @@ bool RouteSegments::GetWaypoint(const double s, LaneWaypoint *waypoint) const {
   return has_projection;
 }
 
-bool RouteSegments::GetProjection(const common::math::Vec2d &point,
-                                  common::SLPoint *sl_point,
-                                  LaneWaypoint *waypoint) const {
+bool RouteSegments::GetProjection(const common::math::Vec2d &point, common::SLPoint *sl_point, LaneWaypoint *waypoint) const {
   double min_l = std::numeric_limits<double>::infinity();
   double accumulated_s = 0.0;
   bool has_projection = false;
