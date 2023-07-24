@@ -60,15 +60,11 @@ namespace planning {
 class Obstacle {
  public:
   Obstacle() = default;
-  Obstacle(const std::string& id,
-           const perception::PerceptionObstacle& perception_obstacle,
-           const prediction::ObstaclePriority::Priority& obstacle_priority,
-           const bool is_static);
-  Obstacle(const std::string& id,
-           const perception::PerceptionObstacle& perception_obstacle,
-           const prediction::Trajectory& trajectory,
-           const prediction::ObstaclePriority::Priority& obstacle_priority,
-           const bool is_static);
+  Obstacle(const std::string& id, const perception::PerceptionObstacle& perception_obstacle,
+  const prediction::ObstaclePriority::Priority& obstacle_priority, const bool is_static);
+  Obstacle(const std::string& id, const perception::PerceptionObstacle& perception_obstacle,
+  const prediction::Trajectory& trajectory,const prediction::ObstaclePriority::Priority& obstacle_priority,
+  const bool is_static);
 
   const std::string& Id() const { return id_; }
   void SetId(const std::string& id) { id_ = id; }
@@ -82,8 +78,7 @@ class Obstacle {
 
   common::TrajectoryPoint GetPointAtTime(const double time) const;
 
-  common::math::Box2d GetBoundingBox(
-      const common::TrajectoryPoint& point) const;
+  common::math::Box2d GetBoundingBox(const common::TrajectoryPoint& point) const;
 
   const common::math::Box2d& PerceptionBoundingBox() const {
     return perception_bounding_box_;
@@ -111,13 +106,12 @@ class Obstacle {
    * @return obstacles The output obstacles saved in a list of unique_ptr.
    */
   static std::list<std::unique_ptr<Obstacle>> CreateObstacles(
-      const prediction::PredictionObstacles& predictions);
+  const prediction::PredictionObstacles& predictions);
 
   static std::unique_ptr<Obstacle> CreateStaticVirtualObstacles(
-      const std::string& id, const common::math::Box2d& obstacle_box);
+  const std::string& id, const common::math::Box2d& obstacle_box);
 
-  static bool IsValidPerceptionObstacle(
-      const perception::PerceptionObstacle& obstacle);
+  static bool IsValidPerceptionObstacle(const perception::PerceptionObstacle& obstacle);
 
   static bool IsValidTrajectoryPoint(const common::TrajectoryPoint& point);
 
@@ -151,11 +145,9 @@ class Obstacle {
 
   const std::vector<ObjectDecisionType>& decisions() const;
 
-  void AddLongitudinalDecision(const std::string& decider_tag,
-                               const ObjectDecisionType& decision);
+  void AddLongitudinalDecision(const std::string& decider_tag, const ObjectDecisionType& decision);
 
-  void AddLateralDecision(const std::string& decider_tag,
-                          const ObjectDecisionType& decision);
+  void AddLateralDecision(const std::string& decider_tag, const ObjectDecisionType& decision);
   bool HasLateralDecision() const;
 
   void set_path_st_boundary(const STBoundary& boundary);
@@ -194,8 +186,7 @@ class Obstacle {
   bool IsLongitudinalIgnore() const;
   bool IsLateralIgnore() const;
 
-  void BuildReferenceLineStBoundary(const ReferenceLine& reference_line,
-                                    const double adc_start_s);
+  void BuildReferenceLineStBoundary(const ReferenceLine& reference_line, const double adc_start_s);
 
   void SetPerceptionSlBoundary(const SLBoundary& sl_boundary);
 
@@ -223,16 +214,14 @@ class Obstacle {
  private:
   FRIEND_TEST(MergeLongitudinalDecision, AllDecisions);
   static ObjectDecisionType MergeLongitudinalDecision(
-      const ObjectDecisionType& lhs, const ObjectDecisionType& rhs);
+  const ObjectDecisionType& lhs, const ObjectDecisionType& rhs);
   FRIEND_TEST(MergeLateralDecision, AllDecisions);
   static ObjectDecisionType MergeLateralDecision(const ObjectDecisionType& lhs,
-                                                 const ObjectDecisionType& rhs);
+  const ObjectDecisionType& rhs);
 
-  bool BuildTrajectoryStBoundary(const ReferenceLine& reference_line,
-                                 const double adc_start_s,
-                                 STBoundary* const st_boundary);
-  bool IsValidObstacle(
-      const perception::PerceptionObstacle& perception_obstacle);
+  bool BuildTrajectoryStBoundary(const ReferenceLine& reference_line, const double adc_start_s,
+  STBoundary* const st_boundary);
+  bool IsValidObstacle(const perception::PerceptionObstacle& perception_obstacle);
 
  private:
   std::string id_;
@@ -277,11 +266,9 @@ class Obstacle {
   };
 
   static const std::unordered_map<ObjectDecisionType::ObjectTagCase, int,
-                                  ObjectTagCaseHash>
-      s_lateral_decision_safety_sorter_;
+  ObjectTagCaseHash> s_lateral_decision_safety_sorter_;
   static const std::unordered_map<ObjectDecisionType::ObjectTagCase, int,
-                                  ObjectTagCaseHash>
-      s_longitudinal_decision_safety_sorter_;
+  ObjectTagCaseHash> s_longitudinal_decision_safety_sorter_;
 };
 
 typedef IndexedList<std::string, Obstacle> IndexedObstacles;

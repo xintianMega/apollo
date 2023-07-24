@@ -40,11 +40,9 @@ namespace planning {
 
 class STBoundaryMapper {
  public:
-  STBoundaryMapper(const SpeedBoundsDeciderConfig& config,
-                   const ReferenceLine& reference_line,
-                   const PathData& path_data, const double planning_distance,
-                   const double planning_time,
-                   const std::shared_ptr<DependencyInjector>& injector);
+  STBoundaryMapper(const SpeedBoundsDeciderConfig& config, const ReferenceLine& reference_line,
+  const PathData& path_data, const double planning_distance, const double planning_time,
+  const std::shared_ptr<DependencyInjector>& injector);
 
   virtual ~STBoundaryMapper() = default;
 
@@ -63,10 +61,9 @@ class STBoundaryMapper {
    * represented as upper and lower points for every s of interests.
    * Note that upper_points.size() = lower_points.size()
    */
-  bool GetOverlapBoundaryPoints(
-      const std::vector<common::PathPoint>& path_points,
-      const Obstacle& obstacle, std::vector<STPoint>* upper_points,
-      std::vector<STPoint>* lower_points) const;
+  bool GetOverlapBoundaryPoints(const std::vector<common::PathPoint>& path_points,
+  const Obstacle& obstacle, std::vector<STPoint>* upper_points,
+  std::vector<STPoint>* lower_points) const;
 
   /** @brief Given a path-point and an obstacle bounding box, check if the
    *        ADC, when at that path-point, will collide with the obstacle.
@@ -74,23 +71,20 @@ class STBoundaryMapper {
    * @param The bounding box of the obstacle.
    * @param The extra lateral buffer for our ADC.
    */
-  bool CheckOverlap(const common::PathPoint& path_point,
-                    const common::math::Box2d& obs_box,
-                    const double l_buffer) const;
+  bool CheckOverlap(const common::PathPoint& path_point, const common::math::Box2d& obs_box,
+  const double l_buffer) const;
 
   /** @brief Maps the closest STOP decision onto the ST-graph. This STOP
    * decision can be stopping for blocking obstacles, or can be due to
    * traffic rules, etc.
    */
-  bool MapStopDecision(Obstacle* stop_obstacle,
-                       const ObjectDecisionType& decision) const;
+  bool MapStopDecision(Obstacle* stop_obstacle, const ObjectDecisionType& decision) const;
 
   /** @brief Fine-tune the boundary for yielding or overtaking obstacles.
    * Increase boundary on the s-dimension or set the boundary type, etc.,
    * when necessary.
    */
-  void ComputeSTBoundaryWithDecision(Obstacle* obstacle,
-                                     const ObjectDecisionType& decision) const;
+  void ComputeSTBoundaryWithDecision(Obstacle* obstacle, const ObjectDecisionType& decision) const;
 
  private:
   const SpeedBoundsDeciderConfig& speed_bounds_config_;

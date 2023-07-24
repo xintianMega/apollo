@@ -28,13 +28,9 @@ namespace planning {
 using apollo::common::TrajectoryPoint;
 
 void StGraphData::LoadData(const std::vector<const STBoundary*>& st_boundaries,
-                           const double min_s_on_st_boundaries,
-                           const apollo::common::TrajectoryPoint& init_point,
-                           const SpeedLimit& speed_limit,
-                           const double cruise_speed,
-                           const double path_data_length,
-                           const double total_time_by_conf,
-                           planning_internal::STGraphDebug* st_graph_debug) {
+const double min_s_on_st_boundaries, const apollo::common::TrajectoryPoint& init_point,
+const SpeedLimit& speed_limit, const double cruise_speed, const double path_data_length,
+const double total_time_by_conf, planning_internal::STGraphDebug* st_graph_debug) {
   init_ = true;
   st_boundaries_ = st_boundaries;
   min_s_on_st_boundaries_ = min_s_on_st_boundaries;
@@ -70,9 +66,8 @@ planning_internal::STGraphDebug* StGraphData::mutable_st_graph_debug() {
   return st_graph_debug_;
 }
 
-bool StGraphData::SetSTDrivableBoundary(
-    const std::vector<std::tuple<double, double, double>>& s_boundary,
-    const std::vector<std::tuple<double, double, double>>& v_obs_info) {
+bool StGraphData::SetSTDrivableBoundary(const std::vector<std::tuple<double, double, double>>& s_boundary,
+const std::vector<std::tuple<double, double, double>>& v_obs_info) {
   if (s_boundary.size() != v_obs_info.size()) {
     return false;
   }

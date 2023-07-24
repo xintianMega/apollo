@@ -57,10 +57,8 @@ class ReferenceLineInfo {
   enum class LaneType { LeftForward, LeftReverse, RightForward, RightReverse };
   ReferenceLineInfo() = default;
 
-  ReferenceLineInfo(const common::VehicleState& vehicle_state,
-                    const common::TrajectoryPoint& adc_planning_point,
-                    const ReferenceLine& reference_line,
-                    const hdmap::RouteSegments& segments);
+  ReferenceLineInfo(const common::VehicleState& vehicle_state, const common::TrajectoryPoint& adc_planning_point,
+  const ReferenceLine& reference_line, const hdmap::RouteSegments& segments);
 
   bool Init(const std::vector<const Obstacle*>& obstacles);
 

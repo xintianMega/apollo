@@ -57,163 +57,111 @@ std::unordered_map< TaskConfig::TaskType,
 Task* (*)(const TaskConfig& config, const std::shared_ptr<DependencyInjector>& injector),
 std::hash<int>>> TaskFactory::task_factory_;
 
-std::unordered_map<TaskConfig::TaskType, TaskConfig, std::hash<int>>
-    TaskFactory::default_task_configs_;
+std::unordered_map<TaskConfig::TaskType, TaskConfig, std::hash<int>> TaskFactory::default_task_configs_;
 
 void TaskFactory::Init(const PlanningConfig& config, const std::shared_ptr<DependencyInjector>& injector) {
   // deciders
-  task_factory_.Register(
-      TaskConfig::CREEP_DECIDER,
-      [](const TaskConfig& config,
-         const std::shared_ptr<DependencyInjector>& injector) -> Task* {
+  task_factory_.Register(TaskConfig::CREEP_DECIDER,
+      [](const TaskConfig& config, const std::shared_ptr<DependencyInjector>& injector) -> Task* {
         return new CreepDecider(config, injector);
       });
-  task_factory_.Register(
-      TaskConfig::LANE_CHANGE_DECIDER,
-      [](const TaskConfig& config,
-         const std::shared_ptr<DependencyInjector>& injector) -> Task* {
+  task_factory_.Register( TaskConfig::LANE_CHANGE_DECIDER,
+      [](const TaskConfig& config, const std::shared_ptr<DependencyInjector>& injector) -> Task* {
         return new LaneChangeDecider(config, injector);
       });
-  task_factory_.Register(
-      TaskConfig::OPEN_SPACE_FALLBACK_DECIDER,
-      [](const TaskConfig& config,
-         const std::shared_ptr<DependencyInjector>& injector) -> Task* {
+  task_factory_.Register(TaskConfig::OPEN_SPACE_FALLBACK_DECIDER,
+      [](const TaskConfig& config, const std::shared_ptr<DependencyInjector>& injector) -> Task* {
         return new OpenSpaceFallbackDecider(config, injector);
       });
-  task_factory_.Register(
-      TaskConfig::OPEN_SPACE_PRE_STOP_DECIDER,
-      [](const TaskConfig& config,
-         const std::shared_ptr<DependencyInjector>& injector) -> Task* {
+  task_factory_.Register(TaskConfig::OPEN_SPACE_PRE_STOP_DECIDER,
+      [](const TaskConfig& config, const std::shared_ptr<DependencyInjector>& injector) -> Task* {
         return new OpenSpacePreStopDecider(config, injector);
       });
-  task_factory_.Register(
-      TaskConfig::OPEN_SPACE_ROI_DECIDER,
-      [](const TaskConfig& config,
-         const std::shared_ptr<DependencyInjector>& injector) -> Task* {
+  task_factory_.Register(TaskConfig::OPEN_SPACE_ROI_DECIDER,
+      [](const TaskConfig& config, const std::shared_ptr<DependencyInjector>& injector) -> Task* {
         return new OpenSpaceRoiDecider(config, injector);
       });
-  task_factory_.Register(
-      TaskConfig::PATH_ASSESSMENT_DECIDER,
-      [](const TaskConfig& config,
-         const std::shared_ptr<DependencyInjector>& injector) -> Task* {
+  task_factory_.Register(TaskConfig::PATH_ASSESSMENT_DECIDER,
+      [](const TaskConfig& config, const std::shared_ptr<DependencyInjector>& injector) -> Task* {
         return new PathAssessmentDecider(config, injector);
       });
-  task_factory_.Register(
-      TaskConfig::PATH_BOUNDS_DECIDER,
-      [](const TaskConfig& config,
-         const std::shared_ptr<DependencyInjector>& injector) -> Task* {
+  task_factory_.Register(TaskConfig::PATH_BOUNDS_DECIDER,
+      [](const TaskConfig& config, const std::shared_ptr<DependencyInjector>& injector) -> Task* {
         return new PathBoundsDecider(config, injector);
       });
-  task_factory_.Register(
-      TaskConfig::PATH_DECIDER,
-      [](const TaskConfig& config,
-         const std::shared_ptr<DependencyInjector>& injector) -> Task* {
+  task_factory_.Register(TaskConfig::PATH_DECIDER,
+      [](const TaskConfig& config, const std::shared_ptr<DependencyInjector>& injector) -> Task* {
         return new PathDecider(config, injector);
       });
-  task_factory_.Register(
-      TaskConfig::PATH_LANE_BORROW_DECIDER,
-      [](const TaskConfig& config,
-         const std::shared_ptr<DependencyInjector>& injector) -> Task* {
+  task_factory_.Register(TaskConfig::PATH_LANE_BORROW_DECIDER,
+      [](const TaskConfig& config, const std::shared_ptr<DependencyInjector>& injector) -> Task* {
         return new PathLaneBorrowDecider(config, injector);
       });
-  task_factory_.Register(
-      TaskConfig::PATH_REFERENCE_DECIDER,
-      [](const TaskConfig& config,
-         const std::shared_ptr<DependencyInjector>& injector) -> Task* {
+  task_factory_.Register(TaskConfig::PATH_REFERENCE_DECIDER,
+      [](const TaskConfig& config, const std::shared_ptr<DependencyInjector>& injector) -> Task* {
         return new PathReferenceDecider(config, injector);
       });
-  task_factory_.Register(
-      TaskConfig::PATH_REUSE_DECIDER,
-      [](const TaskConfig& config,
-         const std::shared_ptr<DependencyInjector>& injector) -> Task* {
+  task_factory_.Register(TaskConfig::PATH_REUSE_DECIDER,
+      [](const TaskConfig& config, const std::shared_ptr<DependencyInjector>& injector) -> Task* {
         return new PathReuseDecider(config, injector);
       });
-  task_factory_.Register(
-      TaskConfig::RSS_DECIDER,
-      [](const TaskConfig& config,
-         const std::shared_ptr<DependencyInjector>& injector) -> Task* {
+  task_factory_.Register(TaskConfig::RSS_DECIDER,
+      [](const TaskConfig& config, const std::shared_ptr<DependencyInjector>& injector) -> Task* {
         return new RssDecider(config);
       });
-  task_factory_.Register(
-      TaskConfig::RULE_BASED_STOP_DECIDER,
-      [](const TaskConfig& config,
-         const std::shared_ptr<DependencyInjector>& injector) -> Task* {
+  task_factory_.Register(TaskConfig::RULE_BASED_STOP_DECIDER,
+      [](const TaskConfig& config, const std::shared_ptr<DependencyInjector>& injector) -> Task* {
         return new RuleBasedStopDecider(config, injector);
       });
-  task_factory_.Register(
-      TaskConfig::SPEED_BOUNDS_PRIORI_DECIDER,
-      [](const TaskConfig& config,
-         const std::shared_ptr<DependencyInjector>& injector) -> Task* {
+  task_factory_.Register(TaskConfig::SPEED_BOUNDS_PRIORI_DECIDER,
+      [](const TaskConfig& config, const std::shared_ptr<DependencyInjector>& injector) -> Task* {
         return new SpeedBoundsDecider(config, injector);
       });
-  task_factory_.Register(
-      TaskConfig::SPEED_BOUNDS_FINAL_DECIDER,
-      [](const TaskConfig& config,
-         const std::shared_ptr<DependencyInjector>& injector) -> Task* {
+  task_factory_.Register(TaskConfig::SPEED_BOUNDS_FINAL_DECIDER,
+      [](const TaskConfig& config, const std::shared_ptr<DependencyInjector>& injector) -> Task* {
         return new SpeedBoundsDecider(config, injector);
-      });
-  task_factory_.Register(
-      TaskConfig::SPEED_DECIDER,
-      [](const TaskConfig& config,
-         const std::shared_ptr<DependencyInjector>& injector) -> Task* {
+      });  task_factory_.Register(TaskConfig::SPEED_DECIDER,
+      [](const TaskConfig& config, const std::shared_ptr<DependencyInjector>& injector) -> Task* {
         return new SpeedDecider(config, injector);
       });
-  task_factory_.Register(
-      TaskConfig::ST_BOUNDS_DECIDER,
-      [](const TaskConfig& config,
-         const std::shared_ptr<DependencyInjector>& injector) -> Task* {
+  task_factory_.Register(TaskConfig::ST_BOUNDS_DECIDER,
+      [](const TaskConfig& config, const std::shared_ptr<DependencyInjector>& injector) -> Task* {
         return new STBoundsDecider(config, injector);
       });
   ///////////////////////////
   // optimizers
-  task_factory_.Register(
-      TaskConfig::OPEN_SPACE_TRAJECTORY_PARTITION,
-      [](const TaskConfig& config,
-         const std::shared_ptr<DependencyInjector>& injector) -> Task* {
+  task_factory_.Register(TaskConfig::OPEN_SPACE_TRAJECTORY_PARTITION,
+      [](const TaskConfig& config, const std::shared_ptr<DependencyInjector>& injector) -> Task* {
         return new OpenSpaceTrajectoryPartition(config, injector);
       });
-  task_factory_.Register(
-      TaskConfig::OPEN_SPACE_TRAJECTORY_PROVIDER,
-      [](const TaskConfig& config,
-         const std::shared_ptr<DependencyInjector>& injector) -> Task* {
+  task_factory_.Register(TaskConfig::OPEN_SPACE_TRAJECTORY_PROVIDER,
+      [](const TaskConfig& config, const std::shared_ptr<DependencyInjector>& injector) -> Task* {
         return new OpenSpaceTrajectoryProvider(config, injector);
       });
-  task_factory_.Register(
-      TaskConfig::PIECEWISE_JERK_NONLINEAR_SPEED_OPTIMIZER,
-      [](const TaskConfig& config,
-         const std::shared_ptr<DependencyInjector>& injector) -> Task* {
+  task_factory_.Register(TaskConfig::PIECEWISE_JERK_NONLINEAR_SPEED_OPTIMIZER,
+      [](const TaskConfig& config, const std::shared_ptr<DependencyInjector>& injector) -> Task* {
         return new PiecewiseJerkSpeedNonlinearOptimizer(config);
       });
-  task_factory_.Register(
-      TaskConfig::PIECEWISE_JERK_PATH_OPTIMIZER,
-      [](const TaskConfig& config,
-         const std::shared_ptr<DependencyInjector>& injector) -> Task* {
+  task_factory_.Register(TaskConfig::PIECEWISE_JERK_PATH_OPTIMIZER,
+      [](const TaskConfig& config, const std::shared_ptr<DependencyInjector>& injector) -> Task* {
         return new PiecewiseJerkPathOptimizer(config, injector);
       });
-  task_factory_.Register(
-      TaskConfig::PIECEWISE_JERK_SPEED_OPTIMIZER,
-      [](const TaskConfig& config,
-         const std::shared_ptr<DependencyInjector>& injector) -> Task* {
+  task_factory_.Register(TaskConfig::PIECEWISE_JERK_SPEED_OPTIMIZER,
+      [](const TaskConfig& config, const std::shared_ptr<DependencyInjector>& injector) -> Task* {
         return new PiecewiseJerkSpeedOptimizer(config);
       });
-  task_factory_.Register(
-      TaskConfig::SPEED_HEURISTIC_OPTIMIZER,
-      [](const TaskConfig& config,
-         const std::shared_ptr<DependencyInjector>& injector) -> Task* {
+  task_factory_.Register(TaskConfig::SPEED_HEURISTIC_OPTIMIZER,
+      [](const TaskConfig& config, const std::shared_ptr<DependencyInjector>& injector) -> Task* {
         return new PathTimeHeuristicOptimizer(config);
       });
   ///////////////////////////
   // other tasks
-  task_factory_.Register(
-      TaskConfig::LEARNING_MODEL_INFERENCE_TASK,
-      [](const TaskConfig& config,
-         const std::shared_ptr<DependencyInjector>& injector) -> Task* {
+  task_factory_.Register(TaskConfig::LEARNING_MODEL_INFERENCE_TASK,
+      [](const TaskConfig& config, const std::shared_ptr<DependencyInjector>& injector) -> Task* {
         return new LearningModelInferenceTask(config, injector);
       });
-  task_factory_.Register(
-      TaskConfig::LEARNING_MODEL_INFERENCE_TRAJECTORY_TASK,
-      [](const TaskConfig& config,
-         const std::shared_ptr<DependencyInjector>& injector) -> Task* {
+  task_factory_.Register(TaskConfig::LEARNING_MODEL_INFERENCE_TRAJECTORY_TASK,
+      [](const TaskConfig& config, const std::shared_ptr<DependencyInjector>& injector) -> Task* {
         return new LearningModelInferenceTrajectoryTask(config, injector);
       });
 
@@ -223,17 +171,15 @@ void TaskFactory::Init(const PlanningConfig& config, const std::shared_ptr<Depen
   }
 }
 
-std::unique_ptr<Task> TaskFactory::CreateTask(
-    const TaskConfig& task_config,
-    const std::shared_ptr<DependencyInjector>& injector) {
+std::unique_ptr<Task> TaskFactory::CreateTask(const TaskConfig& task_config,
+const std::shared_ptr<DependencyInjector>& injector) {
   TaskConfig merged_config;
   if (default_task_configs_.find(task_config.task_type()) !=
-      default_task_configs_.end()) {
+  default_task_configs_.end()) {
     merged_config = default_task_configs_[task_config.task_type()];
   }
   merged_config.MergeFrom(task_config);
-  return task_factory_.CreateObject(task_config.task_type(), merged_config,
-                                    injector);
+  return task_factory_.CreateObject(task_config.task_type(), merged_config, injector);
 }
 
 }  // namespace planning

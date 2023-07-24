@@ -42,23 +42,20 @@ class STBoundary : public common::math::Polygon2d {
    *   Each pair refers to a time t, with (lower_s, upper_s).
    */
   STBoundary() = default;
-  explicit STBoundary(
-      const std::vector<std::pair<STPoint, STPoint>>& point_pairs,
-      bool is_accurate_boundary = false);
+  explicit STBoundary(const std::vector<std::pair<STPoint, STPoint>>& point_pairs,
+  bool is_accurate_boundary = false);
   explicit STBoundary(const common::math::Box2d& box) = delete;
   explicit STBoundary(std::vector<common::math::Vec2d> points) = delete;
 
   /** @brief Wrapper of the constructor (old).
    */
-  static STBoundary CreateInstance(const std::vector<STPoint>& lower_points,
-                                   const std::vector<STPoint>& upper_points);
+  static STBoundary CreateInstance(const std::vector<STPoint>& lower_points, const std::vector<STPoint>& upper_points);
 
   /** @brief Wrapper of the constructor. It doesn't use RemoveRedundantPoints
    * and generates an accurate ST-boundary.
    */
-  static STBoundary CreateInstanceAccurate(
-      const std::vector<STPoint>& lower_points,
-      const std::vector<STPoint>& upper_points);
+  static STBoundary CreateInstanceAccurate(const std::vector<STPoint>& lower_points,
+  const std::vector<STPoint>& upper_points);
 
   /** @brief Default destructor.
    */
@@ -66,14 +63,11 @@ class STBoundary : public common::math::Polygon2d {
 
   bool IsEmpty() const { return lower_points_.empty(); }
 
-  bool GetUnblockSRange(const double curr_time, double* s_upper,
-                        double* s_lower) const;
+  bool GetUnblockSRange(const double curr_time, double* s_upper, double* s_lower) const;
 
-  bool GetBoundarySRange(const double curr_time, double* s_upper,
-                         double* s_lower) const;
+  bool GetBoundarySRange(const double curr_time, double* s_upper, double* s_lower) const;
 
-  bool GetBoundarySlopes(const double curr_time, double* ds_upper,
-                         double* ds_lower) const;
+  bool GetBoundarySlopes(const double curr_time, double* ds_upper, double* ds_lower) const;
 
   // if you need to add boundary type, make sure you modify
   // GetUnblockSRange accordingly.
@@ -133,13 +127,12 @@ class STBoundary : public common::math::Polygon2d {
  private:
   /** @brief The sanity check function for a vector of ST-point pairs.
    */
-  bool IsValid(
-      const std::vector<std::pair<STPoint, STPoint>>& point_pairs) const;
+  bool IsValid(const std::vector<std::pair<STPoint, STPoint>>& point_pairs) const;
 
   /** @brief Returns true if point is within max_dist distance to seg.
    */
   bool IsPointNear(const common::math::LineSegment2d& seg,
-                   const common::math::Vec2d& point, const double max_dist);
+  const common::math::Vec2d& point, const double max_dist);
 
   /** @brief Sometimes a sequence of upper and lower points lie almost on
    * two straightlines. In this case, the intermediate points are removed,
@@ -148,16 +141,14 @@ class STBoundary : public common::math::Polygon2d {
   // (all): When slope is high, this may introduce significant errors.
   // Also, when accumulated for multiple t, the error can get significant.
   // This function should be reconsidered, because it may be dangerous.
-  void RemoveRedundantPoints(
-      std::vector<std::pair<STPoint, STPoint>>* point_pairs);
+  void RemoveRedundantPoints(std::vector<std::pair<STPoint, STPoint>>* point_pairs);
   FRIEND_TEST(StBoundaryTest, remove_redundant_points);
 
   /** @brief Given time t, find a segment denoted by left and right idx, that
    * contains the time t.
    * - If t is less than all or larger than all, return false.
    */
-  bool GetIndexRange(const std::vector<STPoint>& points, const double t,
-                     size_t* left, size_t* right) const;
+  bool GetIndexRange(const std::vector<STPoint>& points, const double t, size_t* left, size_t* right) const;
   FRIEND_TEST(StBoundaryTest, get_index_range);
 
  private:

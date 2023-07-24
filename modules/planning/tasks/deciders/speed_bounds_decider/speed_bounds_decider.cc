@@ -54,6 +54,7 @@ Status SpeedBoundsDecider::Process(Frame *const frame, ReferenceLineInfo *const 
   PathDecision *const path_decision = reference_line_info->path_decision();
 
   // 1. Map obstacles into st graph
+  //使用path、reference line以及config 生成 boundary_mapper
   auto time1 = std::chrono::system_clock::now();
   // 使用path、reference line以及config 生成 boundary_mapper
   STBoundaryMapper boundary_mapper(speed_bounds_config_, reference_line, path_data,
@@ -91,6 +92,7 @@ Status SpeedBoundsDecider::Process(Frame *const frame, ReferenceLineInfo *const 
 
   // 2. Create speed limit along path
   // 生成路径上的速度限制 speed limit
+  //在生成speed limit 时主要是调用speed_limit_decider的GetSpeedLimits() 函数
   SpeedLimitDecider speed_limit_decider(speed_bounds_config_, reference_line, path_data);
 
   SpeedLimit speed_limit;
@@ -124,8 +126,7 @@ Status SpeedBoundsDecider::Process(Frame *const frame, ReferenceLineInfo *const 
   return Status::OK();
 }
 
-double SpeedBoundsDecider::SetSpeedFallbackDistance(
-    PathDecision *const path_decision) {
+double SpeedBoundsDecider::SetSpeedFallbackDistance(PathDecision *const path_decision) {
   // Set min_s_on_st_boundaries to guide speed fallback.
   static constexpr double kEpsilon = 1.0e-6;
   double min_s_non_reverse = std::numeric_limits<double>::infinity();

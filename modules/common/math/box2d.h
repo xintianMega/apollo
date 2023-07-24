@@ -83,8 +83,7 @@ class Box2d {
    * @param opposite_corner The opposite corner to the first one
    * @return An axes-aligned Box2d
    */
-  static Box2d CreateAABox(const Vec2d &one_corner,
-                           const Vec2d &opposite_corner);
+  static Box2d CreateAABox(const Vec2d &one_corner, const Vec2d &opposite_corner);
 
   /**
    * @brief Getter of the center of the box

@@ -51,16 +51,14 @@ class PathData {
 
   void SetReferenceLine(const ReferenceLine *reference_line);
 
-  bool SetPathPointDecisionGuide(
-      std::vector<std::tuple<double, PathPointType, double>>
-          path_point_decision_guide);
+  bool SetPathPointDecisionGuide(std::vector<std::tuple<double, PathPointType, double>>
+  path_point_decision_guide);
 
   const DiscretizedPath &discretized_path() const;
 
   const FrenetFramePath &frenet_frame_path() const;
 
-  const std::vector<std::tuple<double, PathPointType, double>>
-      &path_point_decision_guide() const;
+  const std::vector<std::tuple<double, PathPointType, double>>& path_point_decision_guide() const;
 
   common::PathPoint GetPathPointWithPathS(const double s) const;
 
@@ -68,8 +66,7 @@ class PathData {
    * brief: this function will find the path_point in discretized_path whose
    * projection to reference line has s value closest to ref_s.
    */
-  bool GetPathPointWithRefS(const double ref_s,
-                            common::PathPoint *const path_point) const;
+  bool GetPathPointWithRefS(const double ref_s, common::PathPoint *const path_point) const;
 
   bool LeftTrimWithRefS(const common::FrenetFramePoint &frenet_point);
 
@@ -102,10 +99,8 @@ class PathData {
   const bool is_optimized_towards_trajectory_reference() const {
     return is_optimized_towards_trajectory_reference_;
   }
-  void set_is_optimized_towards_trajectory_reference(
-      bool is_optimized_towards_trajectory_reference) {
-    is_optimized_towards_trajectory_reference_ =
-        is_optimized_towards_trajectory_reference;
+  void set_is_optimized_towards_trajectory_reference(bool is_optimized_towards_trajectory_reference) {
+    is_optimized_towards_trajectory_reference_ = is_optimized_towards_trajectory_reference;
   }
 
   const std::vector<common::PathPoint> &path_reference() const;
@@ -115,10 +110,8 @@ class PathData {
   /*
    * convert frenet path to cartesian path by reference line
    */
-  bool SLToXY(const FrenetFramePath &frenet_path,
-              DiscretizedPath *const discretized_path);
-  bool XYToSL(const DiscretizedPath &discretized_path,
-              FrenetFramePath *const frenet_path);
+  bool SLToXY(const FrenetFramePath &frenet_path, DiscretizedPath *const discretized_path);
+  bool XYToSL(const DiscretizedPath &discretized_path, FrenetFramePath *const frenet_path);
   const ReferenceLine *reference_line_ = nullptr;
   DiscretizedPath discretized_path_;
   FrenetFramePath frenet_path_;
@@ -128,8 +121,7 @@ class PathData {
    * @param tuple consists of s axis position on reference line; PathPointType
    * Enum; distance to closest obstacle
    */
-  std::vector<std::tuple<double, PathPointType, double>>
-      path_point_decision_guide_;
+  std::vector<std::tuple<double, PathPointType, double>> path_point_decision_guide_;
 
   std::string path_label_ = "";
   std::string blocking_obstacle_id_;
