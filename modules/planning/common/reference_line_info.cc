@@ -491,9 +491,8 @@ const RSSInfo& ReferenceLineInfo::rss_info() const { return rss_info_; }
 
 RSSInfo* ReferenceLineInfo::mutable_rss_info() { return &rss_info_; }
 
-bool ReferenceLineInfo::CombinePathAndSpeedProfile(
-    const double relative_time, const double start_s,
-    DiscretizedTrajectory* ptr_discretized_trajectory) {
+bool ReferenceLineInfo::CombinePathAndSpeedProfile(const double relative_time, const double start_s,
+DiscretizedTrajectory* ptr_discretized_trajectory) {
   ACHECK(ptr_discretized_trajectory != nullptr);
   // use varied resolution to reduce data load but also provide enough data
   // point for control module
@@ -512,19 +511,19 @@ bool ReferenceLineInfo::CombinePathAndSpeedProfile(
   }
 
   for (double cur_rel_time = 0.0; cur_rel_time < speed_data_.TotalTime();
-       cur_rel_time += (cur_rel_time < kDenseTimeSec ? kDenseTimeResoltuion
-                                                     : kSparseTimeResolution)) {
+  cur_rel_time += (cur_rel_time < kDenseTimeSec ? kDenseTimeResoltuion : kSparseTimeResolution)) {
     common::SpeedPoint speed_point;
     if (!speed_data_.EvaluateByTime(cur_rel_time, &speed_point)) {
       AERROR << "Fail to get speed point with relative time " << cur_rel_time;
       return false;
     }
 
+    // 使用速度点的相对累计距离去查询规划路径，得到对应的映射点
     if (speed_point.s() > path_data_.discretized_path().Length()) {
       break;
     }
-    common::PathPoint path_point =
-        path_data_.GetPathPointWithPathS(speed_point.s());
+    common::PathPoint path_point = path_data_.GetPathPointWithPathS(speed_point.s());
+    // 加上起始点距离，变成"绝对"累积距离(实际上还是相对于参考线起始点的距离)
     path_point.set_s(path_point.s() + start_s);
 
     common::TrajectoryPoint trajectory_point;
@@ -1000,8 +999,7 @@ int ReferenceLineInfo::GetPnCJunction(
   return 0;
 }
 
-int ReferenceLineInfo::GetJunction(const double s,
-                                   hdmap::PathOverlap* junction_overlap) const {
+int ReferenceLineInfo::GetJunction(const double s, hdmap::PathOverlap* junction_overlap) const {
   CHECK_NOTNULL(junction_overlap);
   const std::vector<hdmap::PathOverlap>& junction_overlaps =
       reference_line_.map_path().junction_overlaps();
@@ -1016,8 +1014,7 @@ int ReferenceLineInfo::GetJunction(const double s,
   return 0;
 }
 
-void ReferenceLineInfo::SetBlockingObstacle(
-    const std::string& blocking_obstacle_id) {
+void ReferenceLineInfo::SetBlockingObstacle(const std::string& blocking_obstacle_id) {
   blocking_obstacle_ = path_decision_.Find(blocking_obstacle_id);
 }
 

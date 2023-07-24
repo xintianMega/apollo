@@ -156,12 +156,9 @@ Status LaneChangeDecider::Process(Frame* frame, ReferenceLineInfo* const current
   return Status::OK();
 }
 
-void LaneChangeDecider::UpdatePreparationDistance(
-    const bool is_opt_succeed, const Frame* frame,
-    const ReferenceLineInfo* const reference_line_info,
-    PlanningContext* planning_context) {
-  auto* lane_change_status =
-      planning_context->mutable_planning_status()->mutable_change_lane();
+void LaneChangeDecider::UpdatePreparationDistance(const bool is_opt_succeed, const Frame* frame,
+const ReferenceLineInfo* const reference_line_info, PlanningContext* planning_context) {
+  auto* lane_change_status = planning_context->mutable_planning_status()->mutable_change_lane();
   ADEBUG << "Current time: " << lane_change_status->timestamp();
   ADEBUG << "Lane Change Status: " << lane_change_status->status();
   // If lane change planning succeeded, update and return
@@ -174,42 +171,34 @@ void LaneChangeDecider::UpdatePreparationDistance(
   lane_change_status->set_is_current_opt_succeed(false);
   // If the planner just succeed recently, let's be more patient and try again
   if (Clock::NowInSeconds() - lane_change_status->last_succeed_timestamp() <
-      FLAGS_allowed_lane_change_failure_time) {
+  FLAGS_allowed_lane_change_failure_time) {
     return;
   }
   // Get ADC's current s and the lane-change start distance s
   const ReferenceLine& reference_line = reference_line_info->reference_line();
-  const common::TrajectoryPoint& planning_start_point =
-      frame->PlanningStartPoint();
+  const common::TrajectoryPoint& planning_start_point = frame->PlanningStartPoint();
   auto adc_sl_info = reference_line.ToFrenetFrame(planning_start_point);
   if (!lane_change_status->exist_lane_change_start_position()) {
     return;
   }
   common::SLPoint point_sl;
-  reference_line.XYToSL(lane_change_status->lane_change_start_position(),
-                        &point_sl);
+  reference_line.XYToSL(lane_change_status->lane_change_start_position(), &point_sl);
   ADEBUG << "Current ADC s: " << adc_sl_info.first[0];
   ADEBUG << "Change lane point s: " << point_sl.s();
   // If the remaining lane-change preparation distance is too small,
   // refresh the preparation distance
-  if (adc_sl_info.first[0] + FLAGS_min_lane_change_prepare_length >
-      point_sl.s()) {
+  if (adc_sl_info.first[0] + FLAGS_min_lane_change_prepare_length > point_sl.s()) {
     lane_change_status->set_exist_lane_change_start_position(false);
     ADEBUG << "Refresh the lane-change preparation distance";
   }
 }
 
-void LaneChangeDecider::UpdateStatus(ChangeLaneStatus::Status status_code,
-                                     const std::string& path_id) {
+void LaneChangeDecider::UpdateStatus(ChangeLaneStatus::Status status_code, const std::string& path_id) {
   UpdateStatus(Clock::NowInSeconds(), status_code, path_id);
 }
 
-void LaneChangeDecider::UpdateStatus(double timestamp,
-                                     ChangeLaneStatus::Status status_code,
-                                     const std::string& path_id) {
-  auto* lane_change_status = injector_->planning_context()
-                                 ->mutable_planning_status()
-                                 ->mutable_change_lane();
+void LaneChangeDecider::UpdateStatus(double timestamp, ChangeLaneStatus::Status status_code, const std::string& path_id) {
+  auto* lane_change_status = injector_->planning_context()->mutable_planning_status()->mutable_change_lane();
   lane_change_status->set_timestamp(timestamp);
   lane_change_status->set_path_id(path_id);
   lane_change_status->set_status(status_code);
@@ -240,8 +229,7 @@ void LaneChangeDecider::PrioritizeChangeLane(const bool is_prioritize_change_lan
      注意，可变车道为按迭代器的顺序求取，一旦发现可变车道，即推出循环。
      2、如果is_prioritize_change_lane 为False，
      找到第一条不可变道的参考线，将第一条参考线更新为当前不可变道的参考线 */
-    if ((is_prioritize_change_lane && iter->IsChangeLanePath()) ||
-        (!is_prioritize_change_lane && !iter->IsChangeLanePath())) {
+    if ((is_prioritize_change_lane && iter->IsChangeLanePath()) || (!is_prioritize_change_lane && !iter->IsChangeLanePath())) {
       ADEBUG << "is_prioritize_change_lane: " << is_prioritize_change_lane;
       ADEBUG << "iter->IsChangeLanePath(): " << iter->IsChangeLanePath();
       break;
@@ -253,8 +241,7 @@ void LaneChangeDecider::PrioritizeChangeLane(const bool is_prioritize_change_lan
 }
 
 // disabled for now
-void LaneChangeDecider::RemoveChangeLane(
-    std::list<ReferenceLineInfo>* reference_line_info) const {
+void LaneChangeDecider::RemoveChangeLane(std::list<ReferenceLineInfo>* reference_line_info) const {
   const auto& lane_change_decider_config = config_.lane_change_decider_config();
   // (SHU): fix core dump when removing change lane
   if (!lane_change_decider_config.enable_remove_change_lane()) {
@@ -271,8 +258,7 @@ void LaneChangeDecider::RemoveChangeLane(
   }
 }
 
-std::string LaneChangeDecider::GetCurrentPathId(
-    const std::list<ReferenceLineInfo>& reference_line_info) const {
+std::string LaneChangeDecider::GetCurrentPathId(const std::list<ReferenceLineInfo>& reference_line_info) const {
   for (const auto& info : reference_line_info) {
     if (!info.IsChangeLanePath()) {
       return info.Lanes().Id();
@@ -342,18 +328,15 @@ bool LaneChangeDecider::IsClearToChangeLane(ReferenceLineInfo* reference_line_in
     double kForwardSafeDistance = 0.0;
     double kBackwardSafeDistance = 0.0;
     if (same_direction) {
-      kForwardSafeDistance =
-        std::fmax(kForwardMinSafeDistanceOnSameDirection,(ego_v - obstacle->speed()) * kSafeTimeOnSameDirection);
-      kBackwardSafeDistance =
-        std::fmax(kBackwardMinSafeDistanceOnSameDirection, (obstacle->speed() - ego_v) * kSafeTimeOnSameDirection);
+      kForwardSafeDistance = std::fmax(kForwardMinSafeDistanceOnSameDirection,(ego_v - obstacle->speed()) * kSafeTimeOnSameDirection);
+      kBackwardSafeDistance = std::fmax(kBackwardMinSafeDistanceOnSameDirection, (obstacle->speed() - ego_v) * kSafeTimeOnSameDirection);
     } else {
-      kForwardSafeDistance =
-        std::fmax(kForwardMinSafeDistanceOnOppositeDirection,(ego_v + obstacle->speed()) * kSafeTimeOnOppositeDirection);
+      kForwardSafeDistance = std::fmax(kForwardMinSafeDistanceOnOppositeDirection,(ego_v + obstacle->speed()) * kSafeTimeOnOppositeDirection);
       kBackwardSafeDistance = kBackwardMinSafeDistanceOnOppositeDirection;
     }
 
     if (HysteresisFilter(ego_start_s - end_s, kBackwardSafeDistance, kDistanceBuffer, obstacle->IsLaneChangeBlocking()) &&
-        HysteresisFilter(start_s - ego_end_s, kForwardSafeDistance, kDistanceBuffer, obstacle->IsLaneChangeBlocking())) {
+    HysteresisFilter(start_s - ego_end_s, kForwardSafeDistance, kDistanceBuffer, obstacle->IsLaneChangeBlocking())) {
       reference_line_info->path_decision()->Find(obstacle->Id())->SetLaneChangeBlocking(true);
       ADEBUG << "Lane Change is blocked by obstacle" << obstacle->Id();
       return false;

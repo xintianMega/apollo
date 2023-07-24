@@ -117,23 +117,18 @@ Stage::StageStatus LaneFollowStage::Process(const TrajectoryPoint& planning_star
       // 如果发生lanechange，判断reference_line的cost
       if (reference_line_info.IsChangeLanePath()) {
         ADEBUG << "reference line is lane change ref.";
-        ADEBUG << "FLAGS_enable_smarter_lane_change: "
-               << FLAGS_enable_smarter_lane_change;
+        ADEBUG << "FLAGS_enable_smarter_lane_change: " << FLAGS_enable_smarter_lane_change;
         if (reference_line_info.Cost() < kStraightForwardLineCost &&
-            (LaneChangeDecider::IsClearToChangeLane(&reference_line_info) ||
-             FLAGS_enable_smarter_lane_change)) {
+        (LaneChangeDecider::IsClearToChangeLane(&reference_line_info) || FLAGS_enable_smarter_lane_change)) {
           // If the path and speed optimization succeed on target lane while
           // under smart lane-change or IsClearToChangeLane under older version
           has_drivable_reference_line = true;
           reference_line_info.SetDrivable(true);
-          LaneChangeDecider::UpdatePreparationDistance(
-              true, frame, &reference_line_info, injector_->planning_context());
+          LaneChangeDecider::UpdatePreparationDistance(true, frame, &reference_line_info, injector_->planning_context());
           ADEBUG << "\tclear for lane change";
         }
         else {
-          LaneChangeDecider::UpdatePreparationDistance(
-              false, frame, &reference_line_info,
-              injector_->planning_context());
+          LaneChangeDecider::UpdatePreparationDistance(false, frame, &reference_line_info, injector_->planning_context());
           reference_line_info.SetDrivable(false);
           ADEBUG << "\tlane change failed";
         }
@@ -151,16 +146,14 @@ Stage::StageStatus LaneFollowStage::Process(const TrajectoryPoint& planning_star
   return has_drivable_reference_line ? StageStatus::RUNNING : StageStatus::ERROR;
 }
 
-Status LaneFollowStage::PlanOnReferenceLine(
-    const TrajectoryPoint& planning_start_point, Frame* frame,
-    ReferenceLineInfo* reference_line_info) {
+Status LaneFollowStage::PlanOnReferenceLine(const TrajectoryPoint& planning_start_point, Frame* frame,
+ReferenceLineInfo* reference_line_info) {
   // 判断是否有lanechange意图，如果有计算cost
   if (!reference_line_info->IsChangeLanePath()) {
     reference_line_info->AddCost(kStraightForwardLineCost);
   }
   ADEBUG << "planning start point:" << planning_start_point.DebugString();
-  ADEBUG << "Current reference_line_info is IsChangeLanePath: "
-         << reference_line_info->IsChangeLanePath();
+  ADEBUG << "Current reference_line_info is IsChangeLanePath: " << reference_line_info->IsChangeLanePath();
 
   // 遍历每个task，即把注册的task运行一遍
   auto ret = Status::OK();
@@ -171,14 +164,12 @@ Status LaneFollowStage::PlanOnReferenceLine(
 
     const double end_timestamp = Clock::NowInSeconds();
     const double time_diff_ms = (end_timestamp - start_timestamp) * 1000;
-    ADEBUG << "after task[" << task->Name()
-           << "]:" << reference_line_info->PathSpeedDebugString();
+    ADEBUG << "after task[" << task->Name() << "]:" << reference_line_info->PathSpeedDebugString();
     ADEBUG << task->Name() << " time spend: " << time_diff_ms << " ms.";
     RecordDebugInfo(reference_line_info, task->Name(), time_diff_ms);
 
     if (!ret.ok()) {
-      AERROR << "Failed to run tasks[" << task->Name()
-             << "], Error message: " << ret.error_message();
+      AERROR << "Failed to run tasks[" << task->Name() << "], Error message: " << ret.error_message();
       break;
     }
 
@@ -201,9 +192,8 @@ Status LaneFollowStage::PlanOnReferenceLine(
 
   // TODO:对规划的轨迹进行合成，如果合成失败，返回失败状态
   DiscretizedTrajectory trajectory;
-  if (!reference_line_info->CombinePathAndSpeedProfile(
-          planning_start_point.relative_time(),
-          planning_start_point.path_point().s(), &trajectory)) {
+  if (!reference_line_info->CombinePathAndSpeedProfile(planning_start_point.relative_time(),
+  planning_start_point.path_point().s(), &trajectory)) {
     const std::string msg = "Fail to aggregate planning trajectory.";
     AERROR << msg;
     return Status(ErrorCode::PLANNING_ERROR, msg);
@@ -211,19 +201,15 @@ Status LaneFollowStage::PlanOnReferenceLine(
 
   // TODO: determine if there is a destination on reference line. 对目的终点进行处理
   double dest_stop_s = -1.0;
-  for (const auto* obstacle :
-       reference_line_info->path_decision()->obstacles().Items()) {
+  for (const auto* obstacle : reference_line_info->path_decision()->obstacles().Items()) {
     if (obstacle->LongitudinalDecision().has_stop() &&
-        obstacle->LongitudinalDecision().stop().reason_code() ==
-            STOP_REASON_DESTINATION) {
-      SLPoint dest_sl = GetStopSL(obstacle->LongitudinalDecision().stop(),
-                                  reference_line_info->reference_line());
+    obstacle->LongitudinalDecision().stop().reason_code() == STOP_REASON_DESTINATION) {
+      SLPoint dest_sl = GetStopSL(obstacle->LongitudinalDecision().stop(), reference_line_info->reference_line());
       dest_stop_s = dest_sl.s();
     }
   }
 
-  for (const auto* obstacle :
-       reference_line_info->path_decision()->obstacles().Items()) {
+  for (const auto* obstacle : reference_line_info->path_decision()->obstacles().Items()) {
     if (obstacle->IsVirtual()) {
       continue;
     }
@@ -235,8 +221,7 @@ Status LaneFollowStage::PlanOnReferenceLine(
       if (dest_stop_s < 0.0) {
         add_stop_obstacle_cost = true;
       } else {
-        SLPoint stop_sl = GetStopSL(obstacle->LongitudinalDecision().stop(),
-                                    reference_line_info->reference_line());
+        SLPoint stop_sl = GetStopSL(obstacle->LongitudinalDecision().stop(), reference_line_info->reference_line());
         if (stop_sl.s() < dest_stop_s) {
           add_stop_obstacle_cost = true;
         }
@@ -250,8 +235,7 @@ Status LaneFollowStage::PlanOnReferenceLine(
 
   // 对规划的轨迹进行检查，如果检查失败，返回失败状态
   if (FLAGS_enable_trajectory_check) {
-    if (ConstraintChecker::ValidTrajectory(trajectory) !=
-        ConstraintChecker::Result::VALID) {
+    if (ConstraintChecker::ValidTrajectory(trajectory) != ConstraintChecker::Result::VALID) {
       const std::string msg = "Current planning trajectory is not valid.";
       AERROR << msg;
       return Status(ErrorCode::PLANNING_ERROR, msg);
@@ -264,24 +248,19 @@ Status LaneFollowStage::PlanOnReferenceLine(
   return Status::OK();
 }
 
-void LaneFollowStage::PlanFallbackTrajectory(
-    const TrajectoryPoint& planning_start_point, Frame* frame,
-    ReferenceLineInfo* reference_line_info) {
+void LaneFollowStage::PlanFallbackTrajectory(const TrajectoryPoint& planning_start_point, Frame* frame,
+ReferenceLineInfo* reference_line_info) {
   // path and speed fall back
   if (reference_line_info->path_data().Empty()) {
     AERROR << "Path fallback due to algorithm failure";
-    GenerateFallbackPathProfile(reference_line_info,
-                                reference_line_info->mutable_path_data());
+    GenerateFallbackPathProfile(reference_line_info, reference_line_info->mutable_path_data());
     reference_line_info->AddCost(kPathOptimizationFallbackCost);
     reference_line_info->set_trajectory_type(ADCTrajectory::PATH_FALLBACK);
   }
 
   if (reference_line_info->trajectory_type() != ADCTrajectory::PATH_FALLBACK) {
-    if (!RetrieveLastFramePathProfile(
-            reference_line_info, frame,
-            reference_line_info->mutable_path_data())) {
-      const auto& candidate_path_data =
-          reference_line_info->GetCandidatePathData();
+    if (!RetrieveLastFramePathProfile(reference_line_info, frame, reference_line_info->mutable_path_data())) {
+      const auto& candidate_path_data = reference_line_info->GetCandidatePathData();
       for (const auto& path_data : candidate_path_data) {
         if (path_data.path_label().find("self") != std::string::npos) {
           *reference_line_info->mutable_path_data() = path_data;
@@ -293,8 +272,7 @@ void LaneFollowStage::PlanFallbackTrajectory(
   }
 
   AERROR << "Speed fallback due to algorithm failure";
-  *reference_line_info->mutable_speed_data() =
-      SpeedProfileGenerator::GenerateFallbackSpeed(injector_->ego_info());
+  *reference_line_info->mutable_speed_data() = SpeedProfileGenerator::GenerateFallbackSpeed(injector_->ego_info());
 
   if (reference_line_info->trajectory_type() != ADCTrajectory::PATH_FALLBACK) {
     reference_line_info->AddCost(kSpeedOptimizationFallbackCost);

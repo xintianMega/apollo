@@ -40,15 +40,12 @@ using apollo::common::SpeedPoint;
 using apollo::common::Status;
 using apollo::common::TrajectoryPoint;
 
-PiecewiseJerkSpeedOptimizer::PiecewiseJerkSpeedOptimizer(
-    const TaskConfig& config)
-    : SpeedOptimizer(config) {
+PiecewiseJerkSpeedOptimizer::PiecewiseJerkSpeedOptimizer(const TaskConfig& config) : SpeedOptimizer(config) {
   ACHECK(config_.has_piecewise_jerk_speed_optimizer_config());
 }
 
-Status PiecewiseJerkSpeedOptimizer::Process(const PathData& path_data,
-                                            const TrajectoryPoint& init_point,
-                                            SpeedData* const speed_data) {
+Status PiecewiseJerkSpeedOptimizer::Process(const PathData& path_data, const TrajectoryPoint& init_point,
+SpeedData* const speed_data) {
   if (reference_line_info_->ReachedDestination()) {
     return Status::OK();
   }
@@ -63,34 +60,26 @@ Status PiecewiseJerkSpeedOptimizer::Process(const PathData& path_data,
   }
   StGraphData& st_graph_data = *reference_line_info_->mutable_st_graph_data();
 
-  const auto& veh_param =
-      common::VehicleConfigHelper::GetConfig().vehicle_param();
+  const auto& veh_param = common::VehicleConfigHelper::GetConfig().vehicle_param();
 
-  std::array<double, 3> init_s = {0.0, st_graph_data.init_point().v(),
-                                  st_graph_data.init_point().a()};
+  std::array<double, 3> init_s = {0.0, st_graph_data.init_point().v(), st_graph_data.init_point().a()};
   double delta_t = 0.1;
   double total_length = st_graph_data.path_length();
   double total_time = st_graph_data.total_time_by_conf();
   int num_of_knots = static_cast<int>(total_time / delta_t) + 1;
 
-  PiecewiseJerkSpeedProblem piecewise_jerk_problem(num_of_knots, delta_t,
-                                                   init_s);
+  PiecewiseJerkSpeedProblem piecewise_jerk_problem(num_of_knots, delta_t, init_s);
 
   const auto& config = config_.piecewise_jerk_speed_optimizer_config();
   piecewise_jerk_problem.set_weight_ddx(config.acc_weight());
   piecewise_jerk_problem.set_weight_dddx(config.jerk_weight());
 
   piecewise_jerk_problem.set_x_bounds(0.0, total_length);
-  piecewise_jerk_problem.set_dx_bounds(
-      0.0, std::fmax(FLAGS_planning_upper_speed_limit,
-                     st_graph_data.init_point().v()));
-  piecewise_jerk_problem.set_ddx_bounds(veh_param.max_deceleration(),
-                                        veh_param.max_acceleration());
-  piecewise_jerk_problem.set_dddx_bound(FLAGS_longitudinal_jerk_lower_bound,
-                                        FLAGS_longitudinal_jerk_upper_bound);
+  piecewise_jerk_problem.set_dx_bounds(0.0, std::fmax(FLAGS_planning_upper_speed_limit, st_graph_data.init_point().v()));
+  piecewise_jerk_problem.set_ddx_bounds(veh_param.max_deceleration(), veh_param.max_acceleration());
+  piecewise_jerk_problem.set_dddx_bound(FLAGS_longitudinal_jerk_lower_bound, FLAGS_longitudinal_jerk_upper_bound);
 
-  piecewise_jerk_problem.set_dx_ref(config.ref_v_weight(),
-                                    reference_line_info_->GetCruiseSpeed());
+  piecewise_jerk_problem.set_dx_ref(config.ref_v_weight(), reference_line_info_->GetCruiseSpeed());
 
   // Update STBoundary
   std::vector<std::pair<double, double>> s_bounds;
@@ -121,8 +110,7 @@ Status PiecewiseJerkSpeedOptimizer::Process(const PathData& path_data,
       }
     }
     if (s_lower_bound > s_upper_bound) {
-      const std::string msg =
-          "s_lower_bound larger than s_upper_bound on STGraph";
+      const std::string msg = "s_lower_bound larger than s_upper_bound on STGraph";
       AERROR << msg;
       speed_data->clear();
       return Status(ErrorCode::PLANNING_ERROR, msg);
@@ -145,8 +133,7 @@ Status PiecewiseJerkSpeedOptimizer::Process(const PathData& path_data,
     x_ref.emplace_back(path_s);
     // get curvature
     PathPoint path_point = path_data.GetPathPointWithPathS(path_s);
-    penalty_dx.push_back(std::fabs(path_point.kappa()) *
-                         config.kappa_penalty_weight());
+    penalty_dx.push_back(std::fabs(path_point.kappa()) * config.kappa_penalty_weight());
     // get v_upper_bound
     const double v_lower_bound = 0.0;
     double v_upper_bound = FLAGS_planning_upper_speed_limit;
@@ -170,8 +157,7 @@ Status PiecewiseJerkSpeedOptimizer::Process(const PathData& path_data,
   const std::vector<double>& ds = piecewise_jerk_problem.opt_dx();
   const std::vector<double>& dds = piecewise_jerk_problem.opt_ddx();
   for (int i = 0; i < num_of_knots; ++i) {
-    ADEBUG << "For t[" << i * delta_t << "], s = " << s[i] << ", v = " << ds[i]
-           << ", a = " << dds[i];
+    ADEBUG << "For t[" << i * delta_t << "], s = " << s[i] << ", v = " << ds[i] << ", a = " << dds[i];
   }
   speed_data->clear();
   speed_data->AppendSpeedPoint(s[0], 0.0, ds[0], dds[0], 0.0);
@@ -180,8 +166,7 @@ Status PiecewiseJerkSpeedOptimizer::Process(const PathData& path_data,
     if (ds[i] <= 0.0) {
       break;
     }
-    speed_data->AppendSpeedPoint(s[i], delta_t * i, ds[i], dds[i],
-                                 (dds[i] - dds[i - 1]) / delta_t);
+    speed_data->AppendSpeedPoint(s[i], delta_t * i, ds[i], dds[i], (dds[i] - dds[i - 1]) / delta_t);
   }
   SpeedProfileGenerator::FillEnoughSpeedPoints(speed_data);
   RecordDebugInfo(*speed_data, st_graph_data.mutable_st_graph_debug());

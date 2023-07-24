@@ -97,8 +97,7 @@ SpeedData SpeedProfileGenerator::GenerateFallbackSpeed(
     if (s[i] - s[i - 1] <= 0.0 || ds[i] <= 0.0) {
       break;
     }
-    speed_data.AppendSpeedPoint(s[i], delta_t * static_cast<double>(i), ds[i],
-                                dds[i], (dds[i] - dds[i - 1]) / delta_t);
+    speed_data.AppendSpeedPoint(s[i], delta_t * static_cast<double>(i), ds[i], dds[i], (dds[i] - dds[i - 1]) / delta_t);
   }
   FillEnoughSpeedPoints(&speed_data);
   return speed_data;
@@ -110,15 +109,13 @@ void SpeedProfileGenerator::FillEnoughSpeedPoints(SpeedData* const speed_data) {
     return;
   }
   for (double t = last_point.t() + FLAGS_fallback_time_unit;
-       t < FLAGS_fallback_total_time; t += FLAGS_fallback_time_unit) {
+  t < FLAGS_fallback_total_time; t += FLAGS_fallback_time_unit) {
     speed_data->AppendSpeedPoint(last_point.s(), t, 0.0, 0.0, 0.0);
   }
 }
 
-SpeedData SpeedProfileGenerator::GenerateStopProfile(const double init_speed,
-                                                     const double init_acc) {
-  AERROR << "Slowing down the car within a constant deceleration with fallback "
-            "stopping profile.";
+SpeedData SpeedProfileGenerator::GenerateStopProfile(const double init_speed, const double init_acc) {
+  AERROR << "Slowing down the car within a constant deceleration with fallback stopping profile.";
   SpeedData speed_data;
 
   const double max_t = FLAGS_fallback_total_time;
@@ -132,8 +129,7 @@ SpeedData SpeedProfileGenerator::GenerateStopProfile(const double init_speed,
   for (double t = unit_t; t < max_t; t += unit_t) {
     double s = 0.0;
     double v = 0.0;
-    s = std::fmax(pre_s,
-                  pre_s + 0.5 * (pre_v + (pre_v + unit_t * acc)) * unit_t);
+    s = std::fmax(pre_s, pre_s + 0.5 * (pre_v + (pre_v + unit_t * acc)) * unit_t);
     v = std::fmax(0.0, pre_v + unit_t * acc);
     speed_data.AppendSpeedPoint(s, t, v, acc, 0.0);
     pre_s = s;

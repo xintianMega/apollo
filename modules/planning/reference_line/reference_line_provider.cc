@@ -176,7 +176,6 @@ const std::list<hdmap::RouteSegments> &route_segments) {
   }
 }
 
-//TODO:
 void ReferenceLineProvider::GenerateThread() {
   while (!is_stop_) {
     static constexpr int32_t kSleepTime = 50;  // milliseconds

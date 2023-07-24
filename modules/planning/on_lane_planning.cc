@@ -244,44 +244,32 @@ void OnLanePlanning::GenerateStopTrajectory(ADCTrajectory* ptr_trajectory_pb) {
 }
 
 //TODO: TX
-void OnLanePlanning::RunOnce(const LocalView& local_view,
-                             ADCTrajectory* const ptr_trajectory_pb) {
+void OnLanePlanning::RunOnce(const LocalView& local_view, ADCTrajectory* const ptr_trajectory_pb) {
   // when rerouting, reference line might not be updated. In this case, planning
   // module maintains not-ready until be restarted.
   static bool failed_to_update_reference_line = false;
   local_view_ = local_view;
   const double start_timestamp = Clock::NowInSeconds();
-  const double start_system_timestamp =
-      std::chrono::duration<double>(
-          std::chrono::system_clock::now().time_since_epoch())
-          .count();
+  const double start_system_timestamp = std::chrono::duration<double>(std::chrono::system_clock::now().time_since_epoch()).count();
 
   // localization
-  ADEBUG << "Get localization:"
-         << local_view_.localization_estimate->DebugString();
+  ADEBUG << "Get localization:" << local_view_.localization_estimate->DebugString();
 
   // chassis
   ADEBUG << "Get chassis:" << local_view_.chassis->DebugString();
 
   //对齐与定位消息的时间戳
-  Status status = injector_->vehicle_state()->Update(
-      *local_view_.localization_estimate, *local_view_.chassis);
+  Status status = injector_->vehicle_state()->Update(*local_view_.localization_estimate, *local_view_.chassis);
 
   VehicleState vehicle_state = injector_->vehicle_state()->vehicle_state();
   const double vehicle_state_timestamp = vehicle_state.timestamp();
-  DCHECK_GE(start_timestamp, vehicle_state_timestamp)
-      << "start_timestamp is behind vehicle_state_timestamp by "
-      << start_timestamp - vehicle_state_timestamp << " secs";
+  DCHECK_GE(start_timestamp, vehicle_state_timestamp) << "start_timestamp is behind vehicle_state_timestamp by "
+  << start_timestamp - vehicle_state_timestamp << " secs";
 
   if (!status.ok() || !util::IsVehicleStateValid(vehicle_state)) {
-    const std::string msg =
-        "Update VehicleStateProvider failed "
-        "or the vehicle state is out dated.";
+    const std::string msg = "Update VehicleStateProvider failed or the vehicle state is out dated.";
     AERROR << msg;
-    ptr_trajectory_pb->mutable_decision()
-        ->mutable_main_decision()
-        ->mutable_not_ready()
-        ->set_reason(msg);
+    ptr_trajectory_pb->mutable_decision()->mutable_main_decision()->mutable_not_ready()->set_reason(msg);
     status.Save(ptr_trajectory_pb->mutable_header()->mutable_status());
     //(all): integrate reverse gear
     ptr_trajectory_pb->set_gear(canbus::Chassis::GEAR_DRIVE);
@@ -290,8 +278,7 @@ void OnLanePlanning::RunOnce(const LocalView& local_view,
     return;
   }
 
-  if (start_timestamp - vehicle_state_timestamp <
-      FLAGS_message_latency_threshold) {
+  if (start_timestamp - vehicle_state_timestamp < FLAGS_message_latency_threshold) {
     vehicle_state = AlignTimeStamp(vehicle_state, start_timestamp);
   }
 
@@ -306,17 +293,13 @@ void OnLanePlanning::RunOnce(const LocalView& local_view,
     planner_->Init(config_);
   }
 
-  failed_to_update_reference_line =
-      (!reference_line_provider_->UpdatedReferenceLine());
+  failed_to_update_reference_line = (!reference_line_provider_->UpdatedReferenceLine());
 
   // early return when reference line fails to update after rerouting
   if (failed_to_update_reference_line) {
     const std::string msg = "Failed to update reference line after rerouting.";
     AERROR << msg;
-    ptr_trajectory_pb->mutable_decision()
-        ->mutable_main_decision()
-        ->mutable_not_ready()
-        ->set_reason(msg);
+    ptr_trajectory_pb->mutable_decision()->mutable_main_decision()->mutable_not_ready()->set_reason(msg);
     status.Save(ptr_trajectory_pb->mutable_header()->mutable_status());
     ptr_trajectory_pb->set_gear(canbus::Chassis::GEAR_DRIVE);
     FillPlanningPb(start_timestamp, ptr_trajectory_pb);
@@ -325,16 +308,13 @@ void OnLanePlanning::RunOnce(const LocalView& local_view,
   }
 
   // planning is triggered by prediction data, but we can still use an estimated cycle time for stitching
-  const double planning_cycle_time =
-      1.0 / static_cast<double>(FLAGS_planning_loop_rate);
+  const double planning_cycle_time = 1.0 / static_cast<double>(FLAGS_planning_loop_rate);
 
   //replan judge & stiching_trajectory
   std::string replan_reason;
-  std::vector<TrajectoryPoint> stitching_trajectory =
-      TrajectoryStitcher::ComputeStitchingTrajectory(
-          vehicle_state, start_timestamp, planning_cycle_time,
-          FLAGS_trajectory_stitching_preserved_length, true,
-          last_publishable_trajectory_.get(), &replan_reason);
+  std::vector<TrajectoryPoint> stitching_trajectory = TrajectoryStitcher::ComputeStitchingTrajectory(
+  vehicle_state, start_timestamp, planning_cycle_time, FLAGS_trajectory_stitching_preserved_length, true,
+  last_publishable_trajectory_.get(), &replan_reason);
 
   injector_->ego_info()->Update(stitching_trajectory.back(), vehicle_state);
   const uint32_t frame_num = static_cast<uint32_t>(seq_num_++);
@@ -343,15 +323,13 @@ void OnLanePlanning::RunOnce(const LocalView& local_view,
   status = InitFrame(frame_num, stitching_trajectory.back(), vehicle_state);
 
   if (status.ok()) {
-    injector_->ego_info()->CalculateFrontObstacleClearDistance(
-        frame_->obstacles());
+    injector_->ego_info()->CalculateFrontObstacleClearDistance(frame_->obstacles());
   }
 
   if (FLAGS_enable_record_debug) {
     frame_->RecordInputDebug(ptr_trajectory_pb->mutable_debug());
   }
-  ptr_trajectory_pb->mutable_latency_stats()->set_init_frame_time_ms(
-      Clock::NowInSeconds() - start_timestamp);
+  ptr_trajectory_pb->mutable_latency_stats()->set_init_frame_time_ms(Clock::NowInSeconds() - start_timestamp);
 
   if (!status.ok()) {
     AERROR << status.ToString();
@@ -366,10 +344,7 @@ void OnLanePlanning::RunOnce(const LocalView& local_view,
       status.Save(estop_trajectory.mutable_header()->mutable_status());
       ptr_trajectory_pb->CopyFrom(estop_trajectory);
     } else {
-      ptr_trajectory_pb->mutable_decision()
-          ->mutable_main_decision()
-          ->mutable_not_ready()
-          ->set_reason(status.ToString());
+      ptr_trajectory_pb->mutable_decision()->mutable_main_decision()->mutable_not_ready()->set_reason(status.ToString());
       status.Save(ptr_trajectory_pb->mutable_header()->mutable_status());
       GenerateStopTrajectory(ptr_trajectory_pb);
     }
@@ -385,12 +360,10 @@ void OnLanePlanning::RunOnce(const LocalView& local_view,
   for (auto& ref_line_info : *frame_->mutable_reference_line_info()) {
     TrafficDecider traffic_decider;
     traffic_decider.Init(traffic_rule_configs_);
-    auto traffic_status =
-        traffic_decider.Execute(frame_.get(), &ref_line_info, injector_);
+    auto traffic_status = traffic_decider.Execute(frame_.get(), &ref_line_info, injector_);
     if (!traffic_status.ok() || !ref_line_info.IsDrivable()) {
       ref_line_info.SetDrivable(false);
-      AWARN << "Reference line " << ref_line_info.Lanes().Id()
-            << " traffic decider failed";
+      AWARN << "Reference line " << ref_line_info.Lanes().Id() << " traffic decider failed";
     }
   }
 
@@ -400,17 +373,12 @@ void OnLanePlanning::RunOnce(const LocalView& local_view,
   for (const auto& p : ptr_trajectory_pb->trajectory_point()) {
     ADEBUG << p.DebugString();
   }
-  const auto end_system_timestamp =
-      std::chrono::duration<double>(
-          std::chrono::system_clock::now().time_since_epoch())
-          .count();
-  const auto time_diff_ms =
-      (end_system_timestamp - start_system_timestamp) * 1000;
+  const auto end_system_timestamp = std::chrono::duration<double>(std::chrono::system_clock::now().time_since_epoch()).count();
+  const auto time_diff_ms = (end_system_timestamp - start_system_timestamp) * 1000;
   ADEBUG << "total planning time spend: " << time_diff_ms << " ms.";
 
   ptr_trajectory_pb->mutable_latency_stats()->set_total_time_ms(time_diff_ms);
-  ADEBUG << "Planning latency: "
-         << ptr_trajectory_pb->latency_stats().DebugString();
+  ADEBUG << "Planning latency: " << ptr_trajectory_pb->latency_stats().DebugString();
 
   //Estop
   if (!status.ok()) {
@@ -438,10 +406,8 @@ void OnLanePlanning::RunOnce(const LocalView& local_view,
     ADEBUG << "Planning pb:" << ptr_trajectory_pb->header().DebugString();
     frame_->set_current_frame_planned_trajectory(*ptr_trajectory_pb);
   } else {
-    auto* ref_line_task =
-        ptr_trajectory_pb->mutable_latency_stats()->add_task_stats();
-    ref_line_task->set_time_ms(reference_line_provider_->LastTimeDelay() *
-                               1000.0);
+    auto* ref_line_task = ptr_trajectory_pb->mutable_latency_stats()->add_task_stats();
+    ref_line_task->set_time_ms(reference_line_provider_->LastTimeDelay() * 1000.0);
     ref_line_task->set_name("ReferenceLineProvider");
     // (all): integrate reverse gear
     ptr_trajectory_pb->set_gear(canbus::Chassis::GEAR_DRIVE);
@@ -450,8 +416,7 @@ void OnLanePlanning::RunOnce(const LocalView& local_view,
 
     frame_->set_current_frame_planned_trajectory(*ptr_trajectory_pb);
     if (FLAGS_enable_planning_smoother) {
-      planning_smoother_.Smooth(injector_->frame_history(), frame_.get(),
-                                ptr_trajectory_pb);
+      planning_smoother_.Smooth(injector_->frame_history(), frame_.get(), ptr_trajectory_pb);
     }
   }
 
@@ -470,12 +435,10 @@ void OnLanePlanning::ExportReferenceLineDebug(planning_internal::Debug* debug) {
     rl_debug->set_cost(reference_line_info.Cost());
     rl_debug->set_is_change_lane_path(reference_line_info.IsChangeLanePath());
     rl_debug->set_is_drivable(reference_line_info.IsDrivable());
-    rl_debug->set_is_protected(reference_line_info.GetRightOfWayStatus() ==
-                               ADCTrajectory::PROTECTED);
+    rl_debug->set_is_protected(reference_line_info.GetRightOfWayStatus() == ADCTrajectory::PROTECTED);
 
     // store kappa and dkappa for performance evaluation
-    const auto& reference_points =
-        reference_line_info.reference_line().reference_points();
+    const auto& reference_points = reference_line_info.reference_line().reference_points();
     double kappa_rms = 0.0;
     double dkappa_rms = 0.0;
     double kappa_max_abs = std::numeric_limits<double>::lowest();
@@ -501,13 +464,10 @@ void OnLanePlanning::ExportReferenceLineDebug(planning_internal::Debug* debug) {
     bool is_off_road = false;
     double minimum_boundary = std::numeric_limits<double>::infinity();
 
-    const double adc_half_width =
-        common::VehicleConfigHelper::GetConfig().vehicle_param().width() / 2.0;
-    const auto& reference_line_path =
-        reference_line_info.reference_line().GetMapPath();
+    const double adc_half_width = common::VehicleConfigHelper::GetConfig().vehicle_param().width() / 2.0;
+    const auto& reference_line_path = reference_line_info.reference_line().GetMapPath();
     const auto sample_s = 0.1;
-    const auto reference_line_length =
-        reference_line_info.reference_line().Length();
+    const auto reference_line_length = reference_line_info.reference_line().Length();
     double average_offset = 0.0;
     double sample_count = 0.0;
     for (double s = 0.0; s < reference_line_length; s += sample_s) {
@@ -556,20 +516,15 @@ const std::vector<TrajectoryPoint>& stitching_trajectory, ADCTrajectory* const p
     auto* engage_advice = ptr_trajectory_pb->mutable_engage_advice();
 
     // enable start auto from open_space planner.
-    if (injector_->vehicle_state()->vehicle_state().driving_mode() !=
-        Chassis::DrivingMode::Chassis_DrivingMode_COMPLETE_AUTO_DRIVE) {
+    if (injector_->vehicle_state()->vehicle_state().driving_mode() != Chassis::DrivingMode::Chassis_DrivingMode_COMPLETE_AUTO_DRIVE) {
       engage_advice->set_advice(EngageAdvice::READY_TO_ENGAGE);
-      engage_advice->set_reason(
-          "Ready to engage when staring with OPEN_SPACE_PLANNER");
+      engage_advice->set_reason("Ready to engage when staring with OPEN_SPACE_PLANNER");
     } else {
       engage_advice->set_advice(EngageAdvice::KEEP_ENGAGED);
       engage_advice->set_reason("Keep engage while in parking");
     }
     // (QiL): refine the export decision in open space info
-    ptr_trajectory_pb->mutable_decision()
-        ->mutable_main_decision()
-        ->mutable_parking()
-        ->set_status(MainParking::IN_PARKING);
+    ptr_trajectory_pb->mutable_decision()->mutable_main_decision()->mutable_parking()->set_status(MainParking::IN_PARKING);
 
     if (FLAGS_enable_record_debug) {
       // ptr_debug->MergeFrom(frame_->open_space_info().debug_instance());
@@ -577,10 +532,10 @@ const std::vector<TrajectoryPoint>& stitching_trajectory, ADCTrajectory* const p
       ADEBUG << "Open space debug information added!";
       // call open space info load debug
       // (Runxin): create a new flag to enable openspace chart
-      ExportOpenSpaceChart(ptr_trajectory_pb->debug(), *ptr_trajectory_pb,
-                           ptr_debug);
+      ExportOpenSpaceChart(ptr_trajectory_pb->debug(), *ptr_trajectory_pb, ptr_debug);
     }
   } else {
+    // 寻找全局最优路径
     const auto* best_ref_info = frame_->FindDriveReferenceLineInfo();
     const auto* target_ref_info = frame_->FindTargetReferenceLineInfo();
     if (!best_ref_info) {
@@ -598,8 +553,7 @@ const std::vector<TrajectoryPoint>& stitching_trajectory, ADCTrajectory* const p
       current_frame_planned_path.push_back(trajectory_point.path_point());
     }
     const auto& best_ref_path = best_ref_info->path_data().discretized_path();
-    std::copy(best_ref_path.begin() + 1, best_ref_path.end(),
-              std::back_inserter(current_frame_planned_path));
+    std::copy(best_ref_path.begin() + 1, best_ref_path.end(), std::back_inserter(current_frame_planned_path));
     frame_->set_current_frame_planned_path(current_frame_planned_path);
 
     ptr_debug->MergeFrom(best_ref_info->debug());
@@ -613,11 +567,9 @@ const std::vector<TrajectoryPoint>& stitching_trajectory, ADCTrajectory* const p
         ExportFailedLaneChangeSTChart(failed_ref_info->debug(), ptr_debug);
       }
     }
-    ptr_trajectory_pb->mutable_latency_stats()->MergeFrom(
-        best_ref_info->latency_stats());
+    ptr_trajectory_pb->mutable_latency_stats()->MergeFrom(best_ref_info->latency_stats());
     // set right of way status
-    ptr_trajectory_pb->set_right_of_way_status(
-        best_ref_info->GetRightOfWayStatus());
+    ptr_trajectory_pb->set_right_of_way_status(best_ref_info->GetRightOfWayStatus());
 
     for (const auto& id : best_ref_info->TargetLaneId()) {
       ptr_trajectory_pb->add_lane_id()->CopyFrom(id);
@@ -633,15 +585,13 @@ const std::vector<TrajectoryPoint>& stitching_trajectory, ADCTrajectory* const p
       *ptr_trajectory_pb->mutable_rss_info() = best_ref_info->rss_info();
     }
 
-    best_ref_info->ExportDecision(ptr_trajectory_pb->mutable_decision(),
-                                  injector_->planning_context());
+    best_ref_info->ExportDecision(ptr_trajectory_pb->mutable_decision(), injector_->planning_context());
 
     // Add debug information.
     if (FLAGS_enable_record_debug) {
       auto* reference_line = ptr_debug->mutable_planning_data()->add_path();
       reference_line->set_name("planning_reference_line");
-      const auto& reference_points =
-          best_ref_info->reference_line().reference_points();
+      const auto& reference_points = best_ref_info->reference_line().reference_points();
       double s = 0.0;
       double prev_x = 0.0;
       double prev_y = 0.0;
@@ -667,20 +617,16 @@ const std::vector<TrajectoryPoint>& stitching_trajectory, ADCTrajectory* const p
       }
     }
 
-    last_publishable_trajectory_.reset(new PublishableTrajectory(
-        current_time_stamp, best_ref_info->trajectory()));
+    last_publishable_trajectory_.reset(new PublishableTrajectory(current_time_stamp, best_ref_info->trajectory()));
 
     ADEBUG << "current_time_stamp: " << current_time_stamp;
 
-    last_publishable_trajectory_->PrependTrajectoryPoints(
-        std::vector<TrajectoryPoint>(stitching_trajectory.begin(),
-                                     stitching_trajectory.end() - 1));
+    last_publishable_trajectory_->PrependTrajectoryPoints(std::vector<TrajectoryPoint>(stitching_trajectory.begin(),
+    stitching_trajectory.end() - 1));
 
     last_publishable_trajectory_->PopulateTrajectoryProtobuf(ptr_trajectory_pb);
 
-    best_ref_info->ExportEngageAdvice(
-        ptr_trajectory_pb->mutable_engage_advice(),
-        injector_->planning_context());
+    best_ref_info->ExportEngageAdvice(ptr_trajectory_pb->mutable_engage_advice(), injector_->planning_context());
   }
 
   return status;
@@ -697,9 +643,8 @@ bool OnLanePlanning::CheckPlanningConfig(const PlanningConfig& config) {
   return true;
 }
 
-void PopulateChartOptions(double x_min, double x_max, std::string x_label,
-                          double y_min, double y_max, std::string y_label,
-                          bool display, Chart* chart) {
+void PopulateChartOptions(double x_min, double x_max, std::string x_label, double y_min, double y_max,
+std::string y_label, bool display, Chart* chart) {
   auto* options = chart->mutable_options();
   options->mutable_x()->set_min(x_min);
   options->mutable_x()->set_max(x_max);
@@ -716,13 +661,11 @@ void AddSTGraph(const STGraphDebug& st_graph, Chart* chart) {
   } else {
     chart->set_title("Planning S-T Graph");
   }
-  PopulateChartOptions(-2.0, 10.0, "t (second)", -10.0, 220.0, "s (meter)",
-                       false, chart);
+  PopulateChartOptions(-2.0, 10.0, "t (second)", -10.0, 220.0, "s (meter)", false, chart);
 
   for (const auto& boundary : st_graph.boundary()) {
     // from 'ST_BOUNDARY_TYPE_' to the end
-    std::string type =
-        StGraphBoundaryDebug_StBoundaryType_Name(boundary.type()).substr(17);
+    std::string type = StGraphBoundaryDebug_StBoundaryType_Name(boundary.type()).substr(17);
 
     auto* boundary_chart = chart->add_polygon();
     auto* properties = boundary_chart->mutable_properties();
@@ -760,8 +703,7 @@ void AddSTGraph(const STGraphDebug& st_graph, Chart* chart) {
 
 void AddSLFrame(const SLFrameDebug& sl_frame, Chart* chart) {
   chart->set_title(sl_frame.name());
-  PopulateChartOptions(0.0, 80.0, "s (meter)", -8.0, 8.0, "l (meter)", false,
-                       chart);
+  PopulateChartOptions(0.0, 80.0, "s (meter)", -8.0, 8.0, "l (meter)", false, chart);
   auto* sl_line = chart->add_line();
   sl_line->set_label("SL Path");
   for (const auto& sl_point : sl_frame.sl_path()) {
@@ -771,12 +713,9 @@ void AddSLFrame(const SLFrameDebug& sl_frame, Chart* chart) {
   }
 }
 
-void AddSpeedPlan(
-    const ::google::protobuf::RepeatedPtrField<SpeedPlan>& speed_plans,
-    Chart* chart) {
+void AddSpeedPlan(const ::google::protobuf::RepeatedPtrField<SpeedPlan>& speed_plans, Chart* chart) {
   chart->set_title("Speed Plan");
-  PopulateChartOptions(0.0, 80.0, "s (meter)", 0.0, 50.0, "v (m/s)", false,
-                       chart);
+  PopulateChartOptions(0.0, 80.0, "s (meter)", 0.0, 50.0, "v (m/s)", false, chart);
 
   for (const auto& speed_plan : speed_plans) {
     auto* line = chart->add_line();
@@ -801,9 +740,8 @@ void AddSpeedPlan(
   }
 }
 
-void OnLanePlanning::ExportFailedLaneChangeSTChart(
-    const planning_internal::Debug& debug_info,
-    planning_internal::Debug* debug_chart) {
+void OnLanePlanning::ExportFailedLaneChangeSTChart(const planning_internal::Debug& debug_info,
+planning_internal::Debug* debug_chart) {
   const auto& src_data = debug_info.planning_data();
   auto* dst_data = debug_chart->mutable_planning_data();
   for (const auto& st_graph : src_data.st_graph()) {
@@ -811,9 +749,7 @@ void OnLanePlanning::ExportFailedLaneChangeSTChart(
   }
 }
 
-void OnLanePlanning::ExportOnLaneChart(
-    const planning_internal::Debug& debug_info,
-    planning_internal::Debug* debug_chart) {
+void OnLanePlanning::ExportOnLaneChart(const planning_internal::Debug& debug_info, planning_internal::Debug* debug_chart) {
   const auto& src_data = debug_info.planning_data();
   auto* dst_data = debug_chart->mutable_planning_data();
   for (const auto& st_graph : src_data.st_graph()) {
@@ -825,9 +761,8 @@ void OnLanePlanning::ExportOnLaneChart(
   AddSpeedPlan(src_data.speed_plan(), dst_data->add_chart());
 }
 
-void OnLanePlanning::ExportOpenSpaceChart(
-    const planning_internal::Debug& debug_info,
-    const ADCTrajectory& trajectory_pb, planning_internal::Debug* debug_chart) {
+void OnLanePlanning::ExportOpenSpaceChart(const planning_internal::Debug& debug_info,
+const ADCTrajectory& trajectory_pb, planning_internal::Debug* debug_chart) {
   // Export Trajectory Visualization Chart.
   if (FLAGS_enable_record_debug) {
     AddOpenSpaceOptimizerResult(debug_info, debug_chart);
@@ -839,9 +774,8 @@ void OnLanePlanning::ExportOpenSpaceChart(
   }
 }
 
-void OnLanePlanning::AddOpenSpaceOptimizerResult(
-    const planning_internal::Debug& debug_info,
-    planning_internal::Debug* debug_chart) {
+void OnLanePlanning::AddOpenSpaceOptimizerResult(const planning_internal::Debug& debug_info,
+planning_internal::Debug* debug_chart) {
   // if open space info provider success run
   if (!frame_->open_space_info().open_space_provider_success()) {
     return;
@@ -851,11 +785,8 @@ void OnLanePlanning::AddOpenSpaceOptimizerResult(
   auto open_space_debug = debug_info.planning_data().open_space();
 
   chart->set_title("Open Space Trajectory Optimizer Visualization");
-  PopulateChartOptions(open_space_debug.xy_boundary(0) - 1.0,
-                       open_space_debug.xy_boundary(1) + 1.0, "x (meter)",
-                       open_space_debug.xy_boundary(2) - 1.0,
-                       open_space_debug.xy_boundary(3) + 1.0, "y (meter)", true,
-                       chart);
+  PopulateChartOptions(open_space_debug.xy_boundary(0) - 1.0, open_space_debug.xy_boundary(1) + 1.0, "x (meter)",
+  open_space_debug.xy_boundary(2) - 1.0, open_space_debug.xy_boundary(3) + 1.0, "y (meter)", true, chart);
 
   chart->mutable_options()->set_sync_xy_window_size(true);
   chart->mutable_options()->set_aspect_ratio(0.9);
@@ -864,8 +795,7 @@ void OnLanePlanning::AddOpenSpaceOptimizerResult(
     auto* obstacle_outline = chart->add_line();
     obstacle_outline->set_label(absl::StrCat("Bdr", obstacle_index));
     obstacle_index += 1;
-    for (int vertice_index = 0;
-         vertice_index < obstacle.vertices_x_coords_size(); vertice_index++) {
+    for (int vertice_index = 0; vertice_index < obstacle.vertices_x_coords_size(); vertice_index++) {
       auto* point_debug = obstacle_outline->add_point();
       point_debug->set_x(obstacle.vertices_x_coords(vertice_index));
       point_debug->set_y(obstacle.vertices_y_coords(vertice_index));
@@ -883,8 +813,7 @@ void OnLanePlanning::AddOpenSpaceOptimizerResult(
   auto* smoothed_line = chart->add_line();
   smoothed_line->set_label("Smooth");
   // size_t adc_label = 0;
-  for (int i = 0; i < smoothed_trajectory.vehicle_motion_point_size() / 2;
-       i++) {
+  for (int i = 0; i < smoothed_trajectory.vehicle_motion_point_size() / 2; i++) {
     auto& point = smoothed_trajectory.vehicle_motion_point(i);
     const auto x = point.trajectory_point().path_point().x();
     const auto y = point.trajectory_point().path_point().y();
@@ -917,8 +846,7 @@ void OnLanePlanning::AddOpenSpaceOptimizerResult(
   auto warm_start_trajectory = open_space_debug.warm_start_trajectory();
   auto* warm_start_line = chart->add_line();
   warm_start_line->set_label("WarmStart");
-  for (int i = 0; i < warm_start_trajectory.vehicle_motion_point_size() / 2;
-       i++) {
+  for (int i = 0; i < warm_start_trajectory.vehicle_motion_point_size() / 2; i++) {
     auto* point_debug = warm_start_line->add_point();
     auto& point = warm_start_trajectory.vehicle_motion_point(i);
     point_debug->set_x(point.trajectory_point().path_point().x());
@@ -933,19 +861,16 @@ void OnLanePlanning::AddOpenSpaceOptimizerResult(
   (*warm_start_properties)["showLine"] = "true";
 }
 
-void OnLanePlanning::AddPartitionedTrajectory(
-    const planning_internal::Debug& debug_info,
-    planning_internal::Debug* debug_chart) {
+void OnLanePlanning::AddPartitionedTrajectory(const planning_internal::Debug& debug_info,
+planning_internal::Debug* debug_chart) {
   // if open space info provider success run
   if (!frame_->open_space_info().open_space_provider_success()) {
     return;
   }
 
   const auto& open_space_debug = debug_info.planning_data().open_space();
-  const auto& chosen_trajectories =
-      open_space_debug.chosen_trajectory().trajectory();
-  if (chosen_trajectories.empty() ||
-      chosen_trajectories[0].trajectory_point().empty()) {
+  const auto& chosen_trajectories = open_space_debug.chosen_trajectory().trajectory();
+  if (chosen_trajectories.empty() || chosen_trajectories[0].trajectory_point().empty()) {
     return;
   }
 
@@ -989,11 +914,9 @@ void OnLanePlanning::AddPartitionedTrajectory(
   auto* kappa_line = chart_kappa->add_line();
   // Draw partitioned trajectories
   size_t partitioned_trajectory_label = 0;
-  for (const auto& partitioned_trajectory :
-       open_space_debug.partitioned_trajectories().trajectory()) {
+  for (const auto& partitioned_trajectory : open_space_debug.partitioned_trajectories().trajectory()) {
     auto* partition_line = chart->add_line();
-    partition_line->set_label(
-        absl::StrCat("Partitioned ", partitioned_trajectory_label));
+    partition_line->set_label(absl::StrCat("Partitioned ", partitioned_trajectory_label));
     ++partitioned_trajectory_label;
     for (const auto& point : partitioned_trajectory.trajectory_point()) {
       auto* point_debug = partition_line->add_point();
@@ -1021,10 +944,8 @@ void OnLanePlanning::AddPartitionedTrajectory(
   auto* stitching_line = chart->add_line();
   stitching_line->set_label("TrajectoryStitchingPoint");
   auto* trajectory_stitching_point = stitching_line->add_point();
-  trajectory_stitching_point->set_x(
-      open_space_debug.trajectory_stitching_point().path_point().x());
-  trajectory_stitching_point->set_y(
-      open_space_debug.trajectory_stitching_point().path_point().y());
+  trajectory_stitching_point->set_x(open_space_debug.trajectory_stitching_point().path_point().x());
+  trajectory_stitching_point->set_y(open_space_debug.trajectory_stitching_point().path_point().y());
   // Set chartJS's dataset properties
   auto* stitching_properties = stitching_line->mutable_properties();
   (*stitching_properties)["borderWidth"] = "3";
@@ -1039,10 +960,8 @@ void OnLanePlanning::AddPartitionedTrajectory(
     auto* collision_line = chart->add_line();
     collision_line->set_label("FutureCollisionPoint");
     auto* future_collision_point = collision_line->add_point();
-    future_collision_point->set_x(
-        open_space_debug.future_collision_point().path_point().x());
-    future_collision_point->set_y(
-        open_space_debug.future_collision_point().path_point().y());
+    future_collision_point->set_x(open_space_debug.future_collision_point().path_point().x());
+    future_collision_point->set_y(open_space_debug.future_collision_point().path_point().y());
     // Set chartJS's dataset properties
     auto* collision_properties = collision_line->mutable_properties();
     (*collision_properties)["borderWidth"] = "3";
@@ -1052,10 +971,8 @@ void OnLanePlanning::AddPartitionedTrajectory(
     (*stitching_properties)["showLine"] = "true";
     (*stitching_properties)["pointStyle"] = "cross";
 
-    const auto& fallback_trajectories =
-        open_space_debug.fallback_trajectory().trajectory();
-    if (fallback_trajectories.empty() ||
-        fallback_trajectories[0].trajectory_point().empty()) {
+    const auto& fallback_trajectories = open_space_debug.fallback_trajectory().trajectory();
+    if (fallback_trajectories.empty() || fallback_trajectories[0].trajectory_point().empty()) {
       return;
     }
     const auto& fallback_trajectory = fallback_trajectories[0];
@@ -1077,8 +994,7 @@ void OnLanePlanning::AddPartitionedTrajectory(
   }
 }
 
-void OnLanePlanning::AddStitchSpeedProfile(
-    planning_internal::Debug* debug_chart) {
+void OnLanePlanning::AddStitchSpeedProfile(planning_internal::Debug* debug_chart) {
   if (!injector_->frame_history()->Latest()) {
     AINFO << "Planning frame is empty!";
     return;
@@ -1093,19 +1009,15 @@ void OnLanePlanning::AddStitchSpeedProfile(
   chart->set_title("Open Space Speed Plan Visualization");
   auto* options = chart->mutable_options();
   // options->mutable_x()->set_mid_value(Clock::NowInSeconds());
-  double xmin(std::numeric_limits<double>::max()),
-      xmax(std::numeric_limits<double>::lowest()),
-      ymin(std::numeric_limits<double>::max()),
-      ymax(std::numeric_limits<double>::lowest());
+  double xmin(std::numeric_limits<double>::max()), xmax(std::numeric_limits<double>::lowest()),
+  ymin(std::numeric_limits<double>::max()), ymax(std::numeric_limits<double>::lowest());
   // auto smoothed_trajectory = open_space_debug.smoothed_trajectory();
   auto* speed_profile = chart->add_line();
   speed_profile->set_label("Speed Profile");
-  const auto& last_trajectory =
-      injector_->frame_history()->Latest()->current_frame_planned_trajectory();
+  const auto& last_trajectory = injector_->frame_history()->Latest()->current_frame_planned_trajectory();
   for (const auto& point : last_trajectory.trajectory_point()) {
     auto* point_debug = speed_profile->add_point();
-    point_debug->set_x(point.relative_time() +
-                       last_trajectory.header().timestamp_sec());
+    point_debug->set_x(point.relative_time() + last_trajectory.header().timestamp_sec());
     point_debug->set_y(point.v());
     if (point_debug->x() > xmax) xmax = point_debug->x();
     if (point_debug->x() < xmin) xmin = point_debug->x();
@@ -1126,8 +1038,7 @@ void OnLanePlanning::AddStitchSpeedProfile(
   (*speed_profile_properties)["showLine"] = "true";
 }
 
-void OnLanePlanning::AddPublishedSpeed(const ADCTrajectory& trajectory_pb,
-                                       planning_internal::Debug* debug_chart) {
+void OnLanePlanning::AddPublishedSpeed(const ADCTrajectory& trajectory_pb, planning_internal::Debug* debug_chart) {
   // if open space info provider success run
   if (!frame_->open_space_info().open_space_provider_success()) {
     return;
@@ -1140,14 +1051,11 @@ void OnLanePlanning::AddPublishedSpeed(const ADCTrajectory& trajectory_pb,
   // auto smoothed_trajectory = open_space_debug.smoothed_trajectory();
   auto* speed_profile = chart->add_line();
   speed_profile->set_label("Speed Profile");
-  double xmin(std::numeric_limits<double>::max()),
-      xmax(std::numeric_limits<double>::lowest()),
-      ymin(std::numeric_limits<double>::max()),
-      ymax(std::numeric_limits<double>::lowest());
+  double xmin(std::numeric_limits<double>::max()), xmax(std::numeric_limits<double>::lowest()),
+  ymin(std::numeric_limits<double>::max()), ymax(std::numeric_limits<double>::lowest());
   for (const auto& point : trajectory_pb.trajectory_point()) {
     auto* point_debug = speed_profile->add_point();
-    point_debug->set_x(point.relative_time() +
-                       trajectory_pb.header().timestamp_sec());
+    point_debug->set_x(point.relative_time() + trajectory_pb.header().timestamp_sec());
     if (trajectory_pb.gear() == canbus::Chassis::GEAR_DRIVE) {
       point_debug->set_y(point.v());
     }
@@ -1191,12 +1099,10 @@ void OnLanePlanning::AddPublishedSpeed(const ADCTrajectory& trajectory_pb,
   (*sliding_line_properties)["showLine"] = "true";
 }
 
-VehicleState OnLanePlanning::AlignTimeStamp(const VehicleState& vehicle_state,
-                                            const double curr_timestamp) const {
+VehicleState OnLanePlanning::AlignTimeStamp(const VehicleState& vehicle_state, const double curr_timestamp) const {
   // (Jinyun): use the same method in trajectory stitching
   //               for forward prediction
-  auto future_xy = injector_->vehicle_state()->EstimateFuturePosition(
-      curr_timestamp - vehicle_state.timestamp());
+  auto future_xy = injector_->vehicle_state()->EstimateFuturePosition(curr_timestamp - vehicle_state.timestamp());
 
   VehicleState aligned_vehicle_state = vehicle_state;
   aligned_vehicle_state.set_x(future_xy.x());
@@ -1205,16 +1111,13 @@ VehicleState OnLanePlanning::AlignTimeStamp(const VehicleState& vehicle_state,
   return aligned_vehicle_state;
 }
 
-void OnLanePlanning::AddPublishedAcceleration(
-    const ADCTrajectory& trajectory_pb, planning_internal::Debug* debug) {
+void OnLanePlanning::AddPublishedAcceleration(const ADCTrajectory& trajectory_pb, planning_internal::Debug* debug) {
   // if open space info provider success run
   if (!frame_->open_space_info().open_space_provider_success()) {
     return;
   }
-  double xmin(std::numeric_limits<double>::max()),
-      xmax(std::numeric_limits<double>::lowest()),
-      ymin(std::numeric_limits<double>::max()),
-      ymax(std::numeric_limits<double>::lowest());
+  double xmin(std::numeric_limits<double>::max()), xmax(std::numeric_limits<double>::lowest()),
+  ymin(std::numeric_limits<double>::max()), ymax(std::numeric_limits<double>::lowest());
   auto chart = debug->mutable_planning_data()->add_chart();
   chart->set_title("Acceleration Partition Visualization");
   auto* options = chart->mutable_options();
@@ -1224,8 +1127,7 @@ void OnLanePlanning::AddPublishedAcceleration(
   acceleration_profile->set_label("Acceleration Profile");
   for (const auto& point : trajectory_pb.trajectory_point()) {
     auto* point_debug = acceleration_profile->add_point();
-    point_debug->set_x(point.relative_time() +
-                       trajectory_pb.header().timestamp_sec());
+    point_debug->set_x(point.relative_time() + trajectory_pb.header().timestamp_sec());
     if (trajectory_pb.gear() == canbus::Chassis::GEAR_DRIVE)
       point_debug->set_y(point.a());
     if (trajectory_pb.gear() == canbus::Chassis::GEAR_REVERSE)
@@ -1241,8 +1143,7 @@ void OnLanePlanning::AddPublishedAcceleration(
   options->mutable_y()->set_max(ymax);
   options->mutable_y()->set_label_string("acceleration (m/s)");
   // Set chartJS's dataset properties
-  auto* acceleration_profile_properties =
-      acceleration_profile->mutable_properties();
+  auto* acceleration_profile_properties = acceleration_profile->mutable_properties();
   (*acceleration_profile_properties)["borderWidth"] = "2";
   (*acceleration_profile_properties)["pointRadius"] = "0";
   (*acceleration_profile_properties)["lineTension"] = "0";

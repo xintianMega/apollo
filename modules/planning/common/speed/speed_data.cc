@@ -56,8 +56,7 @@ void SpeedData::AppendSpeedPoint(const double s, const double time,
   push_back(common::util::PointFactory::ToSpeedPoint(s, time, v, a, da));
 }
 
-bool SpeedData::EvaluateByTime(const double t,
-                               common::SpeedPoint* const speed_point) const {
+bool SpeedData::EvaluateByTime(const double t, common::SpeedPoint* const speed_point) const {
   if (size() < 2) {
     return false;
   }
@@ -96,8 +95,7 @@ bool SpeedData::EvaluateByTime(const double t,
   return true;
 }
 
-bool SpeedData::EvaluateByS(const double s,
-                            common::SpeedPoint* const speed_point) const {
+bool SpeedData::EvaluateByS(const double s, common::SpeedPoint* const speed_point) const {
   if (size() < 2) {
     return false;
   }

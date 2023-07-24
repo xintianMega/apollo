@@ -43,8 +43,7 @@ using apollo::common::math::Vec2d;
 using apollo::cyber::Clock;
 using apollo::perception::PerceptionObstacle;
 
-SpeedDecider::SpeedDecider(const TaskConfig& config, const std::shared_ptr<DependencyInjector>& injector)
-    : Task(config, injector) {}
+SpeedDecider::SpeedDecider(const TaskConfig& config, const std::shared_ptr<DependencyInjector>& injector) : Task(config, injector) {}
 
 common::Status SpeedDecider::Execute(Frame* frame, ReferenceLineInfo* reference_line_info) {
   Task::Execute(frame, reference_line_info);
@@ -59,9 +58,8 @@ common::Status SpeedDecider::Execute(Frame* frame, ReferenceLineInfo* reference_
   return Status::OK();
 }
 
-SpeedDecider::STLocation SpeedDecider::GetSTLocation(
-const PathDecision* const path_decision, const SpeedData& speed_profile,
-const STBoundary& st_boundary) const {
+SpeedDecider::STLocation SpeedDecider::GetSTLocation(const PathDecision* const path_decision,
+const SpeedData& speed_profile, const STBoundary& st_boundary) const {
   if (st_boundary.IsEmpty()) {
     return BELOW;
   }
@@ -87,8 +85,7 @@ const STBoundary& st_boundary) const {
         st_location = CROSS;
 
         if (!FLAGS_use_st_drivable_boundary) {
-          if (st_boundary.boundary_type() ==
-              STBoundary::BoundaryType::KEEP_CLEAR) {
+          if (st_boundary.boundary_type() == STBoundary::BoundaryType::KEEP_CLEAR) {
             if (!CheckKeepClearCrossable(path_decision, speed_profile, st_boundary)) {
               st_location = BELOW;
             }
@@ -112,9 +109,8 @@ const STBoundary& st_boundary) const {
   return st_location;
 }
 
-bool SpeedDecider::CheckKeepClearCrossable(
-const PathDecision* const path_decision, const SpeedData& speed_profile,
-const STBoundary& keep_clear_st_boundary) const {
+bool SpeedDecider::CheckKeepClearCrossable(const PathDecision* const path_decision,
+const SpeedData& speed_profile, const STBoundary& keep_clear_st_boundary) const {
   bool keep_clear_crossable = true;
 
   const auto& last_speed_point = speed_profile.back();
@@ -200,7 +196,7 @@ Status SpeedDecider::MakeObjectDecision(const SpeedData& speed_profile, PathDeci
 
     if (boundary.IsEmpty() || boundary.max_s() < 0.0 || boundary.max_t() < 0.0
     || boundary.min_t() >= speed_profile.back().t()) {
-      AppendIgnoreDecision(mutable_obstacle);
+      AppendIgnoreDecision(mutable_obstacle);  // 如果前方或者侧方已存在标签，那么跳过，否则加上ignore的标签
       continue;
     }
     if (obstacle->HasLongitudinalDecision()) {
@@ -209,6 +205,7 @@ Status SpeedDecider::MakeObjectDecision(const SpeedData& speed_profile, PathDeci
     }
 
     // for Virtual obstacle, skip if center point NOT "on lane"
+    // 对于虚拟目标 Virtual obstacle，如果不在referenceline的车道上，则跳过
     if (obstacle->IsVirtual()) {
       const auto& obstacle_box = obstacle->PerceptionBoundingBox();
       if (!reference_line_->IsOnLane(obstacle_box.center())) {
@@ -217,6 +214,7 @@ Status SpeedDecider::MakeObjectDecision(const SpeedData& speed_profile, PathDeci
     }
 
     // always STOP for pedestrian
+    // 如果是行人则决策结果置为stop
     if (CheckStopForPedestrian(*mutable_obstacle)) {
       ObjectDecisionType stop_decision;
       if (CreateStopDecision(*mutable_obstacle, &stop_decision, -FLAGS_min_stop_distance_obstacle)) {
@@ -225,8 +223,8 @@ Status SpeedDecider::MakeObjectDecision(const SpeedData& speed_profile, PathDeci
       continue;
     }
 
-    auto location = GetSTLocation(path_decision, speed_profile, boundary);
-
+    // 获取障碍物在st图上与自车路径的位置关系
+    auto location = GetSTLocation(path_decision, speed_profile, boundary);`
     if (!FLAGS_use_st_drivable_boundary) {
       if (boundary.boundary_type() == STBoundary::BoundaryType::KEEP_CLEAR) {
         if (CheckKeepClearBlocked(path_decision, *obstacle)) {
@@ -235,7 +233,11 @@ Status SpeedDecider::MakeObjectDecision(const SpeedData& speed_profile, PathDeci
       }
     }
 
+    // 根据不同的STLocation，来对障碍物进行决策
     switch (location) {
+      //如果无人车在障碍物的后方BELOW：
+      /*如果st框的类型为禁停，那么设置为停车(个人理解为先停车前方障碍物驶过，再进入禁停区，因为禁停区无法停车。是否设置跟车也可以？)
+        否则如果障碍物速度大，可以设置为跟车，障碍物速度小可以设置为停车*/
       case BELOW:
         if (boundary.boundary_type() == STBoundary::BoundaryType::KEEP_CLEAR) {
           ObjectDecisionType stop_decision;
@@ -264,6 +266,9 @@ Status SpeedDecider::MakeObjectDecision(const SpeedData& speed_profile, PathDeci
           }
         }
         break;
+      /*如果无人车在障碍物的前方ABOVE
+        如果st框的类型为禁停，那么可以忽略(因为已经过了禁停区)
+        否则就设置为超车(已经超过了)*/
       case ABOVE:
         if (boundary.boundary_type() == STBoundary::BoundaryType::KEEP_CLEAR) {
           ObjectDecisionType ignore;

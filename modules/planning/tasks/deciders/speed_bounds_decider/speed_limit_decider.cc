@@ -56,16 +56,18 @@ SpeedLimit* const speed_limit_data) const {
     }
 
     // (1) speed limit from map
+    //车道本身限制，例如速度不大于60km/h
     double speed_limit_from_reference_line = reference_line_.GetSpeedLimitFromS(reference_line_s);
 
     // (2) speed limit from path curvature
     //  -- 2.1: limit by centripetal force (acceleration)
+    // 向心加速度限制
     const double speed_limit_from_centripetal_acc = std::sqrt(speed_bounds_config_.max_centric_acceleration_limit() /
     std::fmax(std::fabs(discretized_path.at(i).kappa()), speed_bounds_config_.minimal_kappa()));
 
     // (3) speed limit from nudge obstacles
-    // (all): in future, expand the speed limit not only to obstacles with
-    // nudge decisions.
+    // (all): in future, expand the speed limit not only to obstacles with nudge decisions.
+    //遍历所有障碍物的侧方向标签，如果存在以下两种情况就需要微调速度
     double speed_limit_from_nearby_obstacles = std::numeric_limits<double>::max();
     const double collision_safety_range = speed_bounds_config_.collision_safety_range();
     for (const auto* ptr_obstacle : obstacles.Items()) {
@@ -100,11 +102,13 @@ SpeedLimit* const speed_limit_data) const {
       const double frenet_point_l = frenet_path.at(i).l();
 
       // obstacle is on the right of ego vehicle (at path point i)
+      //情况1：障碍物标签为向左微调ObjectNudge::LEFT_NUDGE，并且无人车确实被障碍物阻挡
       bool is_close_on_left = (nudge_decision.type() == ObjectNudge::LEFT_NUDGE) &&
       (frenet_point_l - vehicle_param_.right_edge_to_center() - collision_safety_range <
       ptr_obstacle->PerceptionSLBoundary().end_l());
 
       // obstacle is on the left of ego vehicle (at path point i)
+      //情况2：障碍物标签为向右微调ObjectNudge::RIGHT_NUDGE，并且无人车确实被障碍物阻挡
       bool is_close_on_right = (nudge_decision.type() == ObjectNudge::RIGHT_NUDGE) &&
       (ptr_obstacle->PerceptionSLBoundary().start_l() - collision_safety_range <
       frenet_point_l + vehicle_param_.left_edge_to_center());

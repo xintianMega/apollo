@@ -75,8 +75,12 @@ class STBoundary : public common::math::Polygon2d {
     UNKNOWN,
     STOP,
     FOLLOW,
+    /*在Apollo中，"YIELD"是指让行操作。这个概念表示一辆车在道路上遇到让行标志或情况时，需要让其他车辆或行人先行。*/
     YIELD,
+    /*Apollo中的"OVERTAKE"是指超车操作。这个概念表示一辆车在道路上超越其他车辆的行为。*/
     OVERTAKE,
+    /*Apollo中的"KEEP_CLEAR"是指保持通畅的交通标志。这个标志通常用于指示车辆在交叉路口或其他特定区域保持通畅，不要占用或阻塞交通通道。
+      在自动驾驶系统中，车辆需要识别并遵守KEEP_CLEAR标志，以确保交通的顺畅和安全。*/
     KEEP_CLEAR,
   };
 
