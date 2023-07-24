@@ -40,8 +40,7 @@ class StGraphPoint {
   double spatial_potential_cost() const;
   double total_cost() const;
 
-  void Init(const std::uint32_t index_t, const std::uint32_t index_s,
-            const STPoint& st_point);
+  void Init(const std::uint32_t index_t, const std::uint32_t index_s, const STPoint& st_point);
 
   // given reference speed profile, reach the cost, including position
   void SetReferenceCost(const double reference_cost);

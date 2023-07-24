@@ -42,10 +42,8 @@ namespace planning {
 
 class GriddedPathTimeGraph {
  public:
-  GriddedPathTimeGraph(const StGraphData& st_graph_data,
-                       const DpStSpeedOptimizerConfig& dp_config,
-                       const std::vector<const Obstacle*>& obstacles,
-                       const common::TrajectoryPoint& init_point);
+  GriddedPathTimeGraph(const StGraphData& st_graph_data,const DpStSpeedOptimizerConfig& dp_config,
+  const std::vector<const Obstacle*>& obstacles, const common::TrajectoryPoint& init_point);
 
   common::Status Search(SpeedData* const speed_data);
 
@@ -67,19 +65,14 @@ class GriddedPathTimeGraph {
   void CalculateCostAt(const std::shared_ptr<StGraphMessage>& msg);
 
   double CalculateEdgeCost(const STPoint& first, const STPoint& second,
-                           const STPoint& third, const STPoint& forth,
-                           const double speed_limit, const double cruise_speed);
-  double CalculateEdgeCostForSecondCol(const uint32_t row,
-                                       const double speed_limit,
-                                       const double cruise_speed);
-  double CalculateEdgeCostForThirdCol(const uint32_t curr_row,
-                                      const uint32_t pre_row,
-                                      const double speed_limit,
-                                      const double cruise_speed);
+  const STPoint& third, const STPoint& forth, const double speed_limit, const double cruise_speed);
+  double CalculateEdgeCostForSecondCol(const uint32_t row, const double speed_limit,
+  const double cruise_speed);
+  double CalculateEdgeCostForThirdCol(const uint32_t curr_row, const uint32_t pre_row,
+  const double speed_limit, const double cruise_speed);
 
   // get the row-range of next time step
-  void GetRowRange(const StGraphPoint& point, size_t* next_highest_row,
-                   size_t* next_lowest_row);
+  void GetRowRange(const StGraphPoint& point, size_t* next_highest_row, size_t* next_lowest_row);
 
  private:
   const StGraphData& st_graph_data_;
@@ -95,8 +88,7 @@ class GriddedPathTimeGraph {
   const std::vector<const Obstacle*>& obstacles_;
 
   // vehicle configuration parameter
-  const common::VehicleParam& vehicle_param_ =
-      common::VehicleConfigHelper::GetConfig().vehicle_param();
+  const common::VehicleParam& vehicle_param_ = common::VehicleConfigHelper::GetConfig().vehicle_param();
 
   // initial status
   common::TrajectoryPoint init_point_;

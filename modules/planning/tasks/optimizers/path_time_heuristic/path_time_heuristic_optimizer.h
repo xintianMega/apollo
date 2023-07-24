@@ -35,17 +35,16 @@ namespace planning {
  * programming algorithm.
  */
 class PathTimeHeuristicOptimizer : public SpeedOptimizer {
- public:
+public:
   explicit PathTimeHeuristicOptimizer(const TaskConfig& config);
 
- private:
-  common::Status Process(const PathData& path_data,
-                         const common::TrajectoryPoint& init_point,
-                         SpeedData* const speed_data) override;
+private:
+  common::Status Process(const PathData& path_data, const common::TrajectoryPoint& init_point,
+  SpeedData* const speed_data) override;
 
   bool SearchPathTimeGraph(SpeedData* speed_data) const;
 
- private:
+private:
   common::TrajectoryPoint init_point_;
   SLBoundary adc_sl_boundary_;
   SpeedHeuristicOptimizerConfig speed_heuristic_optimizer_config_;
