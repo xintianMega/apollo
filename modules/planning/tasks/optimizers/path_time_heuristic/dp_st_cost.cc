@@ -33,17 +33,10 @@ namespace {
 constexpr double kInf = std::numeric_limits<double>::infinity();
 }
 
-DpStCost::DpStCost(const DpStSpeedOptimizerConfig& config, const double total_t,
-                   const double total_s,
-                   const std::vector<const Obstacle*>& obstacles,
-                   const STDrivableBoundary& st_drivable_boundary,
-                   const common::TrajectoryPoint& init_point)
-    : config_(config),
-      obstacles_(obstacles),
-      st_drivable_boundary_(st_drivable_boundary),
-      init_point_(init_point),
-      unit_t_(config.unit_t()),
-      total_s_(total_s) {
+DpStCost::DpStCost(const DpStSpeedOptimizerConfig& config, const double total_t, const double total_s,
+const std::vector<const Obstacle*>& obstacles,const STDrivableBoundary& st_drivable_boundary,
+const common::TrajectoryPoint& init_point) : config_(config), obstacles_(obstacles),
+st_drivable_boundary_(st_drivable_boundary), init_point_(init_point), unit_t_(config.unit_t()), total_s_(total_s) {
   int index = 0;
   for (const auto& obstacle : obstacles) {
     boundary_map_[obstacle->path_st_boundary().id()] = index++;
@@ -51,9 +44,7 @@ DpStCost::DpStCost(const DpStSpeedOptimizerConfig& config, const double total_t,
 
   AddToKeepClearRange(obstacles);
 
-  const auto dimension_t =
-      static_cast<uint32_t>(std::ceil(total_t / static_cast<double>(unit_t_))) +
-      1;
+  const auto dimension_t = static_cast<uint32_t>(std::ceil(total_t / static_cast<double>(unit_t_))) + 1;
   boundary_cost_.resize(obstacles_.size());
   for (auto& vec : boundary_cost_) {
     vec.resize(dimension_t, std::make_pair(-1.0, -1.0));
@@ -62,14 +53,12 @@ DpStCost::DpStCost(const DpStSpeedOptimizerConfig& config, const double total_t,
   jerk_cost_.fill(-1.0);
 }
 
-void DpStCost::AddToKeepClearRange(
-    const std::vector<const Obstacle*>& obstacles) {
+void DpStCost::AddToKeepClearRange(const std::vector<const Obstacle*>& obstacles) {
   for (const auto& obstacle : obstacles) {
     if (obstacle->path_st_boundary().IsEmpty()) {
       continue;
     }
-    if (obstacle->path_st_boundary().boundary_type() !=
-        STBoundary::BoundaryType::KEEP_CLEAR) {
+    if (obstacle->path_st_boundary().boundary_type() != STBoundary::BoundaryType::KEEP_CLEAR) {
       continue;
     }
 
@@ -161,8 +150,7 @@ double DpStCost::GetObstacleCost(const StGraphPoint& st_graph_point) {
     int boundary_index = boundary_map_[boundary.id()];
     if (boundary_cost_[boundary_index][st_graph_point.index_t()].first < 0.0) {
       boundary.GetBoundarySRange(t, &s_upper, &s_lower);
-      boundary_cost_[boundary_index][st_graph_point.index_t()] =
-          std::make_pair(s_upper, s_lower);
+      boundary_cost_[boundary_index][st_graph_point.index_t()] = std::make_pair(s_upper, s_lower);
     } else {
       s_upper = boundary_cost_[boundary_index][st_graph_point.index_t()].first;
       s_lower = boundary_cost_[boundary_index][st_graph_point.index_t()].second;
@@ -173,18 +161,15 @@ double DpStCost::GetObstacleCost(const StGraphPoint& st_graph_point) {
         continue;
       } else {
         auto s_diff = follow_distance_s - s_lower + s;
-        cost += config_.obstacle_weight() * config_.default_obstacle_cost() *
-                s_diff * s_diff;
+        cost += config_.obstacle_weight() * config_.default_obstacle_cost() * s_diff * s_diff;
       }
     } else if (s > s_upper) {
-      const double overtake_distance_s =
-          StGapEstimator::EstimateSafeOvertakingGap();
+      const double overtake_distance_s = StGapEstimator::EstimateSafeOvertakingGap();
       if (s > s_upper + overtake_distance_s) {  // or calculated from velocity
         continue;
       } else {
         auto s_diff = overtake_distance_s + s_upper - s;
-        cost += config_.obstacle_weight() * config_.default_obstacle_cost() *
-                s_diff * s_diff;
+        cost += config_.obstacle_weight() * config_.default_obstacle_cost() * s_diff * s_diff;
       }
     }
   }
@@ -195,44 +180,34 @@ double DpStCost::GetSpatialPotentialCost(const StGraphPoint& point) {
   return (total_s_ - point.point().s()) * config_.spatial_potential_penalty();
 }
 
-double DpStCost::GetReferenceCost(const STPoint& point,
-                                  const STPoint& reference_point) const {
-  return config_.reference_weight() * (point.s() - reference_point.s()) *
-         (point.s() - reference_point.s()) * unit_t_;
+double DpStCost::GetReferenceCost(const STPoint& point, const STPoint& reference_point) const {
+  return config_.reference_weight() * (point.s() - reference_point.s()) * (point.s() - reference_point.s()) * unit_t_;
 }
 
-double DpStCost::GetSpeedCost(const STPoint& first, const STPoint& second,
-                              const double speed_limit,
-                              const double cruise_speed) const {
+double DpStCost::GetSpeedCost(const STPoint& first, const STPoint& second, const double speed_limit,
+const double cruise_speed) const {
   double cost = 0.0;
   const double speed = (second.s() - first.s()) / unit_t_;
   if (speed < 0) {
     return kInf;
   }
 
-  const double max_adc_stop_speed = common::VehicleConfigHelper::Instance()
-                                        ->GetConfig()
-                                        .vehicle_param()
-                                        .max_abs_speed_when_stopped();
+  const double max_adc_stop_speed = common::VehicleConfigHelper::Instance()->GetConfig().vehicle_param().max_abs_speed_when_stopped();
   if (speed < max_adc_stop_speed && InKeepClearRange(second.s())) {
     // first.s in range
-    cost += config_.keep_clear_low_speed_penalty() * unit_t_ *
-            config_.default_speed_cost();
+    cost += config_.keep_clear_low_speed_penalty() * unit_t_ * config_.default_speed_cost();
   }
 
   double det_speed = (speed - speed_limit) / speed_limit;
   if (det_speed > 0) {
-    cost += config_.exceed_speed_penalty() * config_.default_speed_cost() *
-            (det_speed * det_speed) * unit_t_;
+    cost += config_.exceed_speed_penalty() * config_.default_speed_cost() * (det_speed * det_speed) * unit_t_;
   } else if (det_speed < 0) {
-    cost += config_.low_speed_penalty() * config_.default_speed_cost() *
-            -det_speed * unit_t_;
+    cost += config_.low_speed_penalty() * config_.default_speed_cost() * -det_speed * unit_t_;
   }
 
   if (FLAGS_enable_dp_reference_speed) {
     double diff_speed = speed - cruise_speed;
-    cost += config_.reference_speed_penalty() * config_.default_speed_cost() *
-            fabs(diff_speed) * unit_t_;
+    cost += config_.reference_speed_penalty() * config_.default_speed_cost() * fabs(diff_speed) * unit_t_;
   }
 
   return cost;
@@ -260,10 +235,8 @@ double DpStCost::GetAccelCost(const double accel) {
     } else {
       cost = decel_penalty * accel_sq;
     }
-    cost += accel_sq * decel_penalty * decel_penalty /
-                (1 + std::exp(1.0 * (accel - max_dec))) +
-            accel_sq * accel_penalty * accel_penalty /
-                (1 + std::exp(-1.0 * (accel - max_acc)));
+    cost += accel_sq * decel_penalty * decel_penalty / (1 + std::exp(1.0 * (accel - max_dec))) +
+    accel_sq * accel_penalty * accel_penalty / (1 + std::exp(-1.0 * (accel - max_acc)));
     accel_cost_.at(accel_key) = cost;
   } else {
     cost = accel_cost_.at(accel_key);
@@ -271,16 +244,12 @@ double DpStCost::GetAccelCost(const double accel) {
   return cost * unit_t_;
 }
 
-double DpStCost::GetAccelCostByThreePoints(const STPoint& first,
-                                           const STPoint& second,
-                                           const STPoint& third) {
+double DpStCost::GetAccelCostByThreePoints(const STPoint& first, const STPoint& second, const STPoint& third) {
   double accel = (first.s() + third.s() - 2 * second.s()) / (unit_t_ * unit_t_);
   return GetAccelCost(accel);
 }
 
-double DpStCost::GetAccelCostByTwoPoints(const double pre_speed,
-                                         const STPoint& pre_point,
-                                         const STPoint& curr_point) {
+double DpStCost::GetAccelCostByTwoPoints(const double pre_speed, const STPoint& pre_point, const STPoint& curr_point) {
   double current_speed = (curr_point.s() - pre_point.s()) / unit_t_;
   double accel = (current_speed - pre_speed) / unit_t_;
   return GetAccelCost(accel);
@@ -311,29 +280,22 @@ double DpStCost::JerkCost(const double jerk) {
   return cost;
 }
 
-double DpStCost::GetJerkCostByFourPoints(const STPoint& first,
-                                         const STPoint& second,
-                                         const STPoint& third,
-                                         const STPoint& fourth) {
-  double jerk = (fourth.s() - 3 * third.s() + 3 * second.s() - first.s()) /
-                (unit_t_ * unit_t_ * unit_t_);
+double DpStCost::GetJerkCostByFourPoints(const STPoint& first, const STPoint& second,
+const STPoint& third, const STPoint& fourth) {
+  double jerk = (fourth.s() - 3 * third.s() + 3 * second.s() - first.s()) / (unit_t_ * unit_t_ * unit_t_);
   return JerkCost(jerk);
 }
 
-double DpStCost::GetJerkCostByTwoPoints(const double pre_speed,
-                                        const double pre_acc,
-                                        const STPoint& pre_point,
-                                        const STPoint& curr_point) {
+double DpStCost::GetJerkCostByTwoPoints(const double pre_speed, const double pre_acc, const STPoint& pre_point,
+const STPoint& curr_point) {
   const double curr_speed = (curr_point.s() - pre_point.s()) / unit_t_;
   const double curr_accel = (curr_speed - pre_speed) / unit_t_;
   const double jerk = (curr_accel - pre_acc) / unit_t_;
   return JerkCost(jerk);
 }
 
-double DpStCost::GetJerkCostByThreePoints(const double first_speed,
-                                          const STPoint& first,
-                                          const STPoint& second,
-                                          const STPoint& third) {
+double DpStCost::GetJerkCostByThreePoints(const double first_speed, const STPoint& first,
+const STPoint& second, const STPoint& third) {
   const double pre_speed = (second.s() - first.s()) / unit_t_;
   const double pre_acc = (pre_speed - first_speed) / unit_t_;
   const double curr_speed = (third.s() - second.s()) / unit_t_;

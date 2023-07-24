@@ -26,8 +26,7 @@ namespace util {
 
 class PointFactory {
  public:
-  template <typename XY>
-  static inline math::Vec2d ToVec2d(const XY& xy) {
+  template <typename XY> static inline math::Vec2d ToVec2d(const XY& xy) {
     return math::Vec2d(xy.x(), xy.y());
   }
 
@@ -38,8 +37,7 @@ class PointFactory {
     return sl;
   }
 
-  static inline PointENU ToPointENU(const double x, const double y,
-                                    const double z = 0) {
+  static inline PointENU ToPointENU(const double x, const double y, const double z = 0) {
     PointENU point_enu;
     point_enu.set_x(x);
     point_enu.set_y(y);
@@ -47,14 +45,12 @@ class PointFactory {
     return point_enu;
   }
 
-  template <typename XYZ>
-  static inline PointENU ToPointENU(const XYZ& xyz) {
+  template <typename XYZ> static inline PointENU ToPointENU(const XYZ& xyz) {
     return ToPointENU(xyz.x(), xyz.y(), xyz.z());
   }
 
-  static inline SpeedPoint ToSpeedPoint(const double s, const double t,
-                                        const double v = 0, const double a = 0,
-                                        const double da = 0) {
+  static inline SpeedPoint ToSpeedPoint(const double s, const double t, const double v = 0,
+  const double a = 0, const double da = 0) {
     SpeedPoint speed_point;
     speed_point.set_s(s);
     speed_point.set_t(t);
@@ -64,12 +60,8 @@ class PointFactory {
     return speed_point;
   }
 
-  static inline PathPoint ToPathPoint(const double x, const double y,
-                                      const double z = 0, const double s = 0,
-                                      const double theta = 0,
-                                      const double kappa = 0,
-                                      const double dkappa = 0,
-                                      const double ddkappa = 0) {
+  static inline PathPoint ToPathPoint(const double x, const double y, const double z = 0, const double s = 0,
+  const double theta = 0, const double kappa = 0, const double dkappa = 0, const double ddkappa = 0) {
     PathPoint path_point;
     path_point.set_x(x);
     path_point.set_y(y);

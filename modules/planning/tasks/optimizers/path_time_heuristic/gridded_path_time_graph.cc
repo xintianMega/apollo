@@ -83,14 +83,27 @@ st_graph_data_.st_drivable_boundary(), init_point_) {
   std::abs(gridded_path_time_graph_config_.max_deceleration()));
 }
 
+//构建st采样空间、cost值初始化、限速信息关联等数据准备的工作
+/*1、遍历每个障碍物的boundry，判度是否有碰撞风险，如果有碰撞风险使用fallback速度规划；
+2、初始化cost table
+3、按照纵向采样点的s，查询各个位置处的限速
+4、搜索可到达位置
+5、计算可到达位置的cost
+6、搜索最优路径*/
 Status GriddedPathTimeGraph::Search(SpeedData* const speed_data) {
   static constexpr double kBounadryEpsilon = 1e-2;
+  //遍历每个障碍物的boundry，判度是否有碰撞风险，如果有碰撞风险使用fallback速度规划；
   for (const auto& boundary : st_graph_data_.st_boundaries()) {
     // KeepClear obstacles not considered in Dp St decision
+    /*如果boundary是KEEP_CLEAR类型，
+    说明这个boundary不会影响车辆的行进，不予考虑，进行下一次循环*/
     if (boundary->boundary_type() == STBoundary::BoundaryType::KEEP_CLEAR) {
       continue;
     }
     // If init point in collision with obstacle, return speed fallback
+    // 如果起点在boundary内部，或十分接近，认为车辆此时不能移动，
+    // 因此，在整个时间范围[0,t]内，设置v=0、a=0、s=0
+    // ST图的起点，即车辆的初始位置，设定为(0,0)
     if (boundary->IsPointInBoundary({0.0, 0.0}) || (std::fabs(boundary->min_t()) < kBounadryEpsilon &&
     std::fabs(boundary->min_s()) < kBounadryEpsilon)) {
       dimension_t_ = static_cast<uint32_t>(std::ceil(total_length_t_ / static_cast<double>(unit_t_))) + 1;
@@ -104,24 +117,41 @@ Status GriddedPathTimeGraph::Search(SpeedData* const speed_data) {
     }
   }
 
+  /*初始化CostTable()
+  1、时间维度是同质的，而空间维度有两种分辨率，稠密和稀疏，靠近自车的地方空间分布稠密；
+  2、时间与空间分辨率检查
+  3、计算coattable的时间尺度、空间上稀疏稠密的尺度，并且生成costtable
+  4、按照时间、空间顺序来初始化costtable
+  5、将空间上的采样点存入 spatial_distance_by_index_*/
   if (!InitCostTable().ok()) {
     const std::string msg = "Initialize cost table failed.";
     AERROR << msg;
     return Status(ErrorCode::PLANNING_ERROR, msg);
   }
 
+  /*查询限速信息，并且填入speed_limit_by_index_
+  1、首先清空speed_limit_by_index_；
+  2、然后从st_graph_data_ 从读取对应s处的限速值并填入*/
   if (!InitSpeedLimitLookUp().ok()) {
     const std::string msg = "Initialize speed limit lookup table failed.";
     AERROR << msg;
     return Status(ErrorCode::PLANNING_ERROR, msg);
   }
 
+  /*计算每个周期的位置取值范围以及该范围内各个位置采样点的cost值
+  1、计算当前时间采样点位置s的可选范围内，每个点的cost值
+  2、根据车辆运动以及障碍物boundary的限制，来确定在每个时间点t 内，从当前位置范围内出发，下个周期自车可以到达的位置s的 坐标范围；
+  3、取所有位置s 采样点下一时刻可达到范围的集合输入给下一周期，用来做下一周期位置s采样点的范围。*/
   if (!CalculateTotalCost().ok()) {
     const std::string msg = "Calculate total cost failed.";
     AERROR << msg;
     return Status(ErrorCode::PLANNING_ERROR, msg);
   }
 
+  /*速度动态规划
+  使用动态规划求解最优st图上的速度路径，并将结果存入reference_line_info->mutable_speed_data()，
+  即SpeedData* const speed_data 中；
+  从indexs = 0, index_t = 7开始搜索，找到最后时刻cost最低的点*/
   if (!RetrieveSpeedProfile(speed_data).ok()) {
     const std::string msg = "Retrieve best speed profile failed.";
     AERROR << msg;
@@ -219,6 +249,11 @@ Status GriddedPathTimeGraph::CalculateTotalCost() {
         if (FLAGS_enable_multi_thread_in_dp_st_graph) {
           results.push_back(cyber::Async(&GriddedPathTimeGraph::CalculateCostAt, this, msg));
         } else {
+          /* 采样点的cost计算
+          计算采样点的cost方法在CalculateCostAt(msg) 方法中，msg中由(c,r)两个变量组成，c代表时间采样点，r代表距离采样点
+          根据c、r读取 cost_table_ 中的对应点
+          根据tObstacleCost、SpatialPotentialCost、CalculateEdgeCostForSecondCol等多个方面来计算cost值，
+          同时第1、第2、第3个时间序列需要特殊处理*/
           CalculateCostAt(msg);
         }
       }
@@ -229,11 +264,16 @@ Status GriddedPathTimeGraph::CalculateTotalCost() {
       }
     }
 
+    // 下一轮循环的准备工作
+    // 遍历当前列中行号在[next_lowest_row,next_highest_row] 的点，
+    // 找到 highest_row 和 lowest_row，
+    // 以此来更新下一轮循环需要的next_highest_row、next_lowest_row
     for (size_t r = next_lowest_row; r <= next_highest_row; ++r) {
       const auto& cost_cr = cost_table_[c][r];
       if (cost_cr.total_cost() < std::numeric_limits<double>::infinity()) {
         size_t h_r = 0;
         size_t l_r = 0;
+        //当前时刻当前位置采样点，下一时刻可到达范围的计算GetRowRange()
         GetRowRange(cost_cr, &h_r, &l_r);
         highest_row = std::max(highest_row, h_r);
         lowest_row = std::min(lowest_row, l_r);
@@ -246,6 +286,7 @@ Status GriddedPathTimeGraph::CalculateTotalCost() {
   return Status::OK();
 }
 
+//找K的范围，依据max_acceleration_和max_deceleration_的剪枝操作
 void GriddedPathTimeGraph::GetRowRange(const StGraphPoint& point, size_t* next_highest_row,
 size_t* next_lowest_row) {
   double v0 = 0.0;
@@ -280,18 +321,28 @@ size_t* next_lowest_row) {
   }
 }
 
+/*计算每一个点的totalCost，并更新父节点
+ * 输入 msg，即(c,r)，cost_table_中t、s方向离散后的index
+ *    一个点的total_cost由四部分构成：
+ *    1、障碍物cost                  obstacle_cost
+ *    2、空间位置cost，于终点s的差值  spatial_potential_cost
+ *    3、前一个点的total_cost
+ *    4、EdgeCost，由三部分构成      Speedcost、AccelCost、JerkCost*/
 void GriddedPathTimeGraph::CalculateCostAt(const std::shared_ptr<StGraphMessage>& msg) {
   const uint32_t c = msg->c;
   const uint32_t r = msg->r;
   auto& cost_cr = cost_table_[c][r];
 
+  // 1、计算 obstacle_cost，如果为无穷大，则停止
   cost_cr.SetObstacleCost(dp_st_cost_.GetObstacleCost(cost_cr));
   if (cost_cr.obstacle_cost() > std::numeric_limits<double>::max()) {
     return;
   }
 
+  // 2、计算SpatialPotentialCost
   cost_cr.SetSpatialPotentialCost(dp_st_cost_.GetSpatialPotentialCost(cost_cr));
 
+  // 第0列的特殊处理，设置起始点的TotalCost 为0
   const auto& cost_init = cost_table_[0][0];
   if (c == 0) {
     DCHECK_EQ(r, 0U) << "Incorrect. Row should be 0 with col = 0. row: " << r;
@@ -302,24 +353,26 @@ void GriddedPathTimeGraph::CalculateCostAt(const std::shared_ptr<StGraphMessage>
 
   const double speed_limit = speed_limit_by_index_[r];
   const double cruise_speed = st_graph_data_.cruise_speed();
-  // The mininal s to model as constant acceleration formula
-  // default: 0.25 * 7 = 1.75 m
+  // The mininal s to model as constant acceleration formula default: 0.25 * 7 = 1.75 m
   const double min_s_consider_speed = dense_unit_s_ * dimension_t_;
 
   if (c == 1) {
+    //当前点的加速度
     const double acc = 2 * (cost_cr.point().s() / unit_t_ - init_point_.v()) / unit_t_;
     if (acc < max_deceleration_ || acc > max_acceleration_) {
       return;
     }
 
-    if (init_point_.v() + acc * unit_t_ < -kDoubleEpsilon &&
-    cost_cr.point().s() > min_s_consider_speed) {
+    if (init_point_.v() + acc * unit_t_ < -kDoubleEpsilon && cost_cr.point().s() > min_s_consider_speed) {
       return;
     }
 
+    // 当前点与起始点的连线与stboundary有重叠，返回
     if (CheckOverlapOnDpStGraph(st_graph_data_.st_boundaries(), cost_cr, cost_init)) {
       return;
     }
+
+    // 计算当前点的total_cost
     cost_cr.SetTotalCost(cost_cr.obstacle_cost() + cost_cr.spatial_potential_cost() +
     cost_init.total_cost() + CalculateEdgeCostForSecondCol(r, speed_limit, cruise_speed));
     cost_cr.SetPrePoint(cost_init);
@@ -327,7 +380,9 @@ void GriddedPathTimeGraph::CalculateCostAt(const std::shared_ptr<StGraphMessage>
     return;
   }
 
+  // 剪枝操作
   static constexpr double kSpeedRangeBuffer = 0.20;
+  // 由当前点推出能到达该点的前一列最小的s,将当前点的pre_col缩小至 [r_low, r]
   const double pre_lowest_s = cost_cr.point().s() -
   FLAGS_planning_upper_speed_limit * (1 + kSpeedRangeBuffer) * unit_t_;
   const auto pre_lowest_itr = std::lower_bound(spatial_distance_by_index_.begin(),
@@ -342,11 +397,13 @@ void GriddedPathTimeGraph::CalculateCostAt(const std::shared_ptr<StGraphMessage>
   const auto& pre_col = cost_table_[c - 1];
   double curr_speed_limit = speed_limit;
 
+  // 第二列的特殊处理
   if (c == 2) {
+    // 对于前一列，遍历从r->r_low的点，
+    // 依据重新算得的cost，当前点的pre_point，也就是DP过程的状态转移方程
     for (uint32_t i = 0; i < r_pre_size; ++i) {
       uint32_t r_pre = r - i;
-      if (std::isinf(pre_col[r_pre].total_cost()) ||
-      pre_col[r_pre].pre_point() == nullptr) {
+      if (std::isinf(pre_col[r_pre].total_cost()) || pre_col[r_pre].pre_point() == nullptr) {
         continue;
       }
       // (Jiaxuan): Calculate accurate acceleration by recording speed
@@ -366,8 +423,7 @@ void GriddedPathTimeGraph::CalculateCostAt(const std::shared_ptr<StGraphMessage>
         continue;
       }
 
-      // Filter out continuous-time node connection which is in collision with
-      // obstacle
+      // Filter out continuous-time node connection which is in collision with obstacle
       if (CheckOverlapOnDpStGraph(st_graph_data_.st_boundaries(), cost_cr, pre_col[r_pre])) {
         continue;
       }
@@ -434,6 +490,9 @@ void GriddedPathTimeGraph::CalculateCostAt(const std::shared_ptr<StGraphMessage>
   }
 }
 
+/*遍历每一列的最后一个点，找正在的best_end_point，并更新min_cost
+这里不直接使用最后一列的min_cost点作为终点
+因为采样时间是一个预估时间窗口，在这之前可能就到达终点了*/
 Status GriddedPathTimeGraph::RetrieveSpeedProfile(SpeedData* const speed_data) {
   double min_cost = std::numeric_limits<double>::infinity();
   const StGraphPoint* best_end_point = nullptr;
@@ -444,6 +503,9 @@ Status GriddedPathTimeGraph::RetrieveSpeedProfile(SpeedData* const speed_data) {
     }
   }
 
+  // 遍历每一列的最后一个点，找正在的best_end_point，并更新min_cost
+  // 这里不直接使用最后一列的min_cost点作为终点
+  // 因为采样时间是一个预估时间窗口，在这之前可能就到达终点了
   for (const auto& row : cost_table_) {
     const StGraphPoint& cur_point = row.back();
     if (!std::isinf(cur_point.total_cost()) && cur_point.total_cost() < min_cost) {
@@ -458,6 +520,7 @@ Status GriddedPathTimeGraph::RetrieveSpeedProfile(SpeedData* const speed_data) {
     return Status(ErrorCode::PLANNING_ERROR, msg);
   }
 
+  // 回溯，得到最优的 speed_profile
   std::vector<SpeedPoint> speed_profile;
   const StGraphPoint* cur_point = best_end_point;
   while (cur_point != nullptr) {
@@ -479,6 +542,7 @@ Status GriddedPathTimeGraph::RetrieveSpeedProfile(SpeedData* const speed_data) {
     return Status(ErrorCode::PLANNING_ERROR, msg);
   }
 
+  // 计算每个点的速度 v
   for (size_t i = 0; i + 1 < speed_profile.size(); ++i) {
     const double v = (speed_profile[i + 1].s() - speed_profile[i].s()) /
     (speed_profile[i + 1].t() - speed_profile[i].t() + 1e-3);
