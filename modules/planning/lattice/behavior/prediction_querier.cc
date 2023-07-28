@@ -44,8 +44,8 @@ std::vector<const Obstacle*> PredictionQuerier::GetObstacles() const {
   return obstacles_;
 }
 
-double PredictionQuerier::ProjectVelocityAlongReferenceLine(
-    const std::string& obstacle_id, const double s, const double t) const {
+double PredictionQuerier::ProjectVelocityAlongReferenceLine(const std::string& obstacle_id,
+const double s, const double t) const {
   ACHECK(id_obstacle_map_.find(obstacle_id) != id_obstacle_map_.end());
 
   const auto& trajectory = id_obstacle_map_.at(obstacle_id)->Trajectory();
@@ -59,20 +59,16 @@ double PredictionQuerier::ProjectVelocityAlongReferenceLine(
     return 0.0;
   }
 
-  auto matched_it =
-      std::lower_bound(trajectory.trajectory_point().begin(),
-                       trajectory.trajectory_point().end(), t,
-                       [](const common::TrajectoryPoint& p, const double t) {
-                         return p.relative_time() < t;
-                       });
+  auto matched_it = std::lower_bound(trajectory.trajectory_point().begin(),
+  trajectory.trajectory_point().end(), t, [](const common::TrajectoryPoint& p, const double t) {
+  return p.relative_time() < t; });
 
   double v = matched_it->v();
   double theta = matched_it->path_point().theta();
   double v_x = v * std::cos(theta);
   double v_y = v * std::sin(theta);
 
-  common::PathPoint obstacle_point_on_ref_line =
-      common::math::PathMatcher::MatchToPath(*ptr_reference_line_, s);
+  common::PathPoint obstacle_point_on_ref_line = common::math::PathMatcher::MatchToPath(*ptr_reference_line_, s);
   auto ref_theta = obstacle_point_on_ref_line.theta();
 
   return std::cos(ref_theta) * v_x + std::sin(ref_theta) * v_y;

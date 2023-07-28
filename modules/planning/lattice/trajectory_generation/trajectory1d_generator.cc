@@ -43,16 +43,12 @@ Trajectory1dGenerator::Trajectory1dGenerator(
     std::shared_ptr<PredictionQuerier> ptr_prediction_querier)
     : init_lon_state_(lon_init_state),
       init_lat_state_(lat_init_state),
-      end_condition_sampler_(lon_init_state, lat_init_state,
-                             ptr_path_time_graph, ptr_prediction_querier),
+      end_condition_sampler_(lon_init_state, lat_init_state, ptr_path_time_graph, ptr_prediction_querier),
       ptr_path_time_graph_(ptr_path_time_graph) {}
 
-void Trajectory1dGenerator::GenerateTrajectoryBundles(
-    const PlanningTarget& planning_target,
-    Trajectory1DBundle* ptr_lon_trajectory_bundle,
-    Trajectory1DBundle* ptr_lat_trajectory_bundle) {
-  GenerateLongitudinalTrajectoryBundle(planning_target,
-                                       ptr_lon_trajectory_bundle);
+void Trajectory1dGenerator::GenerateTrajectoryBundles(const PlanningTarget& planning_target,
+Trajectory1DBundle* ptr_lon_trajectory_bundle, Trajectory1DBundle* ptr_lat_trajectory_bundle) {
+  GenerateLongitudinalTrajectoryBundle(planning_target, ptr_lon_trajectory_bundle);
 
   GenerateLateralTrajectoryBundle(ptr_lat_trajectory_bundle);
 }

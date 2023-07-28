@@ -254,13 +254,11 @@ std::pair<double, double> PathTimeGraph::get_time_range() const {
   return time_range_;
 }
 
-std::vector<STPoint> PathTimeGraph::GetObstacleSurroundingPoints(
-    const std::string& obstacle_id, const double s_dist,
-    const double t_min_density) const {
+std::vector<STPoint> PathTimeGraph::GetObstacleSurroundingPoints(const std::string& obstacle_id,
+const double s_dist, const double t_min_density) const {
   ACHECK(t_min_density > 0.0);
   std::vector<STPoint> pt_pairs;
-  if (path_time_obstacle_map_.find(obstacle_id) ==
-      path_time_obstacle_map_.end()) {
+  if (path_time_obstacle_map_.find(obstacle_id) == path_time_obstacle_map_.end()) {
     return pt_pairs;
   }
 

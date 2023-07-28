@@ -135,8 +135,7 @@ EndConditionSampler::SampleLonEndConditionsForPathTimePoints() const {
   return end_s_conditions;
 }
 
-std::vector<SamplePoint>
-EndConditionSampler::QueryPathTimeObstacleSamplePoints() const {
+std::vector<SamplePoint>EndConditionSampler::QueryPathTimeObstacleSamplePoints() const {
   const auto& vehicle_config = common::VehicleConfigHelper::Instance()->GetConfig();
   std::vector<SamplePoint> sample_points;
   for (const auto& path_time_obstacle : ptr_path_time_graph_->GetPathTimeObstacles()) {
@@ -150,11 +149,11 @@ EndConditionSampler::QueryPathTimeObstacleSamplePoints() const {
 void EndConditionSampler::QueryFollowPathTimePoints(const common::VehicleConfig& vehicle_config,
 const std::string& obstacle_id, std::vector<SamplePoint>* const sample_points) const {
   std::vector<STPoint> follow_path_time_points = ptr_path_time_graph_->GetObstacleSurroundingPoints(
-      obstacle_id, -FLAGS_numerical_epsilon, FLAGS_time_min_density);
+  obstacle_id, -FLAGS_numerical_epsilon, FLAGS_time_min_density);
 
   for (const auto& path_time_point : follow_path_time_points) {
-    double v = ptr_prediction_querier_->ProjectVelocityAlongReferenceLine(
-        obstacle_id, path_time_point.s(), path_time_point.t());
+    double v = ptr_prediction_querier_->ProjectVelocityAlongReferenceLine(obstacle_id,
+    path_time_point.s(), path_time_point.t());
     // Generate candidate s
     double s_upper = path_time_point.s() - vehicle_config.vehicle_param().front_edge_to_center();
     double s_lower = s_upper - FLAGS_default_lon_buffer;
