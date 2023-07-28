@@ -31,15 +31,10 @@ namespace planning {
 using State = std::array<double, 3>;
 using Condition = std::pair<State, double>;
 
-EndConditionSampler::EndConditionSampler(
-    const State& init_s, const State& init_d,
-    std::shared_ptr<PathTimeGraph> ptr_path_time_graph,
-    std::shared_ptr<PredictionQuerier> ptr_prediction_querier)
-    : init_s_(init_s),
-      init_d_(init_d),
-      feasible_region_(init_s),
-      ptr_path_time_graph_(std::move(ptr_path_time_graph)),
-      ptr_prediction_querier_(std::move(ptr_prediction_querier)) {}
+EndConditionSampler::EndConditionSampler(const State& init_s, const State& init_d,
+std::shared_ptr<PathTimeGraph> ptr_path_time_graph, std::shared_ptr<PredictionQuerier> ptr_prediction_querier)
+: init_s_(init_s), init_d_(init_d), feasible_region_(init_s), ptr_path_time_graph_(std::move(ptr_path_time_graph)),
+ptr_prediction_querier_(std::move(ptr_prediction_querier)) {}
 
 std::vector<Condition> EndConditionSampler::SampleLatEndConditions() const {
   std::vector<Condition> end_d_conditions;
@@ -84,8 +79,7 @@ std::vector<Condition> EndConditionSampler::SampleLonEndConditionsForCruising(co
     static_cast<size_t>(v_range / FLAGS_min_velocity_sample_gap));
 
     if (num_of_mid_points > 0) {
-      double velocity_seg =
-          v_range / static_cast<double>(num_of_mid_points + 1);
+      double velocity_seg = v_range / static_cast<double>(num_of_mid_points + 1);
       for (size_t i = 1; i <= num_of_mid_points; ++i) {
         State end_s = {0.0, v_lower + velocity_seg * static_cast<double>(i), 0.0};
         end_s_conditions.emplace_back(end_s, time);
@@ -100,8 +94,7 @@ std::vector<Condition> EndConditionSampler::SampleLonEndConditionsForStopping(co
   static constexpr size_t num_of_time_samples = 9;
   std::array<double, num_of_time_samples> time_samples;
   for (size_t i = 1; i < num_of_time_samples; ++i) {
-    auto ratio =
-        static_cast<double>(i) / static_cast<double>(num_of_time_samples - 1);
+    auto ratio = static_cast<double>(i) / static_cast<double>(num_of_time_samples - 1);
     time_samples[i] = FLAGS_trajectory_time_length * ratio;
   }
   time_samples[0] = FLAGS_polynomial_minimal_param;
@@ -114,8 +107,7 @@ std::vector<Condition> EndConditionSampler::SampleLonEndConditionsForStopping(co
   return end_s_conditions;
 }
 
-std::vector<Condition>
-EndConditionSampler::SampleLonEndConditionsForPathTimePoints() const {
+std::vector<Condition>EndConditionSampler::SampleLonEndConditionsForPathTimePoints() const {
   std::vector<Condition> end_s_conditions;
 
   std::vector<SamplePoint> sample_points = QueryPathTimeObstacleSamplePoints();
