@@ -57,12 +57,10 @@ void Trajectory1dGenerator::GenerateTrajectoryBundles(
   GenerateLateralTrajectoryBundle(ptr_lat_trajectory_bundle);
 }
 
-void Trajectory1dGenerator::GenerateSpeedProfilesForCruising(
-    const double target_speed,
-    Trajectory1DBundle* ptr_lon_trajectory_bundle) const {
+void Trajectory1dGenerator::GenerateSpeedProfilesForCruising(const double target_speed,
+Trajectory1DBundle* ptr_lon_trajectory_bundle) const {
   ADEBUG << "cruise speed is  " << target_speed;
-  auto end_conditions =
-      end_condition_sampler_.SampleLonEndConditionsForCruising(target_speed);
+  auto end_conditions = end_condition_sampler_.SampleLonEndConditionsForCruising(target_speed);
   if (end_conditions.empty()) {
     return;
   }
@@ -70,50 +68,40 @@ void Trajectory1dGenerator::GenerateSpeedProfilesForCruising(
   // For the cruising case, We use the "QuarticPolynomialCurve1d" class (not the
   // "QuinticPolynomialCurve1d" class) to generate curves. Therefore, we can't
   // invoke the common function to generate trajectory bundles.
-  GenerateTrajectory1DBundle<4>(init_lon_state_, end_conditions,
-                                ptr_lon_trajectory_bundle);
+  GenerateTrajectory1DBundle<4>(init_lon_state_, end_conditions, ptr_lon_trajectory_bundle);
 }
 
-void Trajectory1dGenerator::GenerateSpeedProfilesForStopping(
-    const double stop_point,
-    Trajectory1DBundle* ptr_lon_trajectory_bundle) const {
+void Trajectory1dGenerator::GenerateSpeedProfilesForStopping(const double stop_point,
+Trajectory1DBundle* ptr_lon_trajectory_bundle) const {
   ADEBUG << "stop point is " << stop_point;
-  auto end_conditions =
-      end_condition_sampler_.SampleLonEndConditionsForStopping(stop_point);
+  auto end_conditions = end_condition_sampler_.SampleLonEndConditionsForStopping(stop_point);
   if (end_conditions.empty()) {
     return;
   }
 
   // Use the common function to generate trajectory bundles.
-  GenerateTrajectory1DBundle<5>(init_lon_state_, end_conditions,
-                                ptr_lon_trajectory_bundle);
+  GenerateTrajectory1DBundle<5>(init_lon_state_, end_conditions, ptr_lon_trajectory_bundle);
 }
 
-void Trajectory1dGenerator::GenerateSpeedProfilesForPathTimeObstacles(
-    Trajectory1DBundle* ptr_lon_trajectory_bundle) const {
-  auto end_conditions =
-      end_condition_sampler_.SampleLonEndConditionsForPathTimePoints();
+void Trajectory1dGenerator::GenerateSpeedProfilesForPathTimeObstacles(Trajectory1DBundle* ptr_lon_trajectory_bundle) const {
+  auto end_conditions = end_condition_sampler_.SampleLonEndConditionsForPathTimePoints();
   if (end_conditions.empty()) {
     return;
   }
 
   // Use the common function to generate trajectory bundles.
-  GenerateTrajectory1DBundle<5>(init_lon_state_, end_conditions,
-                                ptr_lon_trajectory_bundle);
+  GenerateTrajectory1DBundle<5>(init_lon_state_, end_conditions, ptr_lon_trajectory_bundle);
 }
 
-void Trajectory1dGenerator::GenerateLongitudinalTrajectoryBundle(
-    const PlanningTarget& planning_target,
-    Trajectory1DBundle* ptr_lon_trajectory_bundle) const {
+void Trajectory1dGenerator::GenerateLongitudinalTrajectoryBundle(const PlanningTarget& planning_target,
+Trajectory1DBundle* ptr_lon_trajectory_bundle) const {
   // cruising trajectories are planned regardlessly.
-  GenerateSpeedProfilesForCruising(planning_target.cruise_speed(),
-                                   ptr_lon_trajectory_bundle);
+  GenerateSpeedProfilesForCruising(planning_target.cruise_speed(), ptr_lon_trajectory_bundle);
 
   GenerateSpeedProfilesForPathTimeObstacles(ptr_lon_trajectory_bundle);
 
   if (planning_target.has_stop_point()) {
-    GenerateSpeedProfilesForStopping(planning_target.stop_point().s(),
-                                     ptr_lon_trajectory_bundle);
+    GenerateSpeedProfilesForStopping(planning_target.stop_point().s(), ptr_lon_trajectory_bundle);
   }
 }
 
@@ -123,8 +111,7 @@ void Trajectory1dGenerator::GenerateLateralTrajectoryBundle(
     auto end_conditions = end_condition_sampler_.SampleLatEndConditions();
 
     // Use the common function to generate trajectory bundles.
-    GenerateTrajectory1DBundle<5>(init_lat_state_, end_conditions,
-                                  ptr_lat_trajectory_bundle);
+    GenerateTrajectory1DBundle<5>(init_lat_state_, end_conditions, ptr_lat_trajectory_bundle);
   } else {
     double s_min = init_lon_state_[0];
     double s_max = s_min + FLAGS_max_s_lateral_optimization;

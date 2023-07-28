@@ -47,11 +47,10 @@ class Scenario {
   };
 
   Scenario(const ScenarioConfig& config, const ScenarioContext* context,
-           const std::shared_ptr<DependencyInjector>& injector);
+  const std::shared_ptr<DependencyInjector>& injector);
 
   // 读取配置文件
-  static bool LoadConfig(const std::string& config_file,
-                         ScenarioConfig* config);
+  static bool LoadConfig(const std::string& config_file, ScenarioConfig* config);
 
   virtual ~Scenario() = default;
 
@@ -65,14 +64,12 @@ class Scenario {
    * order, The return value of Stage::Process function determines the
    * transition from one stage to another.
    */
-  virtual std::unique_ptr<Stage> CreateStage(
-      const ScenarioConfig::StageConfig& stage_config,
-      const std::shared_ptr<DependencyInjector>& injector) = 0;
+  virtual std::unique_ptr<Stage> CreateStage(const ScenarioConfig::StageConfig& stage_config,
+  const std::shared_ptr<DependencyInjector>& injector) = 0;
 
   // Each scenario should define its own transfer condition, i.e., when it
   // should allow to transfer from other scenario to itself.
-  virtual bool IsTransferable(const Scenario& other_scenario,
-                              const Frame& frame) {
+  virtual bool IsTransferable(const Scenario& other_scenario, const Frame& frame) {
     return true;
   }
 

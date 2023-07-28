@@ -28,13 +28,12 @@ namespace planning {
 namespace scenario {
 
 Scenario::Scenario(const ScenarioConfig& config, const ScenarioContext* context,
-                   const std::shared_ptr<DependencyInjector>& injector)
-    : config_(config), scenario_context_(context), injector_(injector) {
+const std::shared_ptr<DependencyInjector>& injector)
+: config_(config), scenario_context_(context), injector_(injector) {
   name_ = ScenarioType_Name(config.scenario_type());
 }
 
-bool Scenario::LoadConfig(const std::string& config_file,
-                          ScenarioConfig* config) {
+bool Scenario::LoadConfig(const std::string& config_file, ScenarioConfig* config) {
   return apollo::cyber::common::GetProtoFromFile(config_file, config);
 }
 
@@ -42,9 +41,8 @@ void Scenario::Init() {
   ACHECK(!config_.stage_type().empty());
 
   // set scenario_type in PlanningContext
-  auto* scenario = injector_->planning_context()
-                       ->mutable_planning_status()
-                       ->mutable_scenario();
+  auto* scenario = injector_->planning_context()->mutable_planning_status()
+  ->mutable_scenario();
   scenario->Clear();
   scenario->set_scenario_type(scenario_type());
 
@@ -54,15 +52,12 @@ void Scenario::Init() {
   for (int i = 0; i < config_.stage_type_size(); ++i) {
     auto stage_type = config_.stage_type(i);
     ACHECK(common::util::ContainsKey(stage_config_map_, stage_type))
-        << "stage type : " << StageType_Name(stage_type)
-        << " has no config";
+    << "stage type : " << StageType_Name(stage_type) << " has no config";
   }
-  ADEBUG << "init stage "
-         << StageType_Name(config_.stage_type(0));
+  ADEBUG << "init stage " << StageType_Name(config_.stage_type(0));
 
   //初始化后分配默认stage
-  current_stage_ =
-      CreateStage(*stage_config_map_[config_.stage_type(0)], injector_);
+  current_stage_ = CreateStage(*stage_config_map_[config_.stage_type(0)], injector_);
 }
 
 Scenario::ScenarioStatus Scenario::Process(
@@ -92,8 +87,7 @@ Scenario::ScenarioStatus Scenario::Process(
     case Stage::FINISHED: {
       auto next_stage = current_stage_->NextStage();
       if (next_stage != current_stage_->stage_type()) {
-        AINFO << "switch stage from " << current_stage_->Name() << " to "
-              << StageType_Name(next_stage);
+        AINFO << "switch stage from " << current_stage_->Name() << " to " << StageType_Name(next_stage);
         if (next_stage == StageType::NO_STAGE) {
           scenario_status_ = STATUS_DONE;
           return scenario_status_;
