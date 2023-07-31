@@ -28,15 +28,11 @@
 namespace apollo {
 namespace planning {
 
-QuarticPolynomialCurve1d::QuarticPolynomialCurve1d(
-    const std::array<double, 3>& start, const std::array<double, 2>& end,
-    const double param)
-    : QuarticPolynomialCurve1d(start[0], start[1], start[2], end[0], end[1],
-                               param) {}
+QuarticPolynomialCurve1d::QuarticPolynomialCurve1d(const std::array<double, 3>& start, const std::array<double, 2>& end,
+    const double param) : QuarticPolynomialCurve1d(start[0], start[1], start[2], end[0], end[1], param) {}
 
-QuarticPolynomialCurve1d::QuarticPolynomialCurve1d(
-    const double x0, const double dx0, const double ddx0, const double dx1,
-    const double ddx1, const double param) {
+QuarticPolynomialCurve1d::QuarticPolynomialCurve1d(const double x0, const double dx0, const double ddx0,
+const double dx1, const double ddx1, const double param) {
   param_ = param;
   start_condition_[0] = x0;
   start_condition_[1] = dx0;
@@ -52,16 +48,13 @@ QuarticPolynomialCurve1d::QuarticPolynomialCurve1d(
   coef_ = other.coef_;
 }
 
-double QuarticPolynomialCurve1d::Evaluate(const std::uint32_t order,
-                                          const double p) const {
+double QuarticPolynomialCurve1d::Evaluate(const std::uint32_t order, const double p) const {
   switch (order) {
     case 0: {
-      return (((coef_[4] * p + coef_[3]) * p + coef_[2]) * p + coef_[1]) * p +
-             coef_[0];
+      return (((coef_[4] * p + coef_[3]) * p + coef_[2]) * p + coef_[1]) * p + coef_[0];
     }
     case 1: {
-      return ((4.0 * coef_[4] * p + 3.0 * coef_[3]) * p + 2.0 * coef_[2]) * p +
-             coef_[1];
+      return ((4.0 * coef_[4] * p + 3.0 * coef_[3]) * p + 2.0 * coef_[2]) * p + coef_[1];
     }
     case 2: {
       return (12.0 * coef_[4] * p + 6.0 * coef_[3]) * p + 2.0 * coef_[2];
@@ -77,9 +70,8 @@ double QuarticPolynomialCurve1d::Evaluate(const std::uint32_t order,
   }
 }
 
-QuarticPolynomialCurve1d& QuarticPolynomialCurve1d::FitWithEndPointFirstOrder(
-    const double x0, const double dx0, const double ddx0, const double x1,
-    const double dx1, const double p) {
+QuarticPolynomialCurve1d& QuarticPolynomialCurve1d::FitWithEndPointFirstOrder(const double x0,
+    const double dx0, const double ddx0, const double x1, const double dx1, const double p) {
   CHECK_GT(p, 0.0);
 
   param_ = p;
@@ -102,9 +94,8 @@ QuarticPolynomialCurve1d& QuarticPolynomialCurve1d::FitWithEndPointFirstOrder(
   return *this;
 }
 
-QuarticPolynomialCurve1d& QuarticPolynomialCurve1d::FitWithEndPointSecondOrder(
-    const double x0, const double dx0, const double x1, const double dx1,
-    const double ddx1, const double p) {
+QuarticPolynomialCurve1d& QuarticPolynomialCurve1d::FitWithEndPointSecondOrder(const double x0, const double dx0,
+    const double x1, const double dx1, const double ddx1, const double p) {
   CHECK_GT(p, 0.0);
 
   param_ = p;
@@ -129,8 +120,8 @@ QuarticPolynomialCurve1d& QuarticPolynomialCurve1d::FitWithEndPointSecondOrder(
   return *this;
 }
 
-QuarticPolynomialCurve1d& QuarticPolynomialCurve1d::IntegratedFromCubicCurve(
-    const PolynomialCurve1d& other, const double init_value) {
+QuarticPolynomialCurve1d& QuarticPolynomialCurve1d::IntegratedFromCubicCurve(const PolynomialCurve1d& other,
+    const double init_value) {
   CHECK_EQ(other.Order(), 3U);
   param_ = other.ParamLength();
   coef_[0] = init_value;
@@ -140,8 +131,7 @@ QuarticPolynomialCurve1d& QuarticPolynomialCurve1d::IntegratedFromCubicCurve(
   return *this;
 }
 
-QuarticPolynomialCurve1d& QuarticPolynomialCurve1d::DerivedFromQuinticCurve(
-    const PolynomialCurve1d& other) {
+QuarticPolynomialCurve1d& QuarticPolynomialCurve1d::DerivedFromQuinticCurve(const PolynomialCurve1d& other) {
   CHECK_EQ(other.Order(), 5U);
   param_ = other.ParamLength();
   for (size_t i = 1; i < 6; ++i) {
@@ -150,9 +140,8 @@ QuarticPolynomialCurve1d& QuarticPolynomialCurve1d::DerivedFromQuinticCurve(
   return *this;
 }
 
-void QuarticPolynomialCurve1d::ComputeCoefficients(
-    const double x0, const double dx0, const double ddx0, const double dx1,
-    const double ddx1, const double p) {
+void QuarticPolynomialCurve1d::ComputeCoefficients(const double x0, const double dx0, const double ddx0,
+    const double dx1, const double ddx1, const double p) {
   CHECK_GT(p, 0.0);
 
   coef_[0] = x0;

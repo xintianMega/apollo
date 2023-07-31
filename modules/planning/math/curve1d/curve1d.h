@@ -33,8 +33,7 @@ class Curve1d {
 
   virtual ~Curve1d() = default;
 
-  virtual double Evaluate(const std::uint32_t order,
-                          const double param) const = 0;
+  virtual double Evaluate(const std::uint32_t order, const double param) const = 0;
 
   virtual double ParamLength() const = 0;
 

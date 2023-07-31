@@ -50,8 +50,7 @@ class EndConditionSampler {
 
   virtual ~EndConditionSampler() = default;
 
-  std::vector<std::pair<std::array<double, 3>, double>> SampleLatEndConditions()
-      const;
+  std::vector<std::pair<std::array<double, 3>, double>> SampleLatEndConditions() const;
 
   std::vector<std::pair<std::array<double, 3>, double>>
   SampleLonEndConditionsForCruising(const double ref_cruise_speed) const;

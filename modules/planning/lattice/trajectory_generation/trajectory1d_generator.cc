@@ -101,8 +101,7 @@ Trajectory1DBundle* ptr_lon_trajectory_bundle) const {
   }
 }
 
-void Trajectory1dGenerator::GenerateLateralTrajectoryBundle(
-    Trajectory1DBundle* ptr_lat_trajectory_bundle) const {
+void Trajectory1dGenerator::GenerateLateralTrajectoryBundle(Trajectory1DBundle* ptr_lat_trajectory_bundle) const {
   if (!FLAGS_lateral_optimization) {
     auto end_conditions = end_condition_sampler_.SampleLatEndConditions();
 
@@ -114,12 +113,10 @@ void Trajectory1dGenerator::GenerateLateralTrajectoryBundle(
 
     double delta_s = FLAGS_default_delta_s_lateral_optimization;
 
-    auto lateral_bounds =
-        ptr_path_time_graph_->GetLateralBounds(s_min, s_max, delta_s);
+    auto lateral_bounds = ptr_path_time_graph_->GetLateralBounds(s_min, s_max, delta_s);
 
     // LateralTrajectoryOptimizer lateral_optimizer;
-    std::unique_ptr<LateralQPOptimizer> lateral_optimizer(
-        new LateralOSQPOptimizer);
+    std::unique_ptr<LateralQPOptimizer> lateral_optimizer(new LateralOSQPOptimizer);
 
     lateral_optimizer->optimize(init_lat_state_, delta_s, lateral_bounds);
 

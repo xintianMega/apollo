@@ -107,7 +107,7 @@ std::vector<Condition> EndConditionSampler::SampleLonEndConditionsForStopping(co
   return end_s_conditions;
 }
 
-std::vector<Condition>EndConditionSampler::SampleLonEndConditionsForPathTimePoints() const {
+std::vector<Condition> EndConditionSampler::SampleLonEndConditionsForPathTimePoints() const {
   std::vector<Condition> end_s_conditions;
 
   std::vector<SamplePoint> sample_points = QueryPathTimeObstacleSamplePoints();

@@ -36,20 +36,14 @@ namespace planning {
 
 class TrajectoryEvaluator {
   // normal use
-  typedef std::pair<
-      std::pair<std::shared_ptr<Curve1d>, std::shared_ptr<Curve1d>>, double>
-      PairCost;
+  typedef std::pair<std::pair<std::shared_ptr<Curve1d>, std::shared_ptr<Curve1d>>, double> PairCost;
 
   // auto tuning
-  typedef std::pair<
-      std::pair<std::shared_ptr<Curve1d>, std::shared_ptr<Curve1d>>,
-      std::pair<std::vector<double>, double>>
-      PairCostWithComponents;
+  typedef std::pair<std::pair<std::shared_ptr<Curve1d>, std::shared_ptr<Curve1d>>,
+      std::pair<std::vector<double>, double>> PairCostWithComponents;
 
  public:
-  TrajectoryEvaluator(
-      const std::array<double, 3>& init_s,
-      const PlanningTarget& planning_target,
+  TrajectoryEvaluator(const std::array<double, 3>& init_s, const PlanningTarget& planning_target,
       const std::vector<std::shared_ptr<Curve1d>>& lon_trajectories,
       const std::vector<std::shared_ptr<Curve1d>>& lat_trajectories,
       std::shared_ptr<PathTimeGraph> path_time_graph,
@@ -69,44 +63,34 @@ class TrajectoryEvaluator {
   std::vector<double> top_trajectory_pair_component_cost() const;
 
  private:
-  double Evaluate(const PlanningTarget& planning_target,
-                  const std::shared_ptr<Curve1d>& lon_trajectory,
-                  const std::shared_ptr<Curve1d>& lat_trajectory,
-                  std::vector<double>* cost_components = nullptr) const;
+  double Evaluate(const PlanningTarget& planning_target, const std::shared_ptr<Curve1d>& lon_trajectory,
+        const std::shared_ptr<Curve1d>& lat_trajectory, std::vector<double>* cost_components = nullptr) const;
 
-  double LatOffsetCost(const std::shared_ptr<Curve1d>& lat_trajectory,
-                       const std::vector<double>& s_values) const;
+  double LatOffsetCost(const std::shared_ptr<Curve1d>& lat_trajectory, const std::vector<double>& s_values) const;
 
-  double LatComfortCost(const std::shared_ptr<Curve1d>& lon_trajectory,
-                        const std::shared_ptr<Curve1d>& lat_trajectory) const;
+  double LatComfortCost(const std::shared_ptr<Curve1d>& lon_trajectory, const std::shared_ptr<Curve1d>& lat_trajectory) const;
 
   double LonComfortCost(const std::shared_ptr<Curve1d>& lon_trajectory) const;
 
   double LonCollisionCost(const std::shared_ptr<Curve1d>& lon_trajectory) const;
 
-  double LonObjectiveCost(const std::shared_ptr<Curve1d>& lon_trajectory,
-                          const PlanningTarget& planning_target,
-                          const std::vector<double>& ref_s_dot) const;
+  double LonObjectiveCost(const std::shared_ptr<Curve1d>& lon_trajectory, const PlanningTarget& planning_target,
+        const std::vector<double>& ref_s_dot) const;
 
-  double CentripetalAccelerationCost(
-      const std::shared_ptr<Curve1d>& lon_trajectory) const;
+  double CentripetalAccelerationCost(const std::shared_ptr<Curve1d>& lon_trajectory) const;
 
-  std::vector<double> ComputeLongitudinalGuideVelocity(
-      const PlanningTarget& planning_target) const;
+  std::vector<double> ComputeLongitudinalGuideVelocity(const PlanningTarget& planning_target) const;
 
-  bool InterpolateDenseStPoints(
-      const std::vector<apollo::common::SpeedPoint>& st_points, double t,
+  bool InterpolateDenseStPoints(const std::vector<apollo::common::SpeedPoint>& st_points, double t,
       double* traj_s) const;
 
-  struct CostComparator
-      : public std::binary_function<const PairCost&, const PairCost&, bool> {
+  struct CostComparator : public std::binary_function<const PairCost&, const PairCost&, bool> {
     bool operator()(const PairCost& left, const PairCost& right) const {
       return left.second > right.second;
     }
   };
 
-  std::priority_queue<PairCost, std::vector<PairCost>, CostComparator>
-      cost_queue_;
+  std::priority_queue<PairCost, std::vector<PairCost>, CostComparator> cost_queue_;
 
   std::shared_ptr<PathTimeGraph> path_time_graph_;
 

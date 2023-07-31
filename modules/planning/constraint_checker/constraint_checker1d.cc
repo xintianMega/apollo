@@ -28,14 +28,12 @@ namespace planning {
 
 namespace {
 
-inline bool fuzzy_within(const double v, const double lower, const double upper,
-                         const double e = 1.0e-4) {
+inline bool fuzzy_within(const double v, const double lower, const double upper, const double e = 1.0e-4) {
   return v > lower - e && v < upper + e;
 }
 }  // namespace
 
-bool ConstraintChecker1d::IsValidLongitudinalTrajectory(
-    const Curve1d& lon_trajectory) {
+bool ConstraintChecker1d::IsValidLongitudinalTrajectory(const Curve1d& lon_trajectory) {
   double t = 0.0;
   while (t < lon_trajectory.ParamLength()) {
     double v = lon_trajectory.Evaluate(1, t);  // evaluate_v
@@ -45,13 +43,12 @@ bool ConstraintChecker1d::IsValidLongitudinalTrajectory(
 
     double a = lon_trajectory.Evaluate(2, t);  // evaluate_a
     if (!fuzzy_within(a, FLAGS_longitudinal_acceleration_lower_bound,
-                      FLAGS_longitudinal_acceleration_upper_bound)) {
+        FLAGS_longitudinal_acceleration_upper_bound)) {
       return false;
     }
 
     double j = lon_trajectory.Evaluate(3, t);
-    if (!fuzzy_within(j, FLAGS_longitudinal_jerk_lower_bound,
-                      FLAGS_longitudinal_jerk_upper_bound)) {
+    if (!fuzzy_within(j, FLAGS_longitudinal_jerk_lower_bound, FLAGS_longitudinal_jerk_upper_bound)) {
       return false;
     }
     t += FLAGS_trajectory_time_resolution;

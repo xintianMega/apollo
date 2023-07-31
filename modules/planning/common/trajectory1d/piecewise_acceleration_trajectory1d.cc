@@ -40,8 +40,7 @@ PiecewiseAccelerationTrajectory1d::PiecewiseAccelerationTrajectory1d(
   t_.push_back(0.0);
 }
 
-void PiecewiseAccelerationTrajectory1d::AppendSegment(const double a,
-                                                      const double t_duration) {
+void PiecewiseAccelerationTrajectory1d::AppendSegment(const double a, const double t_duration) {
   double s0 = s_.back();
   double v0 = v_.back();
   double t0 = t_.back();
