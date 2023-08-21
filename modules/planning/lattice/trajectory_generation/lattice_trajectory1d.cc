@@ -25,13 +25,11 @@
 namespace apollo {
 namespace planning {
 
-LatticeTrajectory1d::LatticeTrajectory1d(
-    std::shared_ptr<Curve1d> ptr_trajectory1d) {
+LatticeTrajectory1d::LatticeTrajectory1d(std::shared_ptr<Curve1d> ptr_trajectory1d) {
   ptr_trajectory1d_ = ptr_trajectory1d;
 }
 
-double LatticeTrajectory1d::Evaluate(const std::uint32_t order,
-                                     const double param) const {
+double LatticeTrajectory1d::Evaluate(const std::uint32_t order, const double param) const {
   double param_length = ptr_trajectory1d_->ParamLength();
   if (param < param_length) {
     return ptr_trajectory1d_->Evaluate(order, param);

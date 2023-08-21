@@ -66,8 +66,7 @@ SLBoundary PathTimeGraph::ComputeObstacleBoundary(
   double end_l(std::numeric_limits<double>::lowest());
 
   for (const auto& point : vertices) {
-    auto sl_point = PathMatcher::GetPathFrenetCoordinate(discretized_ref_points,
-                                                         point.x(), point.y());
+    auto sl_point = PathMatcher::GetPathFrenetCoordinate(discretized_ref_points, point.x(), point.y());
     start_s = std::fmin(start_s, sl_point.first);
     end_s = std::fmax(end_s, sl_point.first);
     start_l = std::fmin(start_l, sl_point.second);

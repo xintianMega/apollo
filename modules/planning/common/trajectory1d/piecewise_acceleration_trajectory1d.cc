@@ -79,8 +79,7 @@ std::string PiecewiseAccelerationTrajectory1d::ToString() const {
                       absl::StrJoin(v_, "\t"), absl::StrJoin(a_, "\t"), "\n");
 }
 
-double PiecewiseAccelerationTrajectory1d::Evaluate(const std::uint32_t order,
-                                                   const double param) const {
+double PiecewiseAccelerationTrajectory1d::Evaluate(const std::uint32_t order, const double param) const {
   CHECK_GT(t_.size(), 1U);
   ACHECK(t_.front() <= param && param <= t_.back());
 

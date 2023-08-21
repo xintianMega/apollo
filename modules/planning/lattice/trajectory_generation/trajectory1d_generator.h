@@ -38,11 +38,8 @@ namespace planning {
 
 class Trajectory1dGenerator {
  public:
-  Trajectory1dGenerator(
-      const std::array<double, 3>& lon_init_state,
-      const std::array<double, 3>& lat_init_state,
-      std::shared_ptr<PathTimeGraph> ptr_path_time_graph,
-      std::shared_ptr<PredictionQuerier> ptr_prediction_querier);
+  Trajectory1dGenerator(const std::array<double, 3>& lon_init_state, const std::array<double, 3>& lat_init_state,
+      std::shared_ptr<PathTimeGraph> ptr_path_time_graph, std::shared_ptr<PredictionQuerier> ptr_prediction_querier);
 
   virtual ~Trajectory1dGenerator() = default;
 

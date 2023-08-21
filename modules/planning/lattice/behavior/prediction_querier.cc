@@ -29,6 +29,8 @@ namespace planning {
 PredictionQuerier::PredictionQuerier(const std::vector<const Obstacle*>& obstacles,
 const std::shared_ptr<std::vector<common::PathPoint>>& ptr_reference_line) : ptr_reference_line_(ptr_reference_line) {
   for (const auto ptr_obstacle : obstacles) {
+    // InsertOrUpdate：若map容器存在对应的key则更新，否则插入元素，返回值false表示更新，true为插入；
+    // InsertIfNotPresent：同InsertOrUpdate，不过存在对应的key时不再更新，返回值false为插入失败，true插入成功；
     if (common::util::InsertIfNotPresent(&id_obstacle_map_, ptr_obstacle->Id(), ptr_obstacle)) {
       obstacles_.push_back(ptr_obstacle);
     } else {
